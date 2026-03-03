@@ -49,6 +49,7 @@ jobs:
           else
             MONTH=$(date -u +%Y-%m)
             git commit -m "digest: ${MONTH} monthly digest"
+            git pull --rebase
             git push
           fi
 
@@ -60,5 +61,13 @@ jobs:
           git add manifest.json feed.xml
           if ! git diff --cached --quiet; then
             git commit -m "chore: update manifest.json"
+            git pull --rebase
             git push
           fi
+
+      - name: Send Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PAGES_URL: https://duanyytop.github.io/agents-radar
+        run: pnpm notify

@@ -12,7 +12,8 @@
     "format:check": "prettier --check src",
     "manifest": "tsx src/generate-manifest.ts",
     "weekly": "tsx src/weekly.ts",
-    "monthly": "tsx src/monthly.ts"
+    "monthly": "tsx src/monthly.ts",
+    "notify": "tsx src/notify.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3"

@@ -67,3 +67,10 @@ jobs:
             git push
           fi
 
+      - name: Send Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PAGES_URL: https://duanyytop.github.io/agents-radar
+        run: pnpm notify
+

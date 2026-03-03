@@ -100,12 +100,20 @@ New articles are detected by comparing sitemap `lastmod` timestamps against a pe
 
 Go to **Settings → Secrets and variables → Actions** and add:
 
-| Secret | Description |
-|--------|-------------|
-| `ANTHROPIC_API_KEY` | API key — works with both Anthropic and Kimi Code |
-| `ANTHROPIC_BASE_URL` | API endpoint override. Set to `https://api.kimi.com/coding/` for Kimi Code; leave unset for Anthropic |
+| Secret | Required | Description |
+|--------|----------|-------------|
+| `ANTHROPIC_API_KEY` | ✅ | API key — works with both Anthropic and Kimi Code |
+| `ANTHROPIC_BASE_URL` | optional | API endpoint override. Set to `https://api.kimi.com/coding/` for Kimi Code; leave unset for Anthropic |
+| `TELEGRAM_BOT_TOKEN` | optional | Telegram bot token from [@BotFather](https://t.me/BotFather). If set, a message is sent after each digest run |
+| `TELEGRAM_CHAT_ID` | optional | Telegram chat/channel/group ID to send notifications to |
 
 > `GITHUB_TOKEN` is provided automatically by GitHub Actions.
+
+**Setting up Telegram notifications** (optional):
+1. Message [@BotFather](https://t.me/BotFather) on Telegram, create a bot, copy the token
+2. Add the bot to your channel/group, or start a DM with it
+3. Get the chat ID: forward a message to [@userinfobot](https://t.me/userinfobot) or use the [getUpdates](https://core.telegram.org/bots/api#getupdates) API
+4. Add `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` as repository secrets
 
 ### 3. Enable the workflow
 
