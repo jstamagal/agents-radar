@@ -35,8 +35,6 @@ describe("is429", () => {
 // ---------------------------------------------------------------------------
 
 describe("saveFile", () => {
-  const testDir = "/tmp/agents-radar-test-" + Date.now();
-
   beforeEach(() => {
     vi.spyOn(fs, "mkdirSync").mockReturnValue(undefined);
     vi.spyOn(fs, "writeFileSync").mockReturnValue(undefined);
