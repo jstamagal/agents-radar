@@ -355,14 +355,14 @@ async function main(): Promise<void> {
         cliContent[lang],
         ISSUE_LABELS.cli[lang],
       );
-      console.log(`  Created CLI issue (${lang}): ${cliUrl}`);
+      if (cliUrl) console.log(`  Created CLI issue (${lang}): ${cliUrl}`);
 
       const ocUrl = await createGitHubIssue(
         OPENCLAW_ISSUE_TITLE(dateStr, lang),
         openclawContent[lang],
         ISSUE_LABELS.openclaw[lang],
       );
-      console.log(`  Created OpenClaw issue (${lang}): ${ocUrl}`);
+      if (ocUrl) console.log(`  Created OpenClaw issue (${lang}): ${ocUrl}`);
     }
   }
 
