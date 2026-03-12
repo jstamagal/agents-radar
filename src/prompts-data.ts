@@ -43,12 +43,24 @@ export function buildTrendingPrompt(data: TrendingData, dateStr: string, lang: L
         ? "(No search results)"
         : "（无搜索结果）";
 
+  const trendshiftSection =
+    data.trendshiftRepos.length > 0
+      ? data.trendshiftRepos.map((r) => `- [${r.fullName}](${r.url})`).join("\n")
+      : data.trendshiftFetchSuccess
+        ? lang === "en"
+          ? "(No Trendshift repositories parsed)"
+          : "（未解析到 Trendshift 仓库）"
+        : lang === "en"
+          ? "(Unable to fetch Trendshift data)"
+          : "（未能抓取 Trendshift 数据）";
+
   if (lang === "en") {
     return `You are a technical analyst focused on the AI open-source ecosystem. The following is ${dateStr} GitHub AI-related trending repository data. Please filter for AI relevance, categorize, and analyze trends.
 
 ## Data Sources
 - **Trending List** (github.com/trending, today's stars most reliable): Real-time hot list with today's new stars
 - **Topic Search** (GitHub Search API, topic tags): AI-related projects active in last 7 days, grouped by topic
+- **Trendshift** (trendshift.io): Curated fast-rising GitHub repositories
 
 ---
 
@@ -59,6 +71,11 @@ ${trendingSection}
 
 ## AI Topic Search Results (${data.searchRepos.length} repositories, deduplicated)
 ${searchSection}
+
+---
+
+## Trendshift Rising Repositories (${data.trendshiftRepos.length} repositories)
+${trendshiftSection}
 
 ---
 
@@ -98,6 +115,7 @@ Style: English, professional and concise, must include GitHub links for every pr
 ## 数据说明
 - **Trending 榜单**（github.com/trending，今日 stars 数最可信）：今日实时热榜，含今日新增 stars
 - **主题搜索**（GitHub Search API，topic 标签）：7天内活跃的 AI 相关项目，按主题分类
+- **Trendshift**（trendshift.io）：筛选后的快速上升 GitHub 仓库
 
 ---
 
@@ -108,6 +126,11 @@ ${trendingSection}
 
 ## AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库，已去重）
 ${searchSection}
+
+---
+
+## Trendshift 上升仓库（共 ${data.trendshiftRepos.length} 个仓库）
+${trendshiftSection}
 
 ---
 

@@ -24,6 +24,17 @@ interface RawConfig {
   skills_repo?: string;
   openclaw?: RawRepoEntry;
   openclaw_peers?: RawRepoEntry[];
+  rss?: {
+    site_url?: string;
+    title?: string;
+    description?: string;
+    language?: string;
+  };
+  trendshift?: {
+    enabled?: boolean;
+    url?: string;
+    max_repos?: number;
+  };
 }
 
 export interface RadarConfig {
@@ -31,6 +42,17 @@ export interface RadarConfig {
   skillsRepo: string;
   openclaw: RepoConfig;
   openclawPeers: RepoConfig[];
+  rss: {
+    siteUrl: string;
+    title: string;
+    description: string;
+    language: string;
+  };
+  trendshift: {
+    enabled: boolean;
+    url: string;
+    maxRepos: number;
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -70,6 +92,19 @@ const DEFAULT_OPENCLAW_PEERS: RepoConfig[] = [
   { id: "easyclaw", repo: "gaoyangz77/easyclaw", name: "EasyClaw" },
 ];
 
+const DEFAULT_RSS = {
+  siteUrl: "https://duanyytop.github.io/agents-radar",
+  title: "agents-radar",
+  description: "AI open source ecosystem daily digest",
+  language: "en",
+};
+
+const DEFAULT_TRENDSHIFT = {
+  enabled: true,
+  url: "https://trendshift.io/repositories",
+  maxRepos: 30,
+};
+
 // ---------------------------------------------------------------------------
 // Loader
 // ---------------------------------------------------------------------------
@@ -88,6 +123,8 @@ export function loadConfig(configPath = "config.yml"): RadarConfig {
       skillsRepo: DEFAULT_SKILLS_REPO,
       openclaw: DEFAULT_OPENCLAW,
       openclawPeers: DEFAULT_OPENCLAW_PEERS,
+      rss: DEFAULT_RSS,
+      trendshift: DEFAULT_TRENDSHIFT,
     };
   }
 
@@ -110,10 +147,39 @@ export function loadConfig(configPath = "config.yml"): RadarConfig {
       ? raw.openclaw_peers.map(toRepoConfig)
       : DEFAULT_OPENCLAW_PEERS;
 
+  const rss = {
+    siteUrl:
+      typeof raw?.rss?.site_url === "string" && raw.rss.site_url.trim()
+        ? raw.rss.site_url.trim()
+        : DEFAULT_RSS.siteUrl,
+    title:
+      typeof raw?.rss?.title === "string" && raw.rss.title.trim() ? raw.rss.title.trim() : DEFAULT_RSS.title,
+    description:
+      typeof raw?.rss?.description === "string" && raw.rss.description.trim()
+        ? raw.rss.description.trim()
+        : DEFAULT_RSS.description,
+    language:
+      typeof raw?.rss?.language === "string" && raw.rss.language.trim()
+        ? raw.rss.language.trim()
+        : DEFAULT_RSS.language,
+  };
+
+  const trendshift = {
+    enabled: raw?.trendshift?.enabled ?? DEFAULT_TRENDSHIFT.enabled,
+    url:
+      typeof raw?.trendshift?.url === "string" && raw.trendshift.url.trim()
+        ? raw.trendshift.url.trim()
+        : DEFAULT_TRENDSHIFT.url,
+    maxRepos:
+      typeof raw?.trendshift?.max_repos === "number" && raw.trendshift.max_repos > 0
+        ? raw.trendshift.max_repos
+        : DEFAULT_TRENDSHIFT.maxRepos,
+  };
+
   console.log(
     `[config] Loaded from ${configPath}: ` +
-      `${cliRepos.length} CLI repos, ${openclawPeers.length} OpenClaw peers`,
+      `${cliRepos.length} CLI repos, ${openclawPeers.length} OpenClaw peers, trendshift ${trendshift.enabled ? "enabled" : "disabled"}`,
   );
 
-  return { cliRepos, skillsRepo, openclaw, openclawPeers };
+  return { cliRepos, skillsRepo, openclaw, openclawPeers, rss, trendshift };
 }
