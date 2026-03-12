@@ -45,6 +45,7 @@ const {
   skillsRepo: CLAUDE_SKILLS_REPO,
   openclaw: OPENCLAW,
   openclawPeers: OPENCLAW_PEERS,
+  trendshift: TRENDSHIFT,
 } = loadConfig();
 
 // ---------------------------------------------------------------------------
@@ -109,11 +110,13 @@ async function fetchAllData(
         return { site: "openai", siteName: "OpenAI", isFirstRun: false, newItems: [], totalDiscovered: 0 };
       }),
     ]),
-    fetchTrendingData().catch(
+    fetchTrendingData(TRENDSHIFT).catch(
       (): TrendingData => ({
         trendingRepos: [],
         searchRepos: [],
+        trendshiftRepos: [],
         trendingFetchSuccess: false,
+        trendshiftFetchSuccess: false,
       }),
     ),
     fetchHnData().catch((): HnData => ({ stories: [], fetchSuccess: false })),
@@ -207,7 +210,10 @@ async function generateSummaries(
       ),
     ),
     (async () => {
-      const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+      const hasData =
+        trendingData.trendingRepos.length > 0 ||
+        trendingData.searchRepos.length > 0 ||
+        trendingData.trendshiftRepos.length > 0;
       if (!hasData) {
         return MSG.trendingNoData[lang];
       }

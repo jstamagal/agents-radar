@@ -88,7 +88,10 @@ export async function saveTrendingReport(
   footer: string,
   lang: Lang = "zh",
 ): Promise<void> {
-  const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+  const hasData =
+    trendingData.trendingRepos.length > 0 ||
+    trendingData.searchRepos.length > 0 ||
+    trendingData.trendshiftRepos.length > 0;
   if (!hasData) {
     console.log(`  [trending/${lang}] No data available, skipping report.`);
     return;

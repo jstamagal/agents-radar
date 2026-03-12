@@ -188,7 +188,9 @@ describe("buildTrendingPrompt", () => {
         },
       ],
       searchRepos: [],
+      trendshiftRepos: [],
       trendingFetchSuccess: true,
+      trendshiftFetchSuccess: true,
     };
     const result = buildTrendingPrompt(data, "2026-03-09");
     expect(result).toContain("org/repo");
@@ -198,7 +200,13 @@ describe("buildTrendingPrompt", () => {
   });
 
   it("shows fetch failure message when trending fails", () => {
-    const data: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const data: TrendingData = {
+      trendingRepos: [],
+      searchRepos: [],
+      trendshiftRepos: [],
+      trendingFetchSuccess: false,
+      trendshiftFetchSuccess: false,
+    };
     const result = buildTrendingPrompt(data, "2026-03-09");
     expect(result).toContain("未能抓取");
   });
@@ -217,11 +225,26 @@ describe("buildTrendingPrompt", () => {
           searchQuery: "ai-agent",
         },
       ],
+      trendshiftRepos: [],
       trendingFetchSuccess: false,
+      trendshiftFetchSuccess: true,
     };
     const result = buildTrendingPrompt(data, "2026-03-09");
     expect(result).toContain("[topic:ai-agent]");
     expect(result).toContain("1,000");
+  });
+
+  it("includes trendshift repositories when present", () => {
+    const data: TrendingData = {
+      trendingRepos: [],
+      searchRepos: [],
+      trendshiftRepos: [{ fullName: "trend/repo", url: "https://github.com/trend/repo" }],
+      trendingFetchSuccess: false,
+      trendshiftFetchSuccess: true,
+    };
+    const result = buildTrendingPrompt(data, "2026-03-09", "en");
+    expect(result).toContain("Trendshift Rising Repositories");
+    expect(result).toContain("trend/repo");
   });
 });
 

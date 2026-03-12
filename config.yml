@@ -93,3 +93,20 @@ openclaw_peers:
   - id: easyclaw
     repo: gaoyangz77/easyclaw
     name: EasyClaw
+
+# ── RSS output metadata ────────────────────────────────────────────────────────
+# Controls the generated feed.xml channel metadata.
+
+rss:
+  site_url: https://duanyytop.github.io/agents-radar
+  title: agents-radar
+  description: AI open source ecosystem daily digest
+  language: en
+
+# ── Trendshift source ──────────────────────────────────────────────────────────
+# Additional GitHub trend data source from trendshift.io.
+
+trendshift:
+  enabled: true
+  url: https://trendshift.io/repositories
+  max_repos: 30
