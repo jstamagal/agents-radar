@@ -12,6 +12,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { sleep } from "./date.ts";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -122,10 +123,6 @@ async function httpGet(url: string): Promise<string> {
   } finally {
     clearTimeout(timer);
   }
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // ---------------------------------------------------------------------------

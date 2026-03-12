@@ -191,6 +191,20 @@ export async function fetchSkillsData(repo: string): Promise<{ prs: GitHubItem[]
 const GITHUB_ISSUE_BODY_LIMIT = 65536;
 const TRUNCATION_NOTICE = "\n\n---\n> ⚠️ 内容超过 GitHub Issue 上限，完整报告见提交的 Markdown 文件。";
 
+/** GitHub label colors by label name. Default: "0075ca". */
+const LABEL_COLORS: Record<string, string> = {
+  openclaw: "e11d48",
+  trending: "f9a825",
+  hn: "ff6600",
+  weekly: "7c3aed",
+  monthly: "0d9488",
+  "digest-en": "1d76db",
+  "openclaw-en": "f472b6",
+  "web-en": "6366f1",
+  "trending-en": "fbbf24",
+  "hn-en": "fb923c",
+};
+
 /**
  * Break GitHub URLs in issue body to prevent cross-repository references.
  * Inserts a zero-width space in "github.com" so GitHub's auto-linker
@@ -206,18 +220,6 @@ export async function createGitHubIssue(title: string, body: string, label: stri
   if (body.length > GITHUB_ISSUE_BODY_LIMIT) {
     body = body.slice(0, GITHUB_ISSUE_BODY_LIMIT - TRUNCATION_NOTICE.length) + TRUNCATION_NOTICE;
   }
-  const LABEL_COLORS: Record<string, string> = {
-    openclaw: "e11d48",
-    trending: "f9a825",
-    hn: "ff6600",
-    weekly: "7c3aed",
-    monthly: "0d9488",
-    "digest-en": "1d76db",
-    "openclaw-en": "f472b6",
-    "web-en": "6366f1",
-    "trending-en": "fbbf24",
-    "hn-en": "fb923c",
-  };
   await ensureLabel(label, LABEL_COLORS[label] ?? "0075ca");
   const resp = await fetch(`https://api.github.com/repos/${digestRepo}/issues`, {
     method: "POST",
