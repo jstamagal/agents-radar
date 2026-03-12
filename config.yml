@@ -29,6 +29,13 @@ cli_repos:
   - id: qwen-code
     repo: QwenLM/qwen-code
     name: Qwen Code
+  - id: llxprt
+    repo: vybestack/llxprt-code
+    name: LLXprt-Code
+  - id: pi
+    repo: badlogic/pi-mono
+    name: Pi Mono-Repo
+    
 
 # ── Claude Code Skills ────────────────────────────────────────────────────────
 # Tracked separately without a date filter, sorted by community engagement.
