@@ -177,8 +177,8 @@ export function loadConfig(configPath = "config.yml"): RadarConfig {
   };
 
   console.log(
-    `[config] Loaded from ${configPath}: ` +
-      `${cliRepos.length} CLI repos, ${openclawPeers.length} OpenClaw peers, trendshift ${trendshift.enabled ? "enabled" : "disabled"}`,
+    `[config] Loaded from ${configPath}: ${cliRepos.length} CLI repos, ` +
+      `${openclawPeers.length} OpenClaw peers, trendshift ${trendshift.enabled ? "enabled" : "disabled"}`,
   );
 
   return { cliRepos, skillsRepo, openclaw, openclawPeers, rss, trendshift };

@@ -51,6 +51,7 @@ const SEARCH_QUERIES = [
   { q: "topic:large-language-model", label: "llm-model" },
   { q: "topic:machine-learning", label: "ml" },
 ];
+const GITHUB_REPO_URL_PATTERN = /https?:\/\/github\.com\/([A-Za-z0-9_.-]+)\/([A-Za-z0-9_.-]+)(?=[/"'?#]|$)/g;
 
 // ---------------------------------------------------------------------------
 // GitHub Trending HTML fetch
@@ -227,9 +228,13 @@ async function fetchTrendshiftRepos(
     const seen = new Set<string>();
     const repos: TrendshiftRepo[] = [];
 
-    for (const m of html.matchAll(/https?:\/\/github\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)/g)) {
-      const fullName = m[1];
-      if (!fullName || seen.has(fullName)) continue;
+    for (const m of html.matchAll(GITHUB_REPO_URL_PATTERN)) {
+      const owner = m[1];
+      const repo = m[2];
+      if (!owner || !repo) continue;
+      const fullName = `${owner}/${repo}`;
+
+      if (seen.has(fullName)) continue;
       seen.add(fullName);
       repos.push({ fullName, url: `https://github.com/${fullName}` });
       if (repos.length >= config.maxRepos) break;

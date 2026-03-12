@@ -41,7 +41,7 @@ describe("fetchTrendingData", () => {
         };
       }
 
-      if (url.includes("trendshift.io")) {
+      if (new URL(url).hostname === "trendshift.io") {
         return {
           ok: true,
           text: async () =>

@@ -162,7 +162,7 @@ async function generateSummaries(
   fetchedPeers: RepoFetch[],
   trendingData: TrendingData,
   dateStr: string,
-  lang: Lang = "en",
+  lang: Lang = "zh",
 ): Promise<{
   cliDigests: RepoDigest[];
   openclawSummary: string;
