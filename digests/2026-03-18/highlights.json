@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.78 发布，Opus 4.6 输出上限飙至 128k",
+      "Kimi CLI v1.23.0 重磅上线后台 Bash 任务+终端通知",
+      "Qwen Code v0.12.6 发布，max_tokens 默认提升至 32K",
+      "OpenCode 28 个 PR 爆发式更新，GitLab Agent 集成推进",
+      "OpenAI Codex Linux 沙盒紧急修复，token 消耗争议 93 评论",
+      "Gemini CLI Plan 模式稳定性危机，Memory 子系统重构中"
+    ],
+    "ai-agents": [
+      "OpenClaw 24 小时 500 Issues+500 PRs 极高活跃度",
+      "Cortex 本地记忆系统集成 PR #44421 进入评审",
+      "OpenClaw 网关崩溃与 WhatsApp/Telegram 通道故障集中修复",
+      "GPT-5.4、Mistral、Google Vertex 认证兼容性攻坚",
+      "NanoBot、Zeroclaw 等 13 个 Claw 生态项目并行迭代",
+      "Agent 工具通道断开等 4 项回归问题已关闭"
+    ],
+    "ai-trending": [
+      "obra/superpowers Agentic skills 框架登 Trending",
+      "abhigyanpatwari/GitNexus 浏览器端 Graph RAG Agent 开源",
+      "langchain-ai/deepagents LangGraph 新框架引关注",
+      "jarrodwatts/claude-hud Claude Code 插件热度攀升",
+      "browser-use/browser-use 自动化浏览器 Agent 持续火热",
+      "OpenHands/OpenHands 代码生成 Agent 社区活跃"
+    ],
+    "ai-web": [
+      "Anthropic 首发劳动经济学研究，AI 替代论遭数据挑战",
+      "observed exposure 新指标：AI 实际覆盖远低于理论值",
+      "高暴露职业画像：年长女性高学历，失业未升但招聘放缓",
+      "OpenAI 官网现 GPT-5.4 Mini/Nano 索引条目，产品敏感期",
+      "Anthropic 以深度研究建立政策影响力，差异化对打 OpenAI",
+      "OpenAI 战略收缩信号：砍边缘项目，专注核心商业产品"
+    ],
+    "ai-hn": [
+      "GPT-5.4 Mini/Nano 203 分登顶，127 评论深度讨论",
+      "Claude 单日 3 条宕机帖，开发者怒斥几乎每天崩溃",
+      "YC CEO Garry Tan 开源 Claude Code 配置，50 评论热议",
+      "Antfly Go 多模态 AI 记忆图数据库，79 分高互动",
+      "Horizon Rust GPU 加速无限画布终端，AI 编程新范式",
+      "OpenAI 砍边缘项目专注核心，战略转向引关注"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.77–78 adds hook APIs, token limits",
+      "OpenAI Codex ships 3 alphas with minimal changelogs",
+      "Gemini CLI v0.35.0-preview.1 emphasizes ACP integration",
+      "Six-way vendor race: Anthropic plugins vs OpenAI sandboxing",
+      "MCP protocol adoption spreads across all major tools",
+      "Permission fatigue and Windows parity dominate community"
+    ],
+    "ai-agents": [
+      "OpenClaw hits 500 issues and 500 PRs in 24 hours",
+      "Critical regressions in versions 2026.3.11–2026.3.13",
+      "No new releases as maintainers focus on stability fixes",
+      "102 comments on long-running i18n discussion thread",
+      "Gateway connectivity bugs plague recent releases",
+      "13 projects now in OpenClaw ecosystem family"
+    ],
+    "ai-trending": [
+      "obra/superpowers gains 3,078 stars for agentic skills",
+      "langchain-ai/deepagents earns 1,415 stars for subagents",
+      "Claude Code plugins emerge as distinct category",
+      "jarrodwatts/claude-hud adds agent observability",
+      "GitNexus brings zero-server knowledge graphs to browser",
+      "Local-first architectures dominate developer demand"
+    ],
+    "ai-web": [
+      "Anthropic introduces 'observed exposure' labor metric",
+      "AI labor penetration far below theoretical maximums",
+      "No systematic unemployment increase detected since 2022",
+      "OpenAI's GPT-5.4 Mini metadata lacks article text",
+      "Hiring of young workers in exposed roles decelerates",
+      "Frontier labs show divergent communication strategies"
+    ],
+    "ai-hn": [
+      "OpenAI releases GPT-5.4 Mini and Nano models",
+      "Anthropic suffers multiple Claude Code outage reports",
+      "Encyclopedia Britannica sues OpenAI over training data",
+      "Garry Tan's Claude Code setup goes viral on HN",
+      "Node.js PR rejected over AI-generated code controversy",
+      "Openpilot 0.11 first robotics agent trained in simulation"
+    ]
+  }
+}
