@@ -211,7 +211,13 @@ const LABEL_COLORS: Record<string, string> = {
  * won't create "mentioned this issue" notifications on external repos.
  */
 function neutralizeGitHubRefs(text: string): string {
-  return text.replace(/https:\/\/github\.com\//g, "https://github\u200B.com/");
+  return (
+    text
+      // Prevent "mentioned this issue" cross-references
+      .replace(/https:\/\/github\.com\//g, "https://github\u200B.com/")
+      // Prevent @mention notifications — insert zero-width space after @
+      .replace(/@([a-zA-Z\d](?:[a-zA-Z\d]|-(?=[a-zA-Z\d])){0,38})/g, "@\u200B$1")
+  );
 }
 
 export async function createGitHubIssue(title: string, body: string, label: string): Promise<string> {
