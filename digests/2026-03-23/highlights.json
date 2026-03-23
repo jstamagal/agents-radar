@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 遭遇 Win 蓝屏难题，今日紧急修复",
+      "OpenAI Codex 重构权限系统，安全沙箱成焦点",
+      "Gemini CLI 推独立 LSP，Agent 记忆功能上线",
+      "GitHub Copilot CLI 收到 22 个负面反馈，引担忧",
+      "OpenCode 发布 v1.3.0，完美适配 GitLab",
+      "Qwen Code 发力 IDE 补齐，对标 VSCode 功能"
+    ],
+    "ai-agents": [
+      "OpenClaw 社区 Issues 和 PRs 均达 500 条",
+      "v2026.3.13 版本现严重回归 Bug，WebSocket 握手超时",
+      "CLI 官方支持中英双语，大幅提升易用性",
+      "修复 Tailscale Serve 访问 Canvas 401 认证错误",
+      "Telegram 轮询机制修复，解决网络卡死问题",
+      "Agent 编辑工具逻辑加固，操作失败率降低"
+    ],
+    "ai-trending": [
+      "Claude Code 增强引擎 Star 今日暴涨 3700+",
+      "字节开源 SuperAgent Deer-Flow，集成沙箱与记忆",
+      "MoneyPrinterV2 横空出世，一键生成高清短视频",
+      "TradingAgents 多智能体框架，主打金融决策",
+      "Pentagi 自动化渗透测试 Agent，展现安全潜力",
+      "Minecraft AI 生成器，高精度还原真实地图"
+    ],
+    "ai-hn": [
+      "揭示 GPT-5.2 与 Claude 共患“沉默症”",
+      "Claude 深度介入移动 App QA 流程，迈向工程职责",
+      "Rust 社区调查：维护者对 AI 态度两极分化",
+      "沃尔玛弃用 OpenAI，引发商业化可持续性质疑",
+      "OpenAI 免费版全面引入广告，社区哗然",
+      "硬核指南：现代 LLM 注意力机制变体解析"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code faces Windows BSOD and stability issues",
+      "AI CLI landscape shifts from features to UX friction",
+      "Agentic capabilities becoming standard across major tools",
+      "Terminal UI rendering is the new primary bottleneck",
+      "Debates heat up over 'YOLO modes' vs safety approvals",
+      "Tools diverge on autonomy while converging on standards"
+    ],
+    "ai-agents": [
+      "OpenClaw sees 500 issues and 500 PRs in 24 hours",
+      "Project battles regressions affecting WhatsApp and Slack",
+      "Critical deadlocks halt core gateway and agent lifecycle",
+      "Stabilization phase targets crashes in recent versions",
+      "All 500 active PRs remain open pending review batch",
+      "No new releases as team focuses on critical maintenance"
+    ],
+    "ai-trending": [
+      "everything-claude-code adds 3,700 stars today",
+      "Ecosystem shift towards 'Agent Capabilities' and Claude",
+      "Post-Cursor era: custom harnesses for AI coding agents",
+      "Multi-agent frameworks dominate the application layer",
+      "Autonomous penetration testing agents reach maturity",
+      "Trending list focuses on agentic application workflows"
+    ],
+    "ai-hn": [
+      "Rust contributors spark debate on AI displacement",
+      "Walmart reportedly fires OpenAI for cheaper solution",
+      "OpenAI controversially adds ads to ChatGPT platform",
+      "Researchers document 'deterministic silence' in models",
+      "Anthropic polices trademarks amid Claude tooling boom",
+      "Claude Code ecosystem sees 'grindset' tooling surge"
+    ]
+  }
+}
