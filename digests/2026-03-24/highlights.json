@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v1.1.7714 灾难级更新引发计费与安装Bug",
+      "OpenAI Codex VSCode扩展暴雷致Token消耗过快",
+      "Kimi Code v1.25.0 发布重磅插件系统与/loop功能",
+      "OpenCode 移除Anthropic代码致用户OAuth登录崩塌",
+      "Copilot CLI 强化Monorepo但存在配置加载失效",
+      "主流AI CLI工具达成深度集成MCP与Agent流共识"
+    ],
+    "ai-agents": [
+      "OpenClaw 发型 v2026.3.22 引入ClawHub优先策略",
+      "OpenClaw 遭遇严重事故：UI资源文件遗漏致面板崩溃",
+      "过去24小时OpenClaw社区处理500条Issues与PRs",
+      "发布 v2026.3.23 紧急修复 macOS 会话超时问题",
+      "国际化与定时任务改进的PR正在积极推进中",
+      "项目活跃度极高，正从单一对话向全栈编排转型"
+    ],
+    "ai-trending": [
+      "Claude Code生态爆发：everything-claude-code单日涨星4458",
+      "字节开源Deer-Flow：利用沙箱与记忆管理SuperAgent",
+      "MoneyPrinterV2受热捧：AI整合网络自动化实现流量变现",
+      "browser-use让AI Agent直接操作浏览器落地实际应用",
+      "TradingAgents多智能体框架进军复杂金融交易决策",
+      "AI趋势完全由Agent与编程助手主导，执行成核心需求"
+    ],
+    "ai-web": [
+      "Anthropic重磅：Claude Opus 4.5 成哈佛物理研究生",
+      "AI两周完成人类一年物理计算，消耗3600万tokens",
+      "Anthropic发布长时运行指南，解决科学计算最后一公里",
+      "设立Science Blog，将AI定义为科研基础设施而非工具",
+      "OpenAI今日静默，仅更新Sora安全创作审查页面",
+      "Anthropic展示科研新范式：人类指挥官+AI执行者"
+    ],
+    "ai-hn": [
+      "Claude Code生产力引发热议：是革命还是能力退化？",
+      "Claude Code CheatSheet成热搜，Prompt成新快捷键",
+      "黄仁勋称已实现AGI，HN社区激辩定义与资本兑现",
+      "Show HN: Cq 打造专属AI Coding Agents的StackOverflow",
+      "OpenAI被曝激进扩张IPO传闻，人员编制翻倍引关注",
+      "社区反思AI狂欢：持续性精神病风险与道德边界"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.81 faces critical regressions",
+      "Token drain anxiety hits OpenAI and Claude users",
+      "Multi-agent orchestration causes memory leaks",
+      "MCP support is now a standard ecosystem requirement",
+      "OpenAI Codex stability degrades in v0.117.0-alpha",
+      "GitHub Copilot remains stable in v1.0.11"
+    ],
+    "ai-agents": [
+      "OpenClaw fixes Chrome MCP handshake in v2026.3.23",
+      "Caution advised for OpenClaw v2026.3.22 release",
+      "Over 1,000 issues/PRs updated in 24 hours",
+      "Plugin installation changes cause friction",
+      "Knowledge Graph memory and cron tools arriving",
+      "Rapid development cycle strains release stability"
+    ],
+    "ai-trending": [
+      "Claude Code harness hits 101k stars today",
+      "ByteDance releases open-source 'SuperAgent' Deer-Flow",
+      "n8n-mcp bridges Claude with visual automation",
+      "Tauric TradingAgents framework surges in popularity",
+      "E2B provides secure sandbox for code agents",
+      "Resurgence in fundamental AI implementation tools"
+    ],
+    "ai-web": [
+      "Anthropic unveils 'The AI Grad Student' case study",
+      "Claude Opus 4.5 performs frontier physics research",
+      "Workflow compressed 1 year into just 2 weeks",
+      "Anthropic launches dedicated Science Blog",
+      "OpenAI releases safety update for Sora model",
+      "AI shift from chatbot to autonomous scientist"
+    ],
+    "ai-hn": [
+      "HN captivated by Claude Code ecosystem growth",
+      "Skepticism rises over OpenAI's business expansion",
+      "Community debates Nvidia CEO's AGI definition claims",
+      "OpenAI moves toward autonomous research agents",
+      "Coding agent workflows dominate discussions",
+      "AGI debate: passing tests vs real intelligence"
+    ]
+  }
+}
