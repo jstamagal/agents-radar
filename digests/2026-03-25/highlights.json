@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Copilot CLI 策略回退，v1.0.11 被指存在回归危机",
+      "OpenCode 遭遇严重内存泄漏，性能瓶颈阻碍生产可用",
+      "Qwen Code v0.13.0 迭代迅速，正积极拓展 Telegram 新渠道",
+      "Claude Code 深陷阵痛期，社区插件填补跨平台支持空白",
+      "OpenAI Codex 重构底层，Rust Alpha 深度优化异步架构",
+      "生态焦点转移：从模型智商转向工程鲁棒性与 Windows 适配"
+    ],
+    "ai-agents": [
+      "OpenClaw 24小时激增 500 Issues，v2026.3.23 遭遇升级阵痛",
+      "严重 Bug：新版 UI 资源缺失，WhatsApp 插件大面积崩溃",
+      "架构升级失败：内存索引失效，官方建议暂缓升级至生产环境",
+      "突发动态：迪士尼撤资，因 OpenAI 关闭 Sora 视频应用",
+      "Anthropic 进军科研：实证研究 Claude 已能独立完成物理计算",
+      "字节开源 Deer Flow 霸榜，SuperAgent 架构引爆 GitHub 社区"
+    ],
+    "ai-trending": [
+      "字节 Deer Flow 单日爆增 4300+ Star，定义 SuperAgent 新标准",
+      "GitHub 被 Claude Code 生态屠榜，自动化工具链迎来爆发",
+      "MoneyPrinterV2 狂揽 3000+ Star，AI 自动化变现热度不减",
+      "多智能体金融交易框架 TradingAgents 受热捧，Star 涨至 1700+",
+      "Claude Code 性能增强版 Star 破 10 万，开发者关注度极高",
+      "NouResearch 发布 Hermes Agent，主打长期记忆与自我进化"
+    ],
+    "ai-web": [
+      "Anthropic 发布经济指数：模型使用正向长尾、高复杂任务渗透",
+      "哈佛教授实锤：Claude 仅用两周完成物理系博士一年计算量",
+      "工程突破：Anthropic 借鉴 GAN 思路，解决长周期自主编码难题",
+      "OpenAI 发布 ChatGPT 新发现机制，青少年安全合规再升级",
+      "Anthropic 旨在从政策高度定义 AI 经济价值，抢占监管话语权",
+      "Harvard 案例：3600 万 Token 迭代 110 次，Claude 挑战高能物理"
+    ],
+    "ai-hn": [
+      "重磅突发：OpenAI 宣布关停 Sora，仅上线 15 个月即宣告失败",
+      "迪士尼退出 10 亿美元投资，Sora 关停引发 AI 商业化地震",
+      "社区热议：Sora 关停标志视频生成泡沫破裂，推理成本难以为继",
+      "法官质疑美政府封杀 Anthropic 动机，监管合法性与政治博弈引争议",
+      "Claude Code 自动化功能成技术热点，AI 编程进入深水区",
+      "AI 视频遭遇现实检验：高成本与用户付费意愿不匹配成痛点"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code shifts focus to extensibility",
+      "Ecosystem prioritizes platform parity & ARM",
+      "OpenAI Codex v0.117.0-alpha is resource heavy",
+      "Claude Code Skills ecosystem is growing",
+      "Gemini CLI v0.36.0-preview is refactoring",
+      "Market moves to mission-critical infrastructure"
+    ],
+    "ai-agents": [
+      "OpenClaw hits 500 issues & 500 PRs today",
+      "Recovering from 'Control UI' disaster",
+      "Fixing platform-specific channel crashes",
+      "Plugin compatibility issues causing friction",
+      "Phishing scam warning closed by moderators",
+      "Project stabilizes 2026.3.22 and 2026.3.23"
+    ],
+    "ai-trending": [
+      "ByteDance releases Deer-Flow SuperAgent",
+      "Deer-Flow harness hits 4,300+ stars",
+      "Autonomous Financial Agents are trending",
+      "TradingAgents framework for LLM trading",
+      "MoneyPrinterV2 goes viral with 3,006 stars",
+      "ruflo framework extends Claude Code"
+    ],
+    "ai-web": [
+      "Anthropic releases Economic Index March 2026",
+      "Claude Opus 4.6 shows diversifying usage",
+      "Shift from replacement to augmentation confirmed",
+      "Deep dive into Vibe Physics published",
+      "New docs on Harness Design for agents",
+      "OpenAI focuses on governance & safety"
+    ],
+    "ai-hn": [
+      "OpenAI shuts down Sora video app",
+      "Community debates Sora's financial viability",
+      "Disney exits $1B OpenAI deal",
+      "Sora lasted just 15 months before closure",
+      "Dev focus shifts to Agentic workflows",
+      "Claude Auto Mode security discussed"
+    ]
+  }
+}
