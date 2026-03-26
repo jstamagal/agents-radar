@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.83 紧急回滚：因权限系统崩塌引发生态危机",
+      "OpenAI Codex v0.117.0-alpha：Rust SDK 上线，计费焦虑达顶峰",
+      "Gemini CLI 架构重构：引入 DAG 任务系统以解决 Agent 卡顿",
+      "Kimi Code v1.26.0 插件 Beta：聚焦大仓库支持与交互习惯争议",
+      "GitHub Copilot v1.0.12-x：进入静默修补期，主攻企业策略适配",
+      "Qwen Code v0.14.0：IDE 集成增强，补齐 Windows 兼容性短板"
+    ],
+    "ai-agents": [
+      "OpenClaw 单日 500 Issues 社区大爆炸：v2026.3.24 紧急修复沙箱逃逸",
+      "OpenClaw 增强版发布：新增 /v1/embeddings 接口，全面兼容 OpenAI 协议",
+      "Node 22.14+ 兼容性危机：OpenClaw 运维团队连夜降级内核要求",
+      "OpenClaw v2026.3.24-beta.2：修补文件系统策略，严防本地文件泄露",
+      "运维重心转向维稳：146 个 PR 合并，重点修复插件兼容性回归",
+      "社区反馈强烈：UI 资源丢失与代理认证失效成今日最大痛点"
+    ],
+    "ai-trending": [
+      "字节跳动 Deer-flow 横空出世：日增 3800+ 星，打造企业级 SuperAgent 栈",
+      "RuView 今日爆红：利用 WiFi 信号进行隔空姿态监测，非视觉感知新热点",
+      "BerriAI/LiteLLM 备受瞩目：统一百款 LLM API，解决企业模型切换痛点",
+      "Ruvnet/Ruflo 受追捧：基于 Claude 的多智能体编排平台，日增千星",
+      "Firecrawl 热度不减：全站转 Markdown，仍是 RAG 数据采集首选工具",
+      "mvanhorn 技能登榜：聚合 Reddit/X 数据的调研 Agent，信息搜集利器"
+    ],
+    "ai-web": [
+      "Anthropic 推出 Claude Code Auto 模式：智能拦截危险操作，终结审批疲劳",
+      "哈佛教授实测：AI 两周搞定一年物理计算，36M tokens 产严谨论文",
+      "Anthropic 开启科学博客：定义 AI 为科研认知外包，加速科学发现",
+      "研究揭示 Claude Auto Mode：在沙箱与全免权限间，寻找安全的平衡点",
+      "经济指数新高：高粘性用户通过 AI 获取显著经济回报趋势确立",
+      "长进程 Claude 优化：科学计算任务不再受限于对话时长限制"
+    ],
+    "ai-hn": [
+      "Claude 代码垃圾论：90% 输出流向低星仓库，模型崩溃引担忧",
+      "Show HN: Optio：在 K8s 中编排 AI Agent，实现从工单到 PR 的全自动闭环",
+      "Show HN: GhostDesk：给 AI 一个完整的 Linux 桌面，通过 MCP 操作 GUI",
+      "Show HN: Rick：开源 AI CEO 亮相，号称能自主运营初创公司",
+      "Google TurboQuant：新技术号称能在不牺牲质量下压缩 6 倍 LLM 内存",
+      "Tamp.dev 热议：无需改代码即可将 LLM 上下文大小减少 50%"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.83 addresses critical regressions",
+      "OpenAI Codex refactors core infrastructure",
+      "Gemini CLI focuses on GCP remote workspaces",
+      "GitHub Copilot patch prioritizes MCP stability",
+      "Kimi Code and Qwen add new CLI integrations",
+      "High volatility: 80% of tools report critical bugs"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.3.24 boosts OpenAI compatibility",
+      "500 issues and PRs updated in 24 hours",
+      "New native GTK4 apps planned for Linux",
+      "OAuth token persistence issues reported",
+      "WeChat/WhatsApp plugins facing incompatibilities",
+      "Turbulence mounts amid rapid release cadence"
+    ],
+    "ai-trending": [
+      "Deer-Flow gains 3,787 stars: SuperAgent harness",
+      "Ruflo hits +1,174 stars: Agent orchestration",
+      "RuView enables WiFi sensing for pose estimation",
+      "Last30days skill hits +1,341 stars",
+      "Shift to Agentic AI and computer use",
+      "Letta adds subconscious memory layers"
+    ],
+    "ai-web": [
+      "Claude discovers zero-day Firefox vulnerabilities",
+      "Anthropic releases AI Economic Index",
+      "Opus 4.6: AI models as grad students",
+      "AI found 20% of Firefox's high-severity flaws",
+      "New safety specs and model policies released",
+      "Focus shifts to physical world automation"
+    ],
+    "ai-hn": [
+      "90% of Claude code goes to repos <2 stars",
+      "Skepticism rises over AI coding utility",
+      "Claude is a top OpenAI repo contributor",
+      "Grove: ML training via Apple AirDrop",
+      "Tamp cuts LLM context size by 50%",
+      "New tooling for orchestrating AI agents"
+    ]
+  }
+}
