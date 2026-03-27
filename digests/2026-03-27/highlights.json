@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 生态爆发：MCP 插件系统增强",
+      "Gemini CLI 陷危机：紧急修复内存泄漏与认证死锁",
+      "OpenAI Codex 独立化：MCP 协议剥离与 TUI 重构",
+      "Qwen Code v0.13.1：重点优化 Windows 权限与 LSP",
+      "Copilot CLI 陷停滞：版本迭代慢，创新乏力",
+      "OpenCode 底层重构：弃 Bun 转 Hono，修复异构兼容"
+    ],
+    "ai-agents": [
+      "OpenClaw 吞吐量炸裂：单日 500 PR 修复全栈富文本",
+      "字节开源 deer-flow：专攻长视界任务的 SuperAgent",
+      "AgentScope 主打透明：解决 Agent 调试中的黑盒难题",
+      "oh-my-claudecode：Claude Code 多智能体编排工具",
+      "RuView 黑马诞生：利用 WiFi 信号实现人体姿态估计",
+      "Rig 框架填补空白：Rust 生态的高性能 LLM 应用层"
+    ],
+    "ai-web": [
+      "Claude 指导新手：机器狗取球速度翻倍，物理交互能力验证",
+      "Firefox 漏洞挖掘：Claude 贡献 2025 年度 20% 高危发现",
+      "便利店实验 Phase 2：Claude 4.0 升级后再战实体经济",
+      "Claude 3.7 实战：披露经营便利店失败的系统提示词",
+      "HN 热议：AI 一天重写 JSONata 节省 50 万美金成本",
+      "Disney 撤资 10 亿：因 Sora 关停计划终止 OpenAI 合作"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.85 faces 10 critical bugs",
+      "OpenAI Codex plagued by burning token bugs",
+      "Kimi CLI heavily invests in Plugin systems",
+      "Ecosystem shifts to agentic platforms",
+      "Model Context Protocol adoption encounters friction",
+      "Stability remains bottleneck to enterprise adoption"
+    ],
+    "ai-agents": [
+      "OpenClaw suffers 500 issues and 500 PRs today",
+      "Recent releases caused widespread plugin failures",
+      "Hotfix imminent for widespread crashes",
+      "Adaptive Cards rendering expands to iOS, Android",
+      "Enhanced memory management underway",
+      "High volatility in current development cycle"
+    ],
+    "ai-trending": [
+      "RuView turns WiFi signals into pose data",
+      "Deep Research agents focus on long-horizon tasks",
+      "Open source shifts to specialized reasoning",
+      "AgentScope focuses on agent observability",
+      "Insanely Fast Whisper optimizes local ASR",
+      "Rig framework gains popularity in Rust"
+    ],
+    "ai-web": [
+      "Anthropic tests Claude as robotics reasoning engine",
+      "AI validates agency in physical environments",
+      "Non-experts use Claude to train robot dog",
+      "New red teaming studies on offensive security",
+      "OpenAI remains silent in this news cycle",
+      "Stress tests target Claude's autonomous abilities"
+    ],
+    "ai-hn": [
+      "Judge grants injunction vs Dept of War",
+      "$500 GPU beats Claude on coding benchmarks",
+      "Claude Code throttling sparks user outrage",
+      "AI rewrite saves $500k annually in JSONata",
+      "Agencies purchasing bulk location data",
+      "Debate rages on local vs API inference"
+    ]
+  }
+}
