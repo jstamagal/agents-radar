@@ -29,6 +29,13 @@ cli_repos:
   - id: qwen-code
     repo: QwenLM/qwen-code
     name: Qwen Code
+  - id: llxprt
+    repo: vybestack/llxprt-code
+    name: LLXprt-Code
+  - id: pi
+    repo: badlogic/pi-mono
+    name: Pi Mono-Repo
+    
 
 # ── Claude Code Skills ────────────────────────────────────────────────────────
 # Tracked separately without a date filter, sorted by community engagement.
@@ -86,3 +93,20 @@ openclaw_peers:
   - id: easyclaw
     repo: gaoyangz77/easyclaw
     name: EasyClaw
+
+# ── RSS output metadata ────────────────────────────────────────────────────────
+# Controls the generated feed.xml channel metadata.
+
+rss:
+  site_url: https://duanyytop.github.io/agents-radar
+  title: agents-radar
+  description: AI open source ecosystem daily digest
+  language: en
+
+# ── Trendshift source ──────────────────────────────────────────────────────────
+# Additional GitHub trend data source from trendshift.io.
+
+trendshift:
+  enabled: true
+  url: https://trendshift.io/repositories
+  max_repos: 30

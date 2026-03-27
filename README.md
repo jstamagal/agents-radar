@@ -130,12 +130,13 @@ OpenClaw is tracked as the primary reference project, alongside several peer pro
 
 ### GitHub AI Trending
 
-Two data sources are fetched in parallel every day:
+Three data sources are fetched in parallel every day:
 
 | Source | Details |
 |--------|---------|
 | [github.com/trending](https://github.com/trending?since=daily) | Today's trending repos — parsed from HTML; includes today's new star count |
 | GitHub Search API | Repos active in the last 7 days matching 6 AI topics: `llm`, `ai-agent`, `rag`, `vector-database`, `large-language-model`, `machine-learning` |
+| [trendshift.io](https://trendshift.io/repositories) | Rising GitHub repositories parsed from Trendshift to improve early-signal coverage |
 
 The LLM filters out non-AI repos from the trending list, classifies the rest by dimension (AI infrastructure / agents / applications / models / RAG), and extracts trend signals.
 
@@ -185,6 +186,19 @@ openclaw_peers:
   - id: my-agent
     repo: owner/my-agent
     name: My Agent
+
+# Customize generated RSS metadata
+rss:
+  site_url: https://example.com/agents-radar
+  title: My Agents Radar
+  description: Daily AI ecosystem digest
+  language: en-US
+
+# Configure Trendshift source (optional)
+trendshift:
+  enabled: true
+  url: https://trendshift.io/repositories
+  max_repos: 20
 ```
 
 ### 3. Add Secrets
@@ -229,7 +243,7 @@ Set `LLM_PROVIDER` to choose which model backend powers the digest generation. D
 | Anthropic | `anthropic` | `ANTHROPIC_API_KEY` | `claude-sonnet-4-6` |
 | OpenAI | `openai` | `OPENAI_API_KEY` | `gpt-4o` |
 | GitHub Copilot | `github-copilot` | `GITHUB_TOKEN` | `gpt-4o` |
-| OpenRouter | `openrouter` | `OPENROUTER_API_KEY` | `anthropic/claude-sonnet-4` |
+| OpenRouter | `openrouter` | `OPENROUTER_API_KEY` | `anthropic/claude-sonnet-4.6` |
 
 Override the model name with `ANTHROPIC_MODEL`, `OPENAI_MODEL`, `GITHUB_COPILOT_MODEL`, or `OPENROUTER_MODEL` respectively.
 
