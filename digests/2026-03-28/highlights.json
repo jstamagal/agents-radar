@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.86：Plan Mode失效引发安全担忧",
+      "OpenAI Codex更新：WebSocket故障与权限重构",
+      "Gemini CLI聚焦AST感知：修复UI闪烁与Memory",
+      "Copilot CLI引争议：Alt-screen策略遭社区质疑",
+      "Kimi v1.27.0：Shell模式沙箱化与Figma集成",
+      "Qwen Code中文路径修复：解决IDE Token浪费"
+    ],
+    "ai-agents": [
+      "OpenClaw日活500：修复Ollama输出为空Bug",
+      "引入审计钩子：强化安装前的Skill安全检查",
+      "原生客户端缺位：Linux/Windows桌面端呼声高",
+      "低延迟语音：Realtime Voice PR持续活跃",
+      "富文本展示：Slack Block Kit提升交互体验",
+      "回归问题修复：3.8/3.11版本稳定性加固"
+    ],
+    "ai-trending": [
+      "obra/superpowers爆火：定义AI Agent软件工程流程",
+      "oh-my-claudecode：多Agent协作框架引爆GitHub",
+      "SakanaAI v2：利用树搜索实现自动化科学发现",
+      "超级Agent技能包：自动调研全网信息流",
+      "Onyx开源平台：兼容所有主流LLM企业级方案",
+      "VibeVoice：微软出品语音转文字效率标杆"
+    ],
+    "ai-hn": [
+      "热文剖析：.claude文件夹解剖与数据隐私",
+      "泄露疑云：Anthropic秘密测试新模型Mythos",
+      "Sora关停与裁员：AI祛魅潮打击微软股价",
+      "趣味Hacker：为Claude Code打造动物森友会UI",
+      "Kernel维护者评价：AI漏洞报告从垃圾变正规",
+      "前线惊魂：AI精神病人导致实战战损传闻"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.86 released with critical bug fixes",
+      "Claude Code adds session tracking and VCS support",
+      "OpenAI Codex v0.118.0-alpha.x iterates fast",
+      "Kimi Code and OpenCode optimize UI and mobile",
+      "Ecosystem shifts focus to stability and security",
+      "Copilot, Gemini, and Qwen stabilize agent modes"
+    ],
+    "ai-agents": [
+      "OpenClaw reports 500 issues and 500 PRs active",
+      "OpenClaw merges Ollama thinking model support",
+      "OpenClaw preps release 2026.4.0 for complex sprints",
+      "NVIDIA NIM support added to OpenClaw project",
+      "Project introduces ACP subagent threading",
+      "90% of top issues are open bug reports"
+    ],
+    "ai-trending": [
+      "obra/superpowers gains 2,752 stars today",
+      "AI shifts focus to agentic autonomy frameworks",
+      "Microsoft open-sources VibeVoice model",
+      "oh-my-claudecode adds team orchestration layer",
+      "chandra model targets complex OCR and tables",
+      "SakanaAI v2 uses Tree Search for discovery"
+    ],
+    "ai-hn": [
+      "Leak reveals Anthropic testing 'Claude Mythos'",
+      "Community debates .claude folder internal structure",
+      "Anthropic faces throttling and uptime issues",
+      "Linux kernel welcomes AI-generated bug reports",
+      "OpenAI's new ad program sparks creator backlash",
+      "Cybersecurity stocks dip over new AI rumors"
+    ]
+  }
+}
