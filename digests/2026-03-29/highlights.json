@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 社区痛点集中，Windows/TUI稳定性成最大瓶颈",
+      "OpenAI Codex 架构重构活跃，专注解决Agent运行时兼容性",
+      "GitHub Copilot CLI UX遭灾难级反馈，响应速度引发不满",
+      "Qwen Code 功能爆发，重磅功能频出但引发架构争议",
+      "行业转向拼工程质量，数据丢失与权限失控问题凸显",
+      "全行业Windows适配恶化，社区强烈呼吁偿还技术债"
+    ],
+    "ai-agents": [
+      "OpenClaw 发布 v2026.3.28-beta.1，移除旧版 Qwen 认证",
+      "关键补丁修复媒体信任绕过漏洞，防止本地文件被窃取",
+      "Windows 生态突破，实现 PowerShell 审批白名单与引号修复",
+      "优化 Agent 编排能力，提出并行子任务等待新机制",
+      "单日处理超千条更新，社区集中反馈 pi-coding-agent 问题",
+      "安全性大幅强化，重点解决指令执行安全与可用性"
+    ],
+    "ai-trending": [
+      "obra/superpowers 暴增 2292 Star，定义 AI 编程工程化标准",
+      "AI-Scientist-v2 热度激增，全自动科研引发高认知任务突破",
+      "金融垂直 Agent dexter 崛起，深度研究获 581 Star",
+      "社区焦点转向 Agent 工程，从追模型权重转向构建方法论",
+      "OCR 与多模态工具 Deep-Live-Cam 走红，致力解决脏数据痛点",
+      "obra/superpowers 提出标准流程，开发者追求构建 Agent 方法论"
+    ],
+    "ai-hn": [
+      "人机协作解决 Knuth 难题，AI 被比作生物学显微镜",
+      "Anthropic 模型泄露引恐慌，讨论空前网络安全风险",
+      "多智能体研究 hub 反向验证码，筛选真人用户引热议",
+      "Claude CLI 结合 Obsidian，开发者分享个人税务自动化妙招",
+      "Claude Code 数据丢失引担忧，OpenAI Codex 重构求稳",
+      "社区热议伪效率，反思 AI 让懒惰看起来像生产力的陷阱"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code: Critical filesystem bugs reported",
+      "OpenAI Codex: TUI refactoring accelerates",
+      "Gemini CLI: v0.36.0-p6 released, stabilizing",
+      "Copilot CLI: High TUI friction reported",
+      "Qwen Code: Security hardening in progress",
+      "Ecosystem shifts to spec-driven development"
+    ],
+    "ai-agents": [
+      "OpenClaw: 1000 daily issues and PRs logged",
+      "Breaking: Qwen OAuth removed in beta",
+      "Auth migration required for Qwen users",
+      "Embedded agent authentication issues found",
+      "Linux companion app currently in dev",
+      "Project focuses on crash fixes and security"
+    ],
+    "ai-trending": [
+      "Shift from chat to 'doing' frameworks",
+      "SakanaAI: v2 research agent trending",
+      "Ollama: 166k stars, local LLM standard",
+      "browser-use: 84k stars, web automation",
+      "E2B infrastructure solidifies agent runtimes",
+      "Chandra: New complex OCR model launch"
+    ],
+    "ai-hn": [
+      "AI helps solve Knuth's Claude Cycles",
+      "Laziness vs. productivity debate rages",
+      "Unverified Anthropic leak sparks debate",
+      "Formal verification: A new AI holy grail",
+      "Generative AI's impact on learning studied",
+      "Cybersecurity risks of new models weighed"
+    ]
+  }
+}
