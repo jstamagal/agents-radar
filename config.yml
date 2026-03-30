@@ -14,6 +14,9 @@ cli_repos:
   - id: codex
     repo: openai/codex
     name: OpenAI Codex
+  - id: crush
+    repo: charmbracelet/crush
+    name: Charm Crush
   - id: gemini-cli
     repo: google-gemini/gemini-cli
     name: Gemini CLI
