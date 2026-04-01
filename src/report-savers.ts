@@ -60,7 +60,7 @@ export async function saveWebReport(
         const issueTitle = WEB_REPORT.issueTitle(dateStr, isFirstRun, lang);
         const webLabel = ISSUE_LABELS.web[lang];
         const webUrl = await createGitHubIssue(issueTitle, webContent, webLabel);
-        console.log(`  Created web issue (${lang}): ${webUrl}`);
+        if (webUrl) console.log(`  Created web issue (${lang}): ${webUrl}`);
       }
     } catch (err) {
       console.error(`  [web/${lang}] Report generation failed: ${err}`);
@@ -88,7 +88,10 @@ export async function saveTrendingReport(
   footer: string,
   lang: Lang = "zh",
 ): Promise<void> {
-  const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+  const hasData =
+    trendingData.trendingRepos.length > 0 ||
+    trendingData.searchRepos.length > 0 ||
+    trendingData.trendshiftRepos.length > 0;
   if (!hasData) {
     console.log(`  [trending/${lang}] No data available, skipping report.`);
     return;
@@ -107,7 +110,7 @@ export async function saveTrendingReport(
     const trendingTitle = TRENDING_REPORT.issueTitle(dateStr, lang);
     const trendingLabel = ISSUE_LABELS.trending[lang];
     const trendingUrl = await createGitHubIssue(trendingTitle, trendingContent, trendingLabel);
-    console.log(`  Created trending issue (${lang}): ${trendingUrl}`);
+    if (trendingUrl) console.log(`  Created trending issue (${lang}): ${trendingUrl}`);
   }
 }
 
@@ -151,7 +154,7 @@ export async function saveHnReport(
       const hnTitle = HN_REPORT.issueTitle(dateStr, lang);
       const hnLabel = ISSUE_LABELS.hn[lang];
       const hnUrl = await createGitHubIssue(hnTitle, hnContent, hnLabel);
-      console.log(`  Created HN issue (${lang}): ${hnUrl}`);
+      if (hnUrl) console.log(`  Created HN issue (${lang}): ${hnUrl}`);
     }
   } catch (err) {
     console.error(`  [hn/${lang}] Report generation failed: ${err}`);
