@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 遭遇计费信任危机，社区强烈呼吁开源",
+      "OpenAI Codex 架构重构，MCP 解耦解决扩展痛点",
+      "Kimi Code 狠抓细节，消除回车次数与屏幕闪烁",
+      "Charm Crush 高频更新，Server 模式重构底层",
+      "Qwen Code 修复进程残留，解决僵尸进程连接问题",
+      "Gemini CLI 优化 Windows 兼容，压缩上下文降低内存"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.4.1 发布，原生支持 SearXNG 搜索",
+      "单日千条更新，但 v2026.3.31 引发严重回归 Bug",
+      "Teams 频道修复隔离失效，解决跨线程上下文泄露",
+      "网关 OOM 崩溃已修复，新增 TTL 清理无界 Map",
+      "新增 backup restore 命令，完善备份生命周期管理",
+      "社区活跃度极高，500 PRs 显示强劲开发动力"
+    ],
+    "ai-trending": [
+      "Claude Code 官方 CLI 狂揽万星，终端 Agent 时代来临",
+      "Claude 教程登榜，开发者急需最佳实践指南",
+      "Frontier 级语音模型开源，微软加码多模态基础",
+      "AutoGPT 仍是常青树，见证 Agent 从炒作到落地",
+      "browser-use 热度飙升，打通 Web 自动化最后一公里",
+      "Ollama 稳居本地模型首选，成开发者桌面标准"
+    ],
+    "ai-web": [
+      "Anthropic 进军澳洲，签署 AI 安全 MOU 并投 300 万澳元",
+      "发布澳洲经济指数，Claude 采用率是预期的四倍",
+      "非技术类应用占比反超，澳洲白领工作流渗透深",
+      "OpenAI 暗示重大发布，元数据指向加速下一阶段 AI",
+      "通过数据透明换取信任，Anthropic 政策战略规模化",
+      "新南威尔士占使用量 37%，成为悉尼办选址依据"
+    ],
+    "ai-hn": [
+      "Claude Code 源码泄露，HN 质疑企业级代码审查",
+      "OpenAI 遭遇口碑低谷，被曝囤积全球 40% 内存",
+      "扩散模型 Mercury 2 异军突起，基准击败 StepFun",
+      "Show HN: OpenHarness 登场，开源反击 Claude 闭源",
+      "GitHub 下架泄露代码，DMCA 通知引发开源争论",
+      "AI 轻松反混淆 JS，代码即安全观念受冲击"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code & OpenAI Codex face billing crises",
+      "Ecosystem shifts to Rust/Effect architectures",
+      "Claude Code v2.1.90: Platform instability issues",
+      "Charm Crush pushes open-source architectural shift",
+      "Copilot CLI v1.0.16-1 patch: UX regression",
+      "Qwen Code & Kimi CLI: Local-first workflows rise"
+    ],
+    "ai-agents": [
+      "OpenClaw: 500 issues/PRs updated in 24 hours",
+      "Release v2026.4.1: Chat-native task boards added",
+      "Community battles v2026.3.3x stability regressions",
+      "New SearXNG integration for web search",
+      "High friction: 386 open issues remain",
+      "NanoBot & IronClaw: Active ecosystem peers"
+    ],
+    "ai-trending": [
+      "Anthropic claude-code explodes with 10k+ stars",
+      "Shift: Terminal becomes primary AI interface",
+      "Microsoft VibeVoice adds voice to local agents",
+      "OpenAI Codex: Rust-based CLI competitor",
+      "Rise of 'Agent Harnesses' for memory management",
+      "Ollama & vLLM power local inference stack"
+    ],
+    "ai-web": [
+      "Anthropic signs MOU with Australian government",
+      "Open Sydney office: Expands in Asia-Pacific",
+      "Australian Claude usage 4x per-capita average",
+      "OpenAI announces next phase acceleration",
+      "Claude Economic Index: Global task diversity",
+      "Geopolitical shift beyond US/UK axis"
+    ],
+    "ai-hn": [
+      "Anthropic Claude Code source code leaked",
+      "OpenAI secondary market demand cools",
+      "Minified code easily reverse-engineered by AI",
+      "Mercury 2 challenges StepFun 3.5 Flash",
+      "OpenHarness terminal agent released",
+      "Debate: AI efficacy on code obfuscation"
+    ]
+  }
+}
