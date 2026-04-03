@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.91 紧急修复多起严重 Bug",
+      "OpenAI Codex 极高活跃，核心架构全面 Rust 重构",
+      "Kimi Code v1.30.0 新增 Plan 模式与 Undo 功能",
+      "Windows 兼容性痛点爆发，全平台推广遇阻",
+      "Agent 编排成新战场，社区转向复杂任务可控性",
+      "Copilot 陷停滞模式，活跃度极低"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.4.2 发布，配置迁移与破坏性变更",
+      "严重回归问题：exec 审批与 Dashboard 报错瘫痪生产环境",
+      "OpenAI Codex gpt-5.4-mini 模型支持已合并",
+      "GMI Cloud 提供商集成，生态能力进一步扩展",
+      "24 小时处理 1000 个更新，项目处于极高活跃度",
+      "修复模型回退后会话选择不一致的内核 Bug"
+    ],
+    "ai-trending": [
+      "oh-my-codex 今日爆火，单日涨星 2867",
+      "system_prompts_leaks 逆向提取 GPT-5.4 内部机制",
+      "everything-claude-code 赋予 AI 记忆与安全本能",
+      "IDE 智能化改造成风，Agent Harness 替代传统插件",
+      "browser-use 让 Agent 直接操作浏览器自动化网页",
+      "vllm 持续演进，生产环境部署大模型的首选后端"
+    ],
+    "ai-web": [
+      "Anthropic 揭秘 Claude 内部“情绪”机制原理",
+      "OpenAI 悄然收购 TBPN，官网更新收购公告",
+      "Claude 并非单纯模仿，内部演化出人类心理学表征",
+      "定位“恐惧”神经元为 AI 安全对齐提供新抓手",
+      "OpenAI 更新元数据，涉及企业团队定价调整",
+      "理解 AI 情绪机制是解决幻觉与不可预测性的关键"
+    ],
+    "ai-hn": [
+      "Sora 视频生成亏损率超 200%，商业模式引热议",
+      "Claude Code 源码泄露：Anthropic 筹备 Agent 支付",
+      "AI 基准测试失效，社区重新思考评估标准",
+      "分布式量子计算网络 Show HN 登场",
+      "AI-first PostgreSQL 客户端重塑传统开发工具",
+      "OpenAI 收购 TBPN 与技术债务讨论齐飞"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.91 regresses, causing history loss",
+      "Qwen v0.14.0-preview stabilizes platform parity",
+      "Windows/WSL2 compatibility plagues enterprise devs",
+      "UX stability favored over raw model capability",
+      "Community demands cost metering, sandbox security",
+      "Ecosystem shifts from experimental to production"
+    ],
+    "ai-agents": [
+      "OpenClaw hits 500 issues and PRs in 24 hours",
+      "New v2026.4.2 fixes xAI plugin config paths",
+      "High-velocity dev causes update fatigue, bugs",
+      "Breaking change: xAI settings path migration",
+      "Regression testing lags behind rapid feature dev",
+      "Critical timeouts hit core tools in v2026.3.x"
+    ],
+    "ai-trending": [
+      "oh-my-codex spikes to 2,867 stars today",
+      "Devs race to build open-source agent harnesses",
+      "learn-claude-code reaches 47,223 stars",
+      "OpenCLI turns local tools into AI agent inputs",
+      "Ollama remains standard for local inference",
+      "System prompt transparency trend surges"
+    ],
+    "ai-web": [
+      "Anthropic decodes emotion in Claude Sonnet 4.5",
+      "Research finds internal neurons drive behavior",
+      "OpenAI acquires Tbpn for ecosystem expansion",
+      "OpenAI monetizes Codex dev tools",
+      "Safety focus vs revenue streams divergence",
+      "Mechanistic interpretability achieves breakthrough"
+    ],
+    "ai-hn": [
+      "OpenAI acquisition of TBPN sparks debate",
+      "AI video economics: $20 sub costs $65 compute",
+      "Sora called a money furnace by analysts",
+      "Claude Code leak sparks Anthropic scrutiny",
+      "Unit economics challenge AI sustainability",
+      "Community focus shifts to pragmatism"
+    ]
+  }
+}
