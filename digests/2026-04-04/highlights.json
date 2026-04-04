@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code深陷轮询风暴与配额消耗危机",
+      "OpenAI Codex发布v0.119.0-alpha，迭代频繁",
+      "OpenCode修复PlanMode漏洞，加固执行安全",
+      "Qwen Code发布v0.14.0，探索零成本压缩",
+      "Gemini CLI力推I/O并行与AST性能优化",
+      "行业共识转向：执行优于对话，MCP成核心"
+    ],
+    "ai-agents": [
+      "OpenClaw单日合并500个PR，修复核心稳定性",
+      "新增TUI配置向导，降低第三方插件配置门槛",
+      "修复Gemini API密钥泄露风险，迁移至请求头",
+      "优化Docker环境支持，自动持久化容器别名",
+      "Vertex ADC读取优化，移除存在性预检",
+      "社区热议i18n与跨平台应用，官方暂未排期"
+    ],
+    "ai-trending": [
+      "OmX登顶Trending：打造AI编码器的团队协作系统",
+      "Google开源TimesFM：零样本时间序列预测模型",
+      "fff.nvim发布：针对AI Agent优化的极速文件搜索",
+      "learn-claude-code拆解：从零构建Agent Harness",
+      "everything-claude-code：打造Agent性能增强系统",
+      "工具链成熟化：AI Agent开发项目持续霸榜"
+    ],
+    "ai-web": [
+      "Anthropic发布AI Diff工具：高效识别模型行为差异",
+      "安全范式转型：从被动防御转向主动侦察未知",
+      "解决模型更新盲区：自动化审计成工业级刚需",
+      "Model as Code：模型更新将具备可回滚与可控性",
+      "OpenAI今日静默：疑似处于大版本发布蓄力期",
+      "Anthropic构建护城河：聚焦可解释性与自动化评估"
+    ],
+    "ai-hn": [
+      "Anthropic切断Claude Code第三方接入引发热议",
+      "YC总裁宣称日均编写3.7万行AI代码引争议",
+      "研究警示：AI使用导致人类逻辑思考能力退化",
+      "热议“次贷AI危机”：算力成本或催生行业泡沫",
+      "OpenAI下调ChatGPT企业版价格，B端竞争白热化",
+      "社区反思：过度依赖LLM或致批判性思维丧失"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "AI CLI ecosystem faces stability crisis",
+      "Claude Code battling billing miscalculations",
+      "OpenAI Codex sees high regression activity",
+      "Shift from autocomplete to autonomous agents",
+      "Challenger tools adopt Bun/TypeScript rewrites",
+      "Runtime portability becomes key differentiator"
+    ],
+    "ai-agents": [
+      "OpenClaw reports 500 issues and 500 PRs",
+      "Project plagued by regression-heavy updates",
+      "Critical atomic file system fixes merged",
+      "Heartbeat bug causing session suffix issues",
+      "Users frustrated with broken v2026.4.1 release",
+      "Major improvements in plugin ecosystem"
+    ],
+    "ai-trending": [
+      "Shift towards Autonomous Coding Agents",
+      "oh-my-codex gains 3,047 stars today",
+      "fff.nvim optimized for AI codebase search",
+      "Google releases specialized TimesFM model",
+      "Onyx platform rises as open deployment suite",
+      "Developer focus on 'Agent Engineering'"
+    ],
+    "ai-web": [
+      "Anthropic releases 'model diffing' research",
+      "New tool detects behavioral changes in AI",
+      "Adapts git diff principles to neural networks",
+      "Aims to solve automated interpretability",
+      "Moves safety to proactive behavioral analysis",
+      "OpenAI had no new publications this cycle"
+    ],
+    "ai-hn": [
+      "Anthropic restricts OpenClaw for Claude Code",
+      "Debate: 'Subprime AI Crisis' sustainability",
+      "Study: AI use leads to cognitive surrender",
+      "Anthropic's 'Mythos' hailed for cybersecurity",
+      "Community fears vendor lock-in strategies",
+      "Skepticism on LLM reliability and economics"
+    ]
+  }
+}
