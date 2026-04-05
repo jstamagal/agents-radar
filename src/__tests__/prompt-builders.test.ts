@@ -12,6 +12,7 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHnPrompt,
+  buildWideViewPrompt,
 } from "../prompts-data.ts";
 import type { RepoConfig, GitHubItem, GitHubRelease } from "../github.ts";
 import type { RepoDigest } from "../prompts.ts";
@@ -353,5 +354,86 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildWideViewPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildWideViewPrompt", () => {
+  const trendingData: TrendingData = {
+    trendingRepos: [
+      {
+        fullName: "bytedance/deer-flow",
+        description: "SuperAgent harness for long-horizon tasks",
+        language: "Python",
+        todayStars: 2394,
+        totalStars: 2394,
+        forks: 150,
+        url: "https://github.com/bytedance/deer-flow",
+      },
+      {
+        fullName: "mem0ai/mem0",
+        description: "Universal memory layer for AI agents",
+        language: "Python",
+        todayStars: 0,
+        totalStars: 51156,
+        forks: 4200,
+        url: "https://github.com/mem0ai/mem0",
+      },
+    ],
+    searchRepos: [
+      {
+        fullName: "BrainBlend-AI/atomic-agents",
+        description: "Build agents atomically",
+        language: "Python",
+        stargazersCount: 5816,
+        pushedAt: "2026-03-08",
+        url: "https://github.com/BrainBlend-AI/atomic-agents",
+        searchQuery: "ai-agent",
+      },
+    ],
+    trendingFetchSuccess: true,
+  };
+
+  it("includes all signals in the wide view (zh)", () => {
+    const result = buildWideViewPrompt(trendingData, "2026-03-27");
+    expect(result).toContain("bytedance/deer-flow");
+    expect(result).toContain("mem0ai/mem0");
+    expect(result).toContain("BrainBlend-AI/atomic-agents");
+    expect(result).toContain("+2394 today");
+    expect(result).toContain("[topic:ai-agent]");
+    expect(result).toContain("信号雷达");
+    expect(result).toContain("跨类别汇聚");
+    expect(result).toContain("全景");
+  });
+
+  it("generates English wide view prompt", () => {
+    const result = buildWideViewPrompt(trendingData, "2026-03-27", "en");
+    expect(result).toContain("bytedance/deer-flow");
+    expect(result).toContain("mem0ai/mem0");
+    expect(result).toContain("Signal Radar");
+    expect(result).toContain("Cross-Category Convergence");
+    expect(result).toContain("WIDE VIEW");
+    expect(result).toContain("3 total signals");
+  });
+
+  it("shows fetch failure message when trending fails (zh)", () => {
+    const failData: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildWideViewPrompt(failData, "2026-03-27");
+    expect(result).toContain("未能抓取");
+  });
+
+  it("shows fetch failure message when trending fails (en)", () => {
+    const failData: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildWideViewPrompt(failData, "2026-03-27", "en");
+    expect(result).toContain("Unable to fetch");
+  });
+
+  it("correctly counts total signals", () => {
+    const result = buildWideViewPrompt(trendingData, "2026-03-27", "en");
+    // 2 trending + 1 search = 3 total
+    expect(result).toContain("3 total signals");
   });
 });

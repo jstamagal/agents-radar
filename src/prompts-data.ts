@@ -426,6 +426,136 @@ ${sections}
 - 要具体：包含项目名、版本号、star 数等关键信息`;
 }
 
+// ---------------------------------------------------------------------------
+// Wide View prompt — panoramic signal landscape across all trending signals
+// ---------------------------------------------------------------------------
+
+/**
+ * Generates a "wide view" prompt that takes ALL signals from the trending data
+ * and presents them as a unified panoramic ecosystem map — showing cross-category
+ * relationships, signal momentum, convergence patterns, and the big picture.
+ */
+export function buildWideViewPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingSection =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchSection =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  const totalSignals = data.trendingRepos.length + data.searchRepos.length;
+
+  if (lang === "en") {
+    return `You are a strategic AI ecosystem analyst. The following is ${dateStr} GitHub AI signal data — ${totalSignals} total signals from two complementary sources. Your task is to create a WIDE VIEW: a unified panoramic landscape showing ALL signals together, their relationships, and the big picture of where the AI ecosystem is heading.
+
+## Signal Sources
+- **Trending List** (today's velocity signals, ${data.trendingRepos.length} repos): What's exploding right now
+- **Topic Search** (sustained interest signals, ${data.searchRepos.length} repos): What has lasting momentum
+
+---
+
+## GitHub Today's Trending (${data.trendingRepos.length} repositories)
+${trendingSection}
+
+---
+
+## AI Topic Search Results (${data.searchRepos.length} repositories, deduplicated)
+${searchSection}
+
+---
+
+Generate a WIDE VIEW Signal Landscape Report in English. This is NOT a per-category breakdown — it is a holistic ecosystem map showing all signals together. Structure:
+
+1. **Signal Landscape Overview** — One panoramic paragraph (5-7 sentences) that captures the ENTIRE picture: what is the AI open-source ecosystem doing right now, as a whole? Identify the 2-3 dominant themes that cut across all categories.
+
+2. **Signal Radar** — A single consolidated table or structured list showing ALL AI-relevant signals side by side:
+   - Signal name (with link)
+   - Category (Infrastructure / Agents / Apps / LLMs / RAG)
+   - Momentum type: 🔥 Explosive (high today's stars) | 📈 Sustained (high total stars) | 🌱 Emerging (new, rising)
+   - Signal strength: star count + velocity
+   - One-line essence: what this signal represents in the big picture
+
+3. **Cross-Category Convergence** — Where are multiple signals pointing to the same direction? Identify 2-4 convergence zones where signals from different categories reinforce each other. For each zone: name it, list the signals involved, explain the convergence.
+
+4. **Ecosystem Momentum Map** — A textual "heat map" showing which areas of the AI stack are hottest right now:
+   - Which layers of the AI stack are seeing explosive activity?
+   - Which directions have sustained long-term momentum vs. short-term spikes?
+   - What's conspicuously absent (gaps in the signal landscape)?
+
+5. **The Big Picture Signal** — 150-200 words: If you had to distill ALL ${totalSignals} signals into one unified thesis about where AI open-source is heading today, what would it be? What is the ecosystem collectively building toward?
+
+Style: English, strategic and panoramic. Focus on the CONNECTIONS between signals, not individual project deep-dives. Every project mentioned must include its GitHub link.
+`;
+  }
+
+  return `你是一位 AI 生态战略分析师。以下是 ${dateStr} 的 GitHub AI 信号数据——来自两个互补来源的共 ${totalSignals} 个信号。你的任务是创建一份「全景视图」：将所有信号放在同一张图上，展示它们之间的关系，以及 AI 生态系统整体正在走向何方。
+
+## 信号来源
+- **Trending 榜单**（今日速度信号，${data.trendingRepos.length} 个仓库）：当下正在爆发的项目
+- **主题搜索**（持续关注信号，${data.searchRepos.length} 个仓库）：具有持续动能的项目
+
+---
+
+## GitHub 今日 Trending 榜单（共 ${data.trendingRepos.length} 个仓库）
+${trendingSection}
+
+---
+
+## AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库，已去重）
+${searchSection}
+
+---
+
+请生成一份《AI 开源信号全景视图》报告。这不是按分类逐一拆解的报告——而是将所有信号放在一起看的生态地图。结构如下：
+
+1. **信号全景概览** — 一段全局性描述（5~7 句），捕捉整体图景：AI 开源生态现在整体在做什么？识别贯穿所有类别的 2~3 个主导主题。
+
+2. **信号雷达图** — 一份统一的结构化列表，将所有 AI 相关信号并排展示：
+   - 信号名称（附链接）
+   - 类别（基础设施 / 智能体 / 应用 / 大模型 / RAG）
+   - 动能类型：🔥 爆发型（今日 stars 高）| 📈 持续型（总 stars 高）| 🌱 新兴型（新上榜、快速上升）
+   - 信号强度：star 数 + 速度
+   - 一行本质：这个信号在大图景中代表什么
+
+3. **跨类别汇聚点** — 多个信号正在指向同一方向的地方是哪里？识别 2~4 个汇聚区域，来自不同类别的信号在这里相互印证。对每个汇聚区域：命名它、列出相关信号、解释汇聚逻辑。
+
+4. **生态动能地图** — 文字版「热力图」，展示 AI 技术栈的哪些区域现在最活跃：
+   - AI 技术栈的哪些层级正在经历爆发式增长？
+   - 哪些方向具有长期持续动能 vs. 短期爆发？
+   - 信号版图上明显缺失的是什么（空白地带）？
+
+5. **大图景信号** — 150~200 字：如果将这 ${totalSignals} 个信号全部提炼成一个统一论断，说明 AI 开源今天正在走向何方，那会是什么？生态系统整体在共同构建什么？
+
+语言要求：中文，战略性和全景性视角。重点关注信号之间的联系，而非单个项目的深度解读。所有提到的项目必须附 GitHub 链接。
+`;
+}
+
 export function buildHnPrompt(data: HnData, dateStr: string, lang: Lang = "zh"): string {
   const storiesText = data.stories
     .map((s, i) =>

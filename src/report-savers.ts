@@ -3,9 +3,9 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
-import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, WIDE_VIEW_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildWideViewPrompt } from "./prompts-data.ts";
+import { callLlm, saveFile, LLM_TOKENS_WEB, LLM_TOKENS_TRENDING } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
 import type { HnData } from "./hn.ts";
@@ -155,5 +155,53 @@ export async function saveHnReport(
     }
   } catch (err) {
     console.error(`  [hn/${lang}] Report generation failed: ${err}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Wide View report
+// ---------------------------------------------------------------------------
+
+export async function saveWideViewReport(
+  trendingData: TrendingData,
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+  if (!hasData) {
+    console.log(`  [wide-view/${lang}] No data available, skipping report.`);
+    return;
+  }
+
+  console.log(`  [wide-view/${lang}] Calling LLM for wide view report...`);
+  try {
+    const wideViewSummary = await callLlm(
+      buildWideViewPrompt(trendingData, dateStr, lang),
+      LLM_TOKENS_TRENDING,
+    );
+    const fileName = lang === "en" ? "ai-wide-view-en.md" : "ai-wide-view.md";
+    const totalSignals = trendingData.trendingRepos.length + trendingData.searchRepos.length;
+    const header =
+      lang === "en"
+        ? `# ${WIDE_VIEW_REPORT.title[lang]} ${dateStr}\n\n` +
+          `> ${WIDE_VIEW_REPORT.sources[lang]} | ${totalSignals} signals | Generated: ${utcStr} UTC\n\n---\n\n`
+        : `# ${WIDE_VIEW_REPORT.title[lang]} ${dateStr}\n\n` +
+          `> ${WIDE_VIEW_REPORT.sources[lang]} | 共 ${totalSignals} 个信号 | 生成时间: ${utcStr} UTC\n\n---\n\n`;
+
+    const wideViewContent = header + wideViewSummary + footer;
+
+    console.log(`  Saved ${saveFile(wideViewContent, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const wideViewTitle = WIDE_VIEW_REPORT.issueTitle(dateStr, lang);
+      const wideViewLabel = ISSUE_LABELS.wideView[lang];
+      const wideViewUrl = await createGitHubIssue(wideViewTitle, wideViewContent, wideViewLabel);
+      console.log(`  Created wide view issue (${lang}): ${wideViewUrl}`);
+    }
+  } catch (err) {
+    console.error(`  [wide-view/${lang}] Report generation failed: ${err}`);
   }
 }
