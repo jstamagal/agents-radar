@@ -142,6 +142,159 @@ ${searchSection}
 `;
 }
 
+export function buildSignalsPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingSection =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchSection =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  if (lang === "en") {
+    return `You are a technical analyst mapping the full AI open-source landscape. The following is ${dateStr} GitHub data containing both trending repositories and topic-search results. Your task is to produce a comprehensive "Signal Map" — a wide-angle view that shows ALL AI-relevant signals together in one place.
+
+## Data Sources
+- **Trending List** (github.com/trending, today's stars most reliable): Real-time hot list with today's new stars
+- **Topic Search** (GitHub Search API, topic tags): AI-related projects active in last 7 days, grouped by topic
+
+---
+
+## GitHub Today's Trending (${data.trendingRepos.length} repositories)
+${trendingSection}
+
+---
+
+## AI Topic Search Results (${data.searchRepos.length} repositories, deduplicated)
+${searchSection}
+
+---
+
+Generate a comprehensive AI Open Source Signal Map in English. Unlike a daily digest, this report shows ALL signals together — do not filter aggressively. Include every AI-relevant project.
+
+**Output these sections:**
+
+### 1. Signal Landscape Overview
+2–3 sentences framing the full picture: What is the overall shape of today's AI open-source activity? What are the dominant forces?
+
+### 2. Full Signal Matrix
+A single unified table showing ALL AI-relevant projects from both sources. Use this exact markdown table format:
+
+| Project | Stars | Momentum | Category | Themes |
+|:--------|------:|:--------:|:---------|:-------|
+| [owner/repo](url) | ⭐N,NNN (+NNN today) | 🔥 Hot / 📈 Rising / ◆ Established / 🆕 New | Category | theme1, theme2 |
+
+Momentum tiers:
+- 🔥 Hot — on trending list with significant today-stars (>500)
+- 📈 Rising — on trending list or fast-growing in search
+- ◆ Established — high total stars (>20k), well-known project
+- 🆕 New — recently created or first appearance
+
+Categories: Infrastructure · Agents/Workflows · Applications · LLMs/Training · RAG/Knowledge
+
+Themes (tag every applicable): agent-harness · multi-agent · local-first · mlx · rust · mcp · rag · fine-tuning · cli-tools · computer-use · video-ai · search · workflow-automation · inference · vdb
+
+### 3. Theme Intersection Map
+For each theme that appears in 2+ projects, list the projects sharing that theme. Format as:
+**theme-name**: project-a, project-b, project-c
+
+### 4. Momentum Tiers Summary
+Three short bullet lists:
+- 🔥 **Hot today** (trending with high today-stars)
+- 📈 **Rising fast** (on trending or notable search results)
+- ◆ **Bedrock** (established high-star projects anchoring the ecosystem)
+
+### 5. Cross-Category Signals
+Call out 3–5 projects that span multiple categories or represent genuinely novel intersections (e.g., an agent framework that's also a RAG tool, or a CLI that adds computer-use). One sentence each.
+
+Style: English, professional. Every project must have a GitHub link. Include all AI-relevant projects — this is the wide view.
+`;
+  }
+
+  return `你是一位绘制 AI 开源全景的技术分析师。以下是 ${dateStr} 的 GitHub 数据，包含 Trending 榜单和主题搜索结果。你的任务是生成一份「信号全景图」——一个将所有 AI 相关信号汇聚在一处的宽视角报告。
+
+## 数据说明
+- **Trending 榜单**（github.com/trending，今日 stars 数最可信）：今日实时热榜，含今日新增 stars
+- **主题搜索**（GitHub Search API，topic 标签）：7天内活跃的 AI 相关项目，按主题分类
+
+---
+
+## GitHub 今日 Trending 榜单（共 ${data.trendingRepos.length} 个仓库）
+${trendingSection}
+
+---
+
+## AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库，已去重）
+${searchSection}
+
+---
+
+请生成一份《AI 开源信号全景图》。与日报不同，此报告展示所有信号——不要过度过滤，将所有 AI 相关项目都纳入。
+
+**输出以下部分：**
+
+### 1. 信号全景概览
+2~3 句话描绘今日 AI 开源活动的整体格局：主导力量是什么？整体态势如何？
+
+### 2. 信号全景矩阵
+用一张统一的表格展示来自两个数据源的所有 AI 相关项目，格式如下：
+
+| 项目 | Stars | 势头 | 分类 | 主题标签 |
+|:-----|------:|:----:|:-----|:--------|
+| [owner/repo](url) | ⭐N,NNN (+今日NNN) | 🔥 热门 / 📈 上升 / ◆ 基石 / 🆕 新晋 | 分类 | 标签1, 标签2 |
+
+势头等级：
+- 🔥 热门 — 上榜且今日新增 stars 多（>500）
+- 📈 上升 — 上榜或搜索中快速增长
+- ◆ 基石 — 高 star 数（>20k）的成熟项目
+- 🆕 新晋 — 最近创建或首次出现
+
+分类：基础工具 · 智能体/工作流 · 应用 · 大模型/训练 · RAG/知识库
+
+主题标签（标注所有适用的）：agent-harness · multi-agent · local-first · mlx · rust · mcp · rag · fine-tuning · cli-tools · computer-use · video-ai · search · workflow-automation · inference · vdb
+
+### 3. 主题交叉图
+对出现在 2 个以上项目中的主题，列出共享该主题的项目。格式：
+**主题名**: 项目甲, 项目乙, 项目丙
+
+### 4. 势头层级一览
+三个简短列表：
+- 🔥 **今日热点**（Trending 且今日 stars 多）
+- 📈 **快速上升**（上榜或搜索结果中值得关注）
+- ◆ **基石项目**（支撑生态的高 star 成熟项目）
+
+### 5. 跨类信号
+点出 3~5 个跨越多个分类或代表真正新颖交叉点的项目（如既是 Agent 框架又是 RAG 工具的项目，或新增 computer-use 能力的 CLI）。每项一句话。
+
+语言要求：中文，专业简洁，每个项目必须附 GitHub 链接。尽量覆盖所有 AI 相关项目——这是全景视角。
+`;
+}
+
 export function buildWebReportPrompt(results: WebFetchResult[], dateStr: string, lang: Lang = "zh"): string {
   const isAnyFirstRun = results.some((r) => r.isFirstRun);
 
