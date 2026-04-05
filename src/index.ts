@@ -27,10 +27,15 @@ import {
   buildPeersComparisonPrompt,
   buildSkillsPrompt,
 } from "./prompts.ts";
-import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
-import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
+import {
+  buildTrendingPrompt,
+  buildHighlightsPrompt,
+  buildPanoramaPrompt,
+  type ReportHighlights,
+} from "./prompts-data.ts";
+import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING, LLM_TOKENS_PANORAMA } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport, savePanoramaReport } from "./report-savers.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -168,61 +173,80 @@ async function generateSummaries(
   skillsSummary: string;
   peerDigests: RepoDigest[];
   trendingSummary: string;
+  panoramaSummary: string;
 }> {
   const noActivity = MSG.noActivity[lang];
   const fail = MSG.summaryFailed[lang];
 
-  const [cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary] = await Promise.all([
-    Promise.all(
-      fetchedCli.map((f) =>
-        summarizeRepo(f, buildCliPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, lang), noActivity, fail),
-      ),
-    ),
-    summarizeRepo(
-      fetchedOpenclaw,
-      buildPeerPrompt(
-        fetchedOpenclaw.cfg,
-        fetchedOpenclaw.issues,
-        fetchedOpenclaw.prs,
-        fetchedOpenclaw.releases,
-        dateStr,
-        50,
-        30,
-        lang,
-      ),
-      noActivity,
-      fail,
-    ).then((d) => d.summary),
-    summarize(
-      "claude-code-skills",
-      buildSkillsPrompt(skillsData.prs, skillsData.issues, dateStr, lang),
-      MSG.skillsFailed[lang],
-    ),
-    Promise.all(
-      fetchedPeers.map((f) =>
-        summarizeRepo(
-          f,
-          buildPeerPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, undefined, undefined, lang),
-          noActivity,
-          fail,
+  const [cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary, panoramaSummary] =
+    await Promise.all([
+      Promise.all(
+        fetchedCli.map((f) =>
+          summarizeRepo(
+            f,
+            buildCliPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, lang),
+            noActivity,
+            fail,
+          ),
         ),
       ),
-    ),
-    (async () => {
-      const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
-      if (!hasData) {
-        return MSG.trendingNoData[lang];
-      }
-      return summarize(
-        "trending",
-        buildTrendingPrompt(trendingData, dateStr, lang),
-        MSG.trendingFailed[lang],
-        LLM_TOKENS_TRENDING,
-      );
-    })(),
-  ]);
+      summarizeRepo(
+        fetchedOpenclaw,
+        buildPeerPrompt(
+          fetchedOpenclaw.cfg,
+          fetchedOpenclaw.issues,
+          fetchedOpenclaw.prs,
+          fetchedOpenclaw.releases,
+          dateStr,
+          50,
+          30,
+          lang,
+        ),
+        noActivity,
+        fail,
+      ).then((d) => d.summary),
+      summarize(
+        "claude-code-skills",
+        buildSkillsPrompt(skillsData.prs, skillsData.issues, dateStr, lang),
+        MSG.skillsFailed[lang],
+      ),
+      Promise.all(
+        fetchedPeers.map((f) =>
+          summarizeRepo(
+            f,
+            buildPeerPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, undefined, undefined, lang),
+            noActivity,
+            fail,
+          ),
+        ),
+      ),
+      (async () => {
+        const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+        if (!hasData) {
+          return MSG.trendingNoData[lang];
+        }
+        return summarize(
+          "trending",
+          buildTrendingPrompt(trendingData, dateStr, lang),
+          MSG.trendingFailed[lang],
+          LLM_TOKENS_TRENDING,
+        );
+      })(),
+      (async () => {
+        const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+        if (!hasData) {
+          return MSG.trendingNoData[lang];
+        }
+        return summarize(
+          "panorama",
+          buildPanoramaPrompt(trendingData, dateStr, lang),
+          MSG.trendingFailed[lang],
+          LLM_TOKENS_PANORAMA,
+        );
+      })(),
+    ]);
 
-  return { cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary };
+  return { cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary, panoramaSummary };
 }
 
 // ---------------------------------------------------------------------------
@@ -341,6 +365,8 @@ async function main(): Promise<void> {
     ),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("zh"), "zh"),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
+    savePanoramaReport(trendingData, utcStr, dateStr, digestRepo, autoGenFooter("zh"), "zh"),
+    savePanoramaReport(trendingData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
   ]);
 
   // 5. Generate highlights for Telegram notification
@@ -355,6 +381,7 @@ async function main(): Promise<void> {
     ["ai-trending", "ai-trending.md", "ai-trending-en.md"],
     ["ai-web", "ai-web.md", "ai-web-en.md"],
     ["ai-hn", "ai-hn.md", "ai-hn-en.md"],
+    ["ai-panorama", "ai-panorama.md", "ai-panorama-en.md"],
   ] as const) {
     const zh = readReport(zhFile);
     const en = readReport(enFile);

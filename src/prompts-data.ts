@@ -9,6 +9,144 @@ import type { WebFetchResult } from "./web.ts";
 import type { TrendingData } from "./trending.ts";
 import type { HnData } from "./hn.ts";
 import type { Lang } from "./i18n.ts";
+
+// ---------------------------------------------------------------------------
+// Panorama prompt — "wide view" of all trending signals as an ecosystem map
+// ---------------------------------------------------------------------------
+
+export function buildPanoramaPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const allTrending =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const allSearch =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  const totalSignals = data.trendingRepos.length + data.searchRepos.length;
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem strategist. Today is ${dateStr}. Below is the COMPLETE, UNFILTERED set of ${totalSignals} GitHub signals from both the trending list and AI topic searches. Your goal is to produce a "wide view" panorama that shows ALL signals together as an interconnected ecosystem map — nothing omitted, everything visible at once.
+
+## All Trending Signals (${data.trendingRepos.length} repositories from GitHub Trending)
+${allTrending}
+
+## All Topic-Search Signals (${data.searchRepos.length} repositories from AI topic searches, deduplicated)
+${allSearch}
+
+---
+
+Generate a comprehensive **AI Open Source Ecosystem Panorama** in English with the following sections:
+
+### 1. Signal Summary Table
+Create a markdown table with ALL signals (trending + search). Columns:
+| # | Project | Category | Stars | +Today | Language | Signal Strength |
+
+- **Category**: one of: Infrastructure / Agents+Workflows / LLMs+Training / RAG+Knowledge / Applications / Other-AI
+- **Signal Strength**: 🔥 Hot (trending today) / 📈 Rising (active last 7d) / 🏛️ Established (high stars, steady)
+- Include every project — do not omit any
+- Sort by Signal Strength (Hot first), then by stars within each group
+
+### 2. Ecosystem Map by Category
+For each of the 6 categories, list ALL projects that belong to it (a project may appear in multiple categories). For each project include:
+- Name + link
+- One sentence: what it does and its role in the ecosystem
+- Connections: mention any other signals it complements or competes with
+
+### 3. Cross-Cutting Theme Analysis
+Identify 4-6 major themes that cut across multiple signals. For each theme:
+- Theme name and emoji
+- Which signals embody it (list project names)
+- Why this theme is gaining momentum now
+- Strategic implication for developers/companies
+
+### 4. Ecosystem Health Snapshot
+A brief assessment (3-5 sentences) of:
+- Overall ecosystem activity level today
+- Which layers of the stack (infra / model / app) are most active
+- Any notable gaps or underserved areas in today's signals
+- Whether today's signals represent a shift or continuation of recent trends
+
+### 5. Top 5 Signals to Watch
+Regardless of category, identify the 5 individual signals most worth tracking in the next 7 days. For each: name, why it matters, and what to watch for.
+
+Style: English, professional and data-driven. Include GitHub links for every project. Emphasize breadth over depth — the goal is the complete picture.
+`;
+  }
+
+  return `你是一位资深 AI 生态策略分析师。今日为 ${dateStr}。以下是来自 GitHub Trending 榜单和 AI 主题搜索的全部 ${totalSignals} 个信号，**完整无筛选**。你的目标是生成一份"全景图"，将所有信号作为相互关联的生态系统整体呈现，不遗漏任何一个。
+
+## 全部 Trending 信号（${data.trendingRepos.length} 个仓库，来自 GitHub Trending）
+${allTrending}
+
+## 全部主题搜索信号（${data.searchRepos.length} 个仓库，来自 AI 主题搜索，已去重）
+${allSearch}
+
+---
+
+请生成一份完整的《AI 开源生态全景图》，包含以下部分：
+
+### 1. 信号汇总表
+用 Markdown 表格列出**所有信号**（Trending + 搜索），列：
+| # | 项目 | 类别 | Stars | 今日新增 | 语言 | 信号强度 |
+
+- **类别**：Infrastructure / Agents+Workflows / LLMs+Training / RAG+Knowledge / Applications / Other-AI 之一
+- **信号强度**：🔥 热榜（今日 Trending）/ 📈 上升（近 7 天活跃）/ 🏛️ 成熟（stars 高、稳定增长）
+- 包含所有项目，不遗漏任何一个
+- 先按信号强度排序（热榜优先），同组内按 stars 排序
+
+### 2. 按类别分类的生态图
+对每个类别，列出属于该类别的所有项目（一个项目可出现在多个类别）。每个项目包含：
+- 项目名 + 链接
+- 一句话说明：它做什么，以及它在生态中的位置
+- 关联性：与哪些其他信号互补或竞争
+
+### 3. 横切主题分析
+识别贯穿多个信号的 4~6 个重大主题，每个主题包含：
+- 主题名称和 emoji
+- 哪些信号体现了它（列出项目名）
+- 该主题为何正在获得动力
+- 对开发者/企业的战略影响
+
+### 4. 生态健康快照
+3~5 句话评估：
+- 今日生态整体活跃度
+- 堆栈哪些层（基础设施 / 模型 / 应用）最活跃
+- 今日信号中有无明显空白或待填补领域
+- 今日信号是近期趋势的延续还是新的转折
+
+### 5. 最值得关注的 5 个信号
+无论类别，选出未来 7 天内最值得追踪的 5 个信号。每个信号：名称、重要原因、需要关注的动态。
+
+语言要求：中文，专业且有数据支撑。每个项目必须附 GitHub 链接。重在广度而非深度——目标是完整图景。
+`;
+}
+
 export function buildTrendingPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
   const trendingSection =
     data.trendingFetchSuccess && data.trendingRepos.length > 0
