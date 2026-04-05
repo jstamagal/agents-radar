@@ -12,6 +12,7 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHnPrompt,
+  buildPanoramaPrompt,
 } from "../prompts-data.ts";
 import type { RepoConfig, GitHubItem, GitHubRelease } from "../github.ts";
 import type { RepoDigest } from "../prompts.ts";
@@ -353,5 +354,61 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildPanoramaPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildPanoramaPrompt", () => {
+  const reports = {
+    "ai-cli": "CLI report content about Claude Code and Codex updates.",
+    "ai-agents": "Agents report content about OpenClaw and peer projects.",
+    "ai-trending": "Trending report with 19 signals across infrastructure, agents, apps.",
+    "ai-hn": "HN community discussing agentic coding tools.",
+  };
+
+  it("includes report sections in zh prompt", () => {
+    const result = buildPanoramaPrompt(reports, "2026-03-21", "zh");
+    expect(result).toContain("2026-03-21");
+    expect(result).toContain("[ai-cli]");
+    expect(result).toContain("[ai-agents]");
+    expect(result).toContain("[ai-trending]");
+    expect(result).toContain("[ai-hn]");
+    expect(result).toContain("今日一句话信号");
+    expect(result).toContain("信号地图");
+    expect(result).toContain("今日叙事");
+    expect(result).toContain("行动清单");
+  });
+
+  it("includes report sections in en prompt", () => {
+    const result = buildPanoramaPrompt(reports, "2026-03-21", "en");
+    expect(result).toContain("2026-03-21");
+    expect(result).toContain("[ai-cli]");
+    expect(result).toContain("[ai-trending]");
+    expect(result).toContain("Today's One-Sentence Signal");
+    expect(result).toContain("Signal Map");
+    expect(result).toContain("Today's Narrative");
+    expect(result).toContain("Focus List");
+  });
+
+  it("defaults to zh when lang is omitted", () => {
+    const result = buildPanoramaPrompt(reports, "2026-03-21");
+    expect(result).toContain("全景日报");
+  });
+
+  it("omits reports with no content", () => {
+    const sparse = { "ai-trending": "Trending signals here." };
+    const result = buildPanoramaPrompt(sparse, "2026-03-21", "en");
+    expect(result).toContain("[ai-trending]");
+    expect(result).not.toContain("[ai-cli]");
+  });
+
+  it("truncates long report content to fit prompt", () => {
+    const longContent = "x".repeat(10_000);
+    const result = buildPanoramaPrompt({ "ai-trending": longContent }, "2026-03-21", "en");
+    // Prompt should not contain the full 10k chars for this section
+    expect(result.length).toBeLessThan(longContent.length + 2000);
   });
 });
