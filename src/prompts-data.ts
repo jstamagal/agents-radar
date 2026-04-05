@@ -9,6 +9,179 @@ import type { WebFetchResult } from "./web.ts";
 import type { TrendingData } from "./trending.ts";
 import type { HnData } from "./hn.ts";
 import type { Lang } from "./i18n.ts";
+
+export function buildSignalsPrompt(
+  trendingData: TrendingData,
+  hnData: HnData,
+  webResults: WebFetchResult[],
+  dateStr: string,
+  lang: Lang = "zh",
+): string {
+  // ── Trending section ───────────────────────────────────────────────────────
+  const trendingLines =
+    trendingData.trendingFetchSuccess && trendingData.trendingRepos.length > 0
+      ? trendingData.trendingRepos
+          .slice(0, 20)
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.description ? ` — ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(GitHub Trending unavailable)"
+        : "（GitHub Trending 数据不可用）";
+
+  const searchLines =
+    trendingData.searchRepos.length > 0
+      ? trendingData.searchRepos
+          .slice(0, 15)
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [${r.searchQuery}]` +
+              (r.description ? ` — ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No topic search results)"
+        : "（无主题搜索结果）";
+
+  // ── HN section ─────────────────────────────────────────────────────────────
+  const hnLines =
+    hnData.fetchSuccess && hnData.stories.length > 0
+      ? hnData.stories
+          .slice(0, 20)
+          .map(
+            (s, i) =>
+              `${i + 1}. **${s.title}** — ${s.points} pts, ${s.comments} comments\n` +
+              `   ${s.url}\n` +
+              `   HN: ${s.hnUrl}`,
+          )
+          .join("\n\n")
+      : lang === "en"
+        ? "(Hacker News data unavailable)"
+        : "（Hacker News 数据不可用）";
+
+  // ── Web section ────────────────────────────────────────────────────────────
+  const webLines =
+    webResults.some((r) => r.newItems.length > 0)
+      ? webResults
+          .filter((r) => r.newItems.length > 0)
+          .map((r) => {
+            const items = r.newItems
+              .slice(0, 8)
+              .map((item) => `  - [${item.title ?? item.url}](${item.url})`)
+              .join("\n");
+            return `### ${r.siteName} (${r.newItems.length} new)\n${items}`;
+          })
+          .join("\n\n")
+      : lang === "en"
+        ? "(No new official content today)"
+        : "（今日无新增官方内容）";
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem analyst. Today is ${dateStr}. The following data comes from THREE parallel signal sources — GitHub Trending, Hacker News, and official AI company websites. Your goal is to synthesize ALL signals into a single "wide-view" panorama that reveals cross-source patterns a single report would miss.
+
+---
+
+## SOURCE 1 — GitHub Trending (${trendingData.trendingRepos.length} repos)
+${trendingLines}
+
+## GitHub AI Topic Search (${trendingData.searchRepos.length} repos)
+${searchLines}
+
+---
+
+## SOURCE 2 — Hacker News Top AI Stories (${hnData.stories.length} stories)
+${hnLines}
+
+---
+
+## SOURCE 3 — Official AI Site Updates
+${webLines}
+
+---
+
+Generate a structured **AI Signals Panorama** report in English with these sections:
+
+### 1. 📡 Signal Summary (3–5 sentences)
+What is the single most important story today when you look across ALL three sources? Name the dominant theme.
+
+### 2. 🔭 Cross-Source Signal Clusters
+Group today's signals into 3–6 thematic clusters (e.g., "Local AI / Offline", "Agentic Tooling", "Model Infrastructure"). For each cluster:
+- **Cluster name + emoji**
+- Which sources show this signal (Trending / HN / Official)?
+- 2–4 representative items with links, star counts or scores
+- One sentence: why this cluster matters right now
+
+### 3. 📊 Signal Strength Table
+A markdown table with columns: Signal | Trending | HN | Official | Strength (🔥🔥🔥 / 🔥🔥 / 🔥)
+List each cluster from section 2. Mark ✓ or — for each source column. Rate overall strength.
+
+### 4. 🔍 Unique Signals (only in one source)
+List 2–3 signals that appear in only ONE source but are still worth watching, with brief reasoning.
+
+### 5. 🎯 Key Takeaways
+3–5 bullet points a developer or investor should act on based on today's combined signal landscape.
+
+Style: English, professional, data-driven. Include links for every project mentioned.
+`;
+  }
+
+  return `你是一位资深 AI 生态分析师。今日日期：${dateStr}。以下数据来自三个并行信号源——GitHub Trending、Hacker News 和 AI 公司官方网站。你的目标是将所有信号综合成一份"全景"报告，揭示单一报告无法发现的跨源规律。
+
+---
+
+## 信号源 1 — GitHub Trending（共 ${trendingData.trendingRepos.length} 个仓库）
+${trendingLines}
+
+## GitHub AI 主题搜索（共 ${trendingData.searchRepos.length} 个仓库）
+${searchLines}
+
+---
+
+## 信号源 2 — Hacker News AI 热帖（共 ${hnData.stories.length} 条）
+${hnLines}
+
+---
+
+## 信号源 3 — 官方 AI 网站更新
+${webLines}
+
+---
+
+请生成一份结构清晰的《AI 信号全景日报》，包含以下部分：
+
+### 1. 📡 信号速览（3~5 句话）
+综合三个信号源，今日最重要的一条主线是什么？指出主导主题。
+
+### 2. 🔭 跨源信号簇
+将今日信号归纳为 3~6 个主题簇（如"本地 AI / 离线部署"、"智能体工具链"、"模型基础设施"）。每个簇包含：
+- **簇名 + emoji**
+- 该信号出现在哪些源中（Trending / HN / 官方）？
+- 2~4 个代表性条目（附链接、star 数或分数）
+- 一句话：这个信号簇为什么值得现在关注
+
+### 3. 📊 信号强度矩阵
+一张 Markdown 表格，列为：信号 | Trending | HN | 官方 | 综合强度（🔥🔥🔥 / 🔥🔥 / 🔥）
+列出第 2 节中的所有簇。每列标注 ✓ 或 —。评定综合强度。
+
+### 4. 🔍 独家信号（仅出现在单一源中）
+列出 2~3 个只出现在一个信号源、但仍值得关注的信号，给出简短理由。
+
+### 5. 🎯 行动要点
+3~5 条 bullet，开发者或投资者应基于今日综合信号景观采取的行动。
+
+语言要求：中文，专业简洁，数据驱动。每个提及的项目必须附 GitHub 链接。
+`;
+}
+
 export function buildTrendingPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
   const trendingSection =
     data.trendingFetchSuccess && data.trendingRepos.length > 0
