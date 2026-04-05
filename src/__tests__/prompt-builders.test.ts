@@ -12,6 +12,7 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHnPrompt,
+  buildRadarPrompt,
 } from "../prompts-data.ts";
 import type { RepoConfig, GitHubItem, GitHubRelease } from "../github.ts";
 import type { RepoDigest } from "../prompts.ts";
@@ -353,5 +354,50 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildRadarPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildRadarPrompt", () => {
+  const sampleReports = {
+    "ai-cli": "Claude Code saw 200 new PRs today.",
+    "ai-trending": "claude-code topped GitHub Trending with 10k stars.",
+    "ai-hn": "HN discussion on agentic CLI tools peaked at 500 points.",
+  };
+
+  it("includes all report sections in Chinese prompt", () => {
+    const result = buildRadarPrompt(sampleReports, "2026-04-02");
+    expect(result).toContain("2026-04-02");
+    expect(result).toContain("ai-cli");
+    expect(result).toContain("ai-trending");
+    expect(result).toContain("ai-hn");
+    expect(result).toContain("Claude Code");
+    expect(result).toContain("雷达");
+  });
+
+  it("generates English prompt with wide-view structure", () => {
+    const result = buildRadarPrompt(sampleReports, "2026-04-02", "en");
+    expect(result).toContain("2026-04-02");
+    expect(result).toContain("ai-cli");
+    expect(result).toContain("Radar");
+    expect(result).toContain("Signal Convergence");
+    expect(result).toContain("Radar Quadrants");
+  });
+
+  it("reports source count in prompt header", () => {
+    const zh = buildRadarPrompt(sampleReports, "2026-04-02", "zh");
+    expect(zh).toContain(`${Object.keys(sampleReports).length} 个来源`);
+
+    const en = buildRadarPrompt(sampleReports, "2026-04-02", "en");
+    expect(en).toContain(`${Object.keys(sampleReports).length} sources`);
+  });
+
+  it("gracefully handles a single-source input", () => {
+    const result = buildRadarPrompt({ "ai-cli": "some content" }, "2026-04-02");
+    expect(result).toContain("ai-cli");
+    expect(result).toContain("some content");
   });
 });

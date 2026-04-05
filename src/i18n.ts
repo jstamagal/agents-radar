@@ -86,12 +86,23 @@ export const MONTHLY_REPORT = {
   issueTitle: (monthStr: string) => `📆 AI 工具生态月报 ${monthStr}`,
 } as const;
 
+export const RADAR_REPORT = {
+  title: t("AI 生态全景雷达", "AI Ecosystem Wide-View Radar"),
+  sources: t(
+    "数据来源: CLI 工具 + AI Agents + GitHub Trending + Hacker News + 官方内容",
+    "Sources: CLI Tools + AI Agents + GitHub Trending + Hacker News + Official Content",
+  ),
+  issueTitle: (dateStr: string, lang: Lang) =>
+    lang === "en" ? `🛰️ AI Ecosystem Radar ${dateStr}` : `🛰️ AI 生态全景雷达 ${dateStr}`,
+} as const;
+
 export const ISSUE_LABELS = {
   cli: t("digest", "digest-en"),
   openclaw: t("openclaw", "openclaw-en"),
   web: t("web", "web-en"),
   trending: t("trending", "trending-en"),
   hn: t("hn", "hn-en"),
+  radar: t("radar", "radar-en"),
 } as const;
 
 export const CLI_ISSUE_TITLE = (dateStr: string, lang: Lang) =>
@@ -131,6 +142,8 @@ export const REPORT_LABELS: Record<string, string> = {
   "ai-weekly-en": "AI Tools Weekly Digest",
   "ai-monthly": "AI 工具生态月报",
   "ai-monthly-en": "AI Tools Monthly Digest",
+  "ai-radar": "AI 生态全景雷达",
+  "ai-radar-en": "AI Ecosystem Wide-View Radar",
 };
 
 export const NOTIFY_LABELS: Record<string, Record<Lang, string>> = {
@@ -141,4 +154,5 @@ export const NOTIFY_LABELS: Record<string, Record<Lang, string>> = {
   "ai-hn": t("HN 社区动态", "HN Community"),
   "ai-weekly": t("AI 工具生态周报", "AI Tools Weekly"),
   "ai-monthly": t("AI 工具生态月报", "AI Tools Monthly"),
+  "ai-radar": t("AI 生态全景雷达", "AI Ecosystem Radar"),
 };

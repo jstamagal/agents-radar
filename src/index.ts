@@ -30,7 +30,7 @@ import {
 import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
 import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport, saveRadarReport } from "./report-savers.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -343,19 +343,36 @@ async function main(): Promise<void> {
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
   ]);
 
-  // 5. Generate highlights for Telegram notification
+  // Radar report: synthesise all generated reports into a single wide-view
+  // Helper to read a saved digest file (defined here and reused below)
   const readReport = (name: string): string | undefined => {
     const p = path.join("digests", dateStr, name);
     return fs.existsSync(p) ? fs.readFileSync(p, "utf-8") : undefined;
   };
 
-  const zhReports: Record<string, string> = { "ai-cli": cliContent.zh, "ai-agents": openclawContent.zh };
-  const enReports: Record<string, string> = { "ai-cli": cliContent.en, "ai-agents": openclawContent.en };
-  for (const [id, zhFile, enFile] of [
+  // Saved-file report IDs with their zh/en filenames, shared by radar + highlights
+  const fileBasedReports = [
     ["ai-trending", "ai-trending.md", "ai-trending-en.md"],
     ["ai-web", "ai-web.md", "ai-web-en.md"],
     ["ai-hn", "ai-hn.md", "ai-hn-en.md"],
-  ] as const) {
+  ] as const;
+
+  for (const lang of ["zh", "en"] as const) {
+    const radarInputs: Record<string, string> = {
+      "ai-cli": cliContent[lang],
+      "ai-agents": openclawContent[lang],
+    };
+    for (const [id, zhFile, enFile] of fileBasedReports) {
+      const reportFile = readReport(lang === "en" ? enFile : zhFile);
+      if (reportFile) radarInputs[id] = reportFile;
+    }
+    await saveRadarReport(radarInputs, utcStr, dateStr, digestRepo, autoGenFooter(lang), lang);
+  }
+
+  // 5. Generate highlights for Telegram notification
+  const zhReports: Record<string, string> = { "ai-cli": cliContent.zh, "ai-agents": openclawContent.zh };
+  const enReports: Record<string, string> = { "ai-cli": cliContent.en, "ai-agents": openclawContent.en };
+  for (const [id, zhFile, enFile] of fileBasedReports) {
     const zh = readReport(zhFile);
     const en = readReport(enFile);
     if (zh) zhReports[id] = zh;

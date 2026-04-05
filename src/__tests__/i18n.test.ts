@@ -8,6 +8,7 @@ import {
   HN_REPORT,
   WEEKLY_REPORT,
   MONTHLY_REPORT,
+  RADAR_REPORT,
   ISSUE_LABELS,
   CLI_ISSUE_TITLE,
   OPENCLAW_ISSUE_TITLE,
@@ -38,6 +39,8 @@ describe("bilingual string maps", () => {
     { name: "HN_REPORT.title", obj: HN_REPORT.title },
     { name: "WEEKLY_REPORT.title", obj: WEEKLY_REPORT.title },
     { name: "MONTHLY_REPORT.title", obj: MONTHLY_REPORT.title },
+    { name: "RADAR_REPORT.title", obj: RADAR_REPORT.title },
+    { name: "RADAR_REPORT.sources", obj: RADAR_REPORT.sources },
     { name: "FOOTER.autoGen", obj: FOOTER.autoGen },
   ];
 
@@ -91,6 +94,13 @@ describe("issue title functions", () => {
   it("MONTHLY_REPORT.issueTitle includes month string", () => {
     expect(MONTHLY_REPORT.issueTitle("2026-02")).toContain("2026-02");
   });
+
+  it("RADAR_REPORT.issueTitle produces zh and en titles", () => {
+    expect(RADAR_REPORT.issueTitle("2026-04-02", "zh")).toContain("全景雷达");
+    expect(RADAR_REPORT.issueTitle("2026-04-02", "zh")).toContain("2026-04-02");
+    expect(RADAR_REPORT.issueTitle("2026-04-02", "en")).toContain("AI Ecosystem Radar");
+    expect(RADAR_REPORT.issueTitle("2026-04-02", "en")).toContain("2026-04-02");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -130,6 +140,8 @@ describe("ISSUE_LABELS", () => {
     expect(ISSUE_LABELS.openclaw.zh).toBe("openclaw");
     expect(ISSUE_LABELS.trending.en).toBe("trending-en");
     expect(ISSUE_LABELS.hn.en).toBe("hn-en");
+    expect(ISSUE_LABELS.radar.zh).toBe("radar");
+    expect(ISSUE_LABELS.radar.en).toBe("radar-en");
   });
 });
 
@@ -139,7 +151,16 @@ describe("ISSUE_LABELS", () => {
 
 describe("NOTIFY_LABELS", () => {
   it("covers all report types", () => {
-    const expected = ["ai-cli", "ai-agents", "ai-web", "ai-trending", "ai-hn", "ai-weekly", "ai-monthly"];
+    const expected = [
+      "ai-cli",
+      "ai-agents",
+      "ai-web",
+      "ai-trending",
+      "ai-hn",
+      "ai-weekly",
+      "ai-monthly",
+      "ai-radar",
+    ];
     for (const key of expected) {
       expect(NOTIFY_LABELS[key]).toBeDefined();
       expect(NOTIFY_LABELS[key]!.zh).toBeTruthy();

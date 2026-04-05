@@ -509,3 +509,111 @@ ${storiesText}
 语言要求：中文，简洁专业，保留所有原文链接。
 `;
 }
+
+// ---------------------------------------------------------------------------
+// Radar prompt — synthesizes all daily reports into a single wide-view
+// ecosystem radar showing cross-source signal convergence.
+// ---------------------------------------------------------------------------
+
+/** Max characters from each source report included in the radar prompt. */
+const RADAR_SOURCE_MAX_CHARS = 2500;
+
+export function buildRadarPrompt(
+  reportContents: Record<string, string>,
+  dateStr: string,
+  lang: Lang = "zh",
+): string {
+  const sections = Object.entries(reportContents)
+    .map(([id, content]) => `## [${id}]\n\n${content.slice(0, RADAR_SOURCE_MAX_CHARS)}`)
+    .join("\n\n---\n\n");
+
+  if (lang === "en") {
+    return `You are a senior AI open-source ecosystem analyst with a 360° view across tooling, community, research, and industry signals. The following are today's (${dateStr}) AI ecosystem report summaries from ALL data sources: CLI tools, AI agents, GitHub trending, Hacker News, and official web content. Synthesize them into a single **Wide-View Radar Report**.
+
+## Today's Report Summaries (${Object.keys(reportContents).length} sources)
+
+${sections}
+
+---
+
+Generate a structured **AI Ecosystem Radar — Wide View (${dateStr})** in English with these sections:
+
+### 1. Ecosystem Pulse
+3-5 sentences on the overall momentum and mood of the AI open-source ecosystem today. What's the single biggest story? What energy does today carry?
+
+### 2. Signal Convergence Map
+Identify themes or specific projects that appear across **multiple** data sources (trending + HN + CLI + web). These cross-source signals have the strongest real-world momentum. List 4-6 convergence signals, each with:
+- The signal/theme name
+- Which sources it appears in
+- Why this convergence matters
+
+### 3. Radar Quadrants
+Map today's most significant signals into a 4-quadrant view. List 3-5 items per quadrant:
+- 🔥 **High Heat / High Velocity** — trending fast with lots of community buzz right now
+- 🌱 **Emerging / Early Signal** — newly surfacing, gaining traction, worth watching closely
+- 🏗️ **Infrastructure / Foundational** — steady, essential, powering everything else silently
+- 📡 **Watch Zone** — interesting but currently low-activity; potential breakout candidates
+
+### 4. Top 10 Signals Today
+The 10 most significant individual projects or developments across all sources today. For each:
+- Project/topic name with GitHub link if applicable
+- Which data source(s) it appears in
+- One sentence: what it is and why it matters today
+
+### 5. Cross-Source Insights
+2-3 paragraphs of higher-order analysis that you can only see by looking across ALL sources simultaneously:
+- What patterns emerge that no single report reveals alone?
+- Where do community sentiment (HN), developer activity (CLI/agents), and trending data align — or diverge?
+- Any surprising signals or notable absences?
+
+### 6. What to Watch Next
+3-5 forward-looking predictions or watch items based on today's full signal set. Be specific about what to monitor and why.
+
+Style: English, analytical and concise. Include GitHub links for all mentioned projects. This report is meant to be the single document a reader can consult to understand the full AI open-source landscape today.
+`;
+  }
+
+  return `你是一位资深 AI 开源生态全局分析师，同时掌握工具链、社区、研究与产业等多维度信号。以下是 ${dateStr} 来自**所有数据源**（CLI 工具、AI Agents、GitHub Trending、Hacker News、官方内容）的今日 AI 生态报告摘要。请将其综合成一份**全景雷达报告**。
+
+## 今日各来源报告摘要（共 ${Object.keys(reportContents).length} 个来源）
+
+${sections}
+
+---
+
+请生成《AI 生态全景雷达 ${dateStr}》，包含以下部分：
+
+### 1. 生态脉搏
+3~5 句话，概述今日 AI 开源生态的整体动能与情绪。今日最大的主线故事是什么？整体氛围如何？
+
+### 2. 信号汇聚图
+找出同时出现在**多个数据源**（Trending + HN + CLI + 官方内容）的主题或项目。跨源汇聚的信号代表最强的真实动能。列出 4~6 个汇聚信号，每条说明：
+- 信号/主题名称
+- 出现在哪些数据源中
+- 为何此次汇聚值得关注
+
+### 3. 雷达四象限
+将今日最重要的信号映射到四象限视图，每个象限 3~5 条：
+- 🔥 **高热 / 高速** — 当前热度飙升，社区关注度极高
+- 🌱 **萌芽 / 早期信号** — 刚开始浮现，正在积累势头，值得密切关注
+- 🏗️ **基础设施 / 根基层** — 稳定但关键，默默支撑整个生态
+- 📡 **观察区** — 有趣但当前活跃度低；潜在爆发候选
+
+### 4. 今日 Top 10 信号
+今日跨所有来源最重要的 10 个项目或事件。每条包含：
+- 项目/话题名称（附 GitHub 链接，如有）
+- 出现在哪些数据源
+- 一句话：它是什么，今日为何值得关注
+
+### 5. 跨源洞察
+2~3 段高阶分析——只有同时审视所有来源才能发现的规律：
+- 哪些模式是单一报告无法揭示的？
+- 社区情绪（HN）、开发者活跃度（CLI/Agents）与趋势数据在哪里一致，在哪里出现了分歧？
+- 有无令人意外的信号或值得注意的"缺席"？
+
+### 6. 下一步值得关注的信号
+基于今日完整信号集，给出 3~5 条前瞻性预判或监测建议。具体说明监测什么、为何值得关注。
+
+语言要求：中文，分析深入、表达简练。所有提及项目附上 GitHub 链接。本报告应成为读者了解当日 AI 开源生态全貌的唯一参考文档。
+`;
+}
