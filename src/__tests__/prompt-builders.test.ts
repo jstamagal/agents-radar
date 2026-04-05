@@ -8,6 +8,7 @@ import {
 } from "../prompts.ts";
 import {
   buildTrendingPrompt,
+  buildSignalsPrompt,
   buildWebReportPrompt,
   buildWeeklyPrompt,
   buildMonthlyPrompt,
@@ -353,5 +354,96 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildSignalsPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildSignalsPrompt", () => {
+  const trendingRepos = [
+    {
+      fullName: "microsoft/BitNet",
+      description: "Official inference framework for 1-bit LLMs",
+      language: "C++",
+      totalStars: 5000,
+      todayStars: 2149,
+      forks: 300,
+      url: "https://github.com/microsoft/BitNet",
+    },
+    {
+      fullName: "browser-use/browser-use",
+      description: "Make websites accessible for AI agents",
+      language: "Python",
+      totalStars: 80584,
+      todayStars: 0,
+      forks: 8000,
+      url: "https://github.com/browser-use/browser-use",
+    },
+  ];
+
+  it("includes all trending repos in zh signal matrix", () => {
+    const data: TrendingData = { trendingRepos, searchRepos: [], trendingFetchSuccess: true };
+    const result = buildSignalsPrompt(data, "2026-03-13");
+    expect(result).toContain("microsoft/BitNet");
+    expect(result).toContain("browser-use/browser-use");
+    expect(result).toContain("信号矩阵");
+    expect(result).toContain("2026-03-13");
+    expect(result).toContain("+2,149");
+  });
+
+  it("includes search repos in zh output", () => {
+    const data: TrendingData = {
+      trendingRepos: [],
+      searchRepos: [
+        {
+          fullName: "mem0ai/mem0",
+          description: "Universal memory layer",
+          language: "Python",
+          stargazersCount: 49631,
+          pushedAt: "2026-03-12",
+          url: "https://github.com/mem0ai/mem0",
+          searchQuery: "llm-agent",
+        },
+      ],
+      trendingFetchSuccess: false,
+    };
+    const result = buildSignalsPrompt(data, "2026-03-13");
+    expect(result).toContain("mem0ai/mem0");
+    expect(result).toContain("[topic:llm-agent]");
+  });
+
+  it("shows fetch failure message when trending fails (zh)", () => {
+    const data: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildSignalsPrompt(data, "2026-03-13");
+    expect(result).toContain("未能抓取");
+  });
+
+  it("generates English variant with signal matrix structure", () => {
+    const data: TrendingData = { trendingRepos, searchRepos: [], trendingFetchSuccess: true };
+    const result = buildSignalsPrompt(data, "2026-03-13", "en");
+    expect(result).toContain("Signal Matrix");
+    expect(result).toContain("microsoft/BitNet");
+    expect(result).toContain("browser-use/browser-use");
+    expect(result).toContain("2026-03-13");
+    expect(result).toContain("Top 5 Signals");
+    expect(result).toContain("Category Breakdown");
+    expect(result).toContain("Meta Signal");
+  });
+
+  it("English variant shows fetch failure message", () => {
+    const data: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildSignalsPrompt(data, "2026-03-13", "en");
+    expect(result).toContain("Unable to fetch");
+  });
+
+  it("zh variant includes all required report sections", () => {
+    const data: TrendingData = { trendingRepos, searchRepos: [], trendingFetchSuccess: true };
+    const result = buildSignalsPrompt(data, "2026-03-13");
+    expect(result).toContain("信号矩阵");
+    expect(result).toContain("Top 5");
+    expect(result).toContain("分类概览");
+    expect(result).toContain("元信号解读");
   });
 });
