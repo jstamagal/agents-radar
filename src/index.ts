@@ -30,7 +30,8 @@ import {
 import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
 import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport, saveSignalsReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { runRangeSignals } from "./rollup.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -362,11 +363,8 @@ async function main(): Promise<void> {
     if (en) enReports[id] = en;
   }
 
-  // 5a. Signals Panorama — synthesises all daily reports into one wide view
-  await Promise.all([
-    saveSignalsReport(zhReports, utcStr, dateStr, digestRepo, autoGenFooter("zh"), "zh"),
-    saveSignalsReport(enReports, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
-  ]);
+  // 5a. Signals Panorama — synthesises a rolling 21-day window (all sources) into one wide view
+  await runRangeSignals(dateStr, { zh: zhReports, en: enReports });
 
   console.log("  Generating highlights for Telegram...");
   const highlights: Record<Lang, ReportHighlights> = { zh: {}, en: {} };
