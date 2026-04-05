@@ -426,6 +426,127 @@ ${sections}
 - 要具体：包含项目名、版本号、star 数等关键信息`;
 }
 
+// ---------------------------------------------------------------------------
+// Signals prompt — wide-view matrix of ALL trending signals
+// ---------------------------------------------------------------------------
+
+export function buildSignalsPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingRows =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `| [${r.fullName}](${r.url})` +
+              ` | ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars})` : "") +
+              ` | ${r.language || "—"}` +
+              ` | trending` +
+              ` | ${r.description ?? "—"} |`,
+          )
+          .join("\n")
+      : "";
+
+  const searchRows =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `| [${r.fullName}](${r.url})` +
+              ` | ⭐${r.stargazersCount.toLocaleString()}` +
+              ` | ${r.language || "—"}` +
+              ` | topic:${r.searchQuery}` +
+              ` | ${r.description ?? "—"} |`,
+          )
+          .join("\n")
+      : "";
+
+  const totalSignals = data.trendingRepos.length + data.searchRepos.length;
+
+  if (lang === "en") {
+    return `You are a technical analyst covering the AI open-source ecosystem. The following is ALL GitHub AI signal data for ${dateStr} — ${totalSignals} total signals from trending and topic search.
+
+Your task is to produce a **Signal Snapshot** — a wide-view, data-dense report that shows every signal at once, organized by category, so a reader can scan the entire landscape in one pass.
+
+## Raw Signal Data
+
+### GitHub Trending (${data.trendingRepos.length} repos)
+| Project | Stars | Language | Source | Description |
+|---------|-------|----------|--------|-------------|
+${trendingRows || "_(no trending data)_"}
+
+### AI Topic Search (${data.searchRepos.length} repos)
+| Project | Stars | Language | Source | Description |
+|---------|-------|----------|--------|-------------|
+${searchRows || "_(no search data)_"}
+
+---
+
+Generate the Signal Snapshot with these sections:
+
+**1. Signal Matrix** — Organize ALL ${totalSignals} signals into the five categories below. For each category, render a compact markdown table:
+
+| Project | ⭐ Stars | ⭐ Today | Language | One-line Signal |
+|---------|---------|---------|----------|-----------------|
+
+Categories:
+- 🔧 AI Infrastructure
+- 🤖 AI Agents / Workflows
+- 📦 AI Applications
+- 🧠 LLMs / Training
+- 🔍 RAG / Knowledge
+
+Every signal must appear in exactly one category. If a signal is not AI-related, place it in a separate "⚙️ Other / Non-AI" table at the end.
+
+**2. Cross-Category Patterns** — 3-5 bullet points highlighting patterns visible *across* the full matrix: which categories dominate today, any languages/tech stacks appearing multiple times, any notable star velocity outliers.
+
+**3. Top 3 Signals to Watch** — The three highest-conviction signals from the full matrix, with a two-sentence rationale each.
+
+Style: English, professional, data-first. All project names must be hyperlinked. Do not truncate or omit any signal.
+`;
+  }
+
+  return `你是专注于 AI 开源生态的技术分析师。以下是 ${dateStr} 的全量 GitHub AI 信号数据 —— 共 ${totalSignals} 个信号，来自 Trending 榜单与主题搜索。
+
+你的任务是生成《AI 开源信号全景》—— 一份数据密集的宽视图报告，将所有信号一次性呈现，按类别组织，让读者一眼扫完整个生态全貌。
+
+## 原始信号数据
+
+### GitHub Trending（${data.trendingRepos.length} 个仓库）
+| 项目 | Stars | 编程语言 | 来源 | 简介 |
+|------|-------|---------|------|------|
+${trendingRows || "（无 Trending 数据）"}
+
+### AI 主题搜索（${data.searchRepos.length} 个仓库）
+| 项目 | Stars | 编程语言 | 来源 | 简介 |
+|------|-------|---------|------|------|
+${searchRows || "（无搜索数据）"}
+
+---
+
+请生成《AI 开源信号全景》，包含以下部分：
+
+**1. 信号矩阵** —— 将全部 ${totalSignals} 个信号按以下五个维度分类，每个维度输出一张紧凑的 Markdown 表格：
+
+| 项目 | ⭐ 总量 | ⭐ 今日 | 编程语言 | 一句话信号 |
+|------|--------|--------|---------|----------|
+
+维度：
+- 🔧 AI 基础工具（框架、SDK、推理引擎、开发工具、CLI）
+- 🤖 AI 智能体/工作流（Agent 框架、自动化、多智能体）
+- 📦 AI 应用（具体应用产品、垂直场景）
+- 🧠 大模型/训练（模型权重、训练框架、微调工具）
+- 🔍 RAG/知识库（向量数据库、检索增强、知识管理）
+
+每个信号必须出现且仅出现在一个维度中。若某信号与 AI 无明显关联，归入末尾单独的"⚙️ 其他/非AI"表格。
+
+**2. 跨维度模式** —— 3~5 条 bullet，描述全量矩阵中可见的横向规律：哪些维度今日最活跃、哪些语言/技术栈多次出现、有无明显的 stars 增速异常值。
+
+**3. 重点关注 Top 3 信号** —— 从全量矩阵中挑选三个最值得关注的高确信度信号，每个附两句话理由。
+
+语言要求：中文，专业简洁，数据优先。所有项目名必须附超链接。不得截断或省略任何信号。
+`;
+}
+
 export function buildHnPrompt(data: HnData, dateStr: string, lang: Lang = "zh"): string {
   const storiesText = data.stories
     .map((s, i) =>
