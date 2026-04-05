@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 强制推安全策略，社区因计费与权限问题刷屏抗议",
+      "OpenAI Codex 转向 Rust 重构，Linux 沙箱回归引开发者热议",
+      "Charm Crush 发布性能优化版，修复数据丢失问题聚焦 Go 生态",
+      "GitHub Copilot 引入批判 Agent，多设备同步 Bug 遭用户吐槽",
+      "Kimi Code 社区提议用 TS/Bun 重写，透明度与监控成焦点",
+      "AI CLI 工具陷入“平台期焦虑”，多代理与 Rust 成转型解药"
+    ],
+    "ai-agents": [
+      "OpenClaw 单日处理 500 PRs，插件生态架构大规模重构",
+      "官方紧急修复 Matrix 插件凭证窃取漏洞，安全边界硬化",
+      "Windows 路径过滤同步问题修复，跨平台体验显著提升",
+      "Agent 间会话交接能力增强，ACP 协议工作区注入升级",
+      "项目积极整合 v2026.4.4 版本，技术债清理工作如火如荼",
+      "OpenClaw 活跃度极高，全球化 i18n 支持需求显著提升"
+    ],
+    "ai-trending": [
+      "block/goose 超越代码建议，直接操刀执行测试获 900+ 星",
+      "微软入局 agent-framework，企业级多智能体编排战开启",
+      "Blaizzy 推出 MLX-VLM，让 Mac 用户本地运行多模态模型",
+      "oh-my-codex 接管终端文件系统，受 AI IDE 影响遭狂热追捧",
+      "vLLM 持续霸榜，生产环境部署 LLM 的默认标准再优化",
+      "Agent 应用层爆发，AI 从辅助对话转向工程化落地执行"
+    ],
+    "ai-hn": [
+      "Anthropic 公开模型内部情绪表征，黑盒可解释性引热议",
+      "Show HN: sllm 分租 GPU 节点，无限 Token 激活工程热情",
+      "vLLM 长上下文推理更新，内存优化方案受底层开发者关注",
+      "Show HN: Tokencap 限制 Agent 预算，解决 Token 消耗失控",
+      "OpenAI 财务表泄露，微软股权占比引资本市场博弈猜测",
+      "理性务实成基调，社区从探讨感知转向关注高效低成本部署"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.92 prioritizes policy control",
+      "OpenAI Codex unstable: v0.118.0 has regressions",
+      "Charm Crush adds JSON performance improvements",
+      "Kimi Code and Qwen target multi-agent architectures",
+      "Dev demand shifts from magic to stable reliability",
+      "GitHub Copilot CLI faces parity competition"
+    ],
+    "ai-agents": [
+      "OpenClaw hits 500 issues and PRs in 24 hours",
+      "No new release: stabilization period in effect",
+      "Fix: bare 'new' and 'reset' trigger session resets",
+      "Focus: hardening security and environment handling",
+      "Refactoring extension boundaries dominates dev cycle",
+      "IronClaw and LobsterAI join ecosystem network"
+    ],
+    "ai-trending": [
+      "Yeachan-Heo/oh-my-codex gains 1,789 stars today",
+      "block/goose trending: extensible Rust AI agent",
+      "Blaizzy/mlx-vlm adds local VLMs for Apple Silicon",
+      "Microsoft releases official agent-framework",
+      "Shift from chat UIs to complex agentic workflows",
+      "Developers prioritize local-first inference"
+    ],
+    "ai-hn": [
+      "Anthropic paper probes 'emotion concepts' in LLMs",
+      "OpenRouter raises $120M for model routing",
+      "US data center plans halved due to power shortage",
+      "Controversy: Blog bans all Anthropic employees",
+      "UCLA study: AI lacks experience in a physical body",
+      "Skepticism rises regarding AI lab safety practices"
+    ]
+  }
+}
