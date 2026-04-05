@@ -3,9 +3,9 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
-import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, SYNTHESIS_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildSynthesisPrompt } from "./prompts-data.ts";
+import { callLlm, saveFile, LLM_TOKENS_WEB, LLM_TOKENS_SYNTHESIS } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
 import type { HnData } from "./hn.ts";
@@ -112,8 +112,64 @@ export async function saveTrendingReport(
 }
 
 // ---------------------------------------------------------------------------
-// Hacker News report
+// Synthesis / Wide View report
 // ---------------------------------------------------------------------------
+
+export async function saveSynthesisReport(
+  trendingData: TrendingData,
+  hnData: HnData,
+  webResults: WebFetchResult[],
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  const hasTrending = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+  const hasHn = hnData.fetchSuccess && hnData.stories.length > 0;
+  const hasWeb = webResults.some((r) => r.newItems.length > 0);
+
+  if (!hasTrending && !hasHn && !hasWeb) {
+    console.log(`  [synthesis/${lang}] No data available across any source, skipping report.`);
+    return;
+  }
+
+  console.log(`  [synthesis/${lang}] Calling LLM for synthesis report...`);
+  try {
+    const synthesisSummary = await callLlm(
+      buildSynthesisPrompt(trendingData, hnData, webResults, dateStr, lang),
+      LLM_TOKENS_SYNTHESIS,
+    );
+
+    const fileName = lang === "en" ? "ai-synthesis-en.md" : "ai-synthesis.md";
+    const totalSignals =
+      trendingData.trendingRepos.length + trendingData.searchRepos.length + hnData.stories.length;
+
+    const header =
+      lang === "en"
+        ? `# ${SYNTHESIS_REPORT.title[lang]} ${dateStr}\n\n` +
+          `> ${SYNTHESIS_REPORT.sources[lang]} | ` +
+          `${totalSignals} signals | Generated: ${utcStr} UTC\n\n` +
+          `---\n\n`
+        : `# ${SYNTHESIS_REPORT.title[lang]} ${dateStr}\n\n` +
+          `> ${SYNTHESIS_REPORT.sources[lang]} | ` +
+          `共 ${totalSignals} 个信号 | 生成时间: ${utcStr} UTC\n\n` +
+          `---\n\n`;
+
+    const synthesisContent = header + synthesisSummary + footer;
+
+    console.log(`  Saved ${saveFile(synthesisContent, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const synthesisTitle = SYNTHESIS_REPORT.issueTitle(dateStr, lang);
+      const synthesisLabel = ISSUE_LABELS.synthesis[lang];
+      const synthesisUrl = await createGitHubIssue(synthesisTitle, synthesisContent, synthesisLabel);
+      console.log(`  Created synthesis issue (${lang}): ${synthesisUrl}`);
+    }
+  } catch (err) {
+    console.error(`  [synthesis/${lang}] Report generation failed: ${err}`);
+  }
+}
 
 export async function saveHnReport(
   hnData: HnData,

@@ -426,6 +426,200 @@ ${sections}
 - 要具体：包含项目名、版本号、star 数等关键信息`;
 }
 
+// ---------------------------------------------------------------------------
+// Synthesis / "Wide View" prompt — cross-source panoramic signal analysis
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a prompt that combines Trending, HN, and Web signals into a single
+ * "wide view" panoramic report, surfacing cross-source convergence patterns.
+ */
+export function buildSynthesisPrompt(
+  trendingData: TrendingData,
+  hnData: HnData,
+  webResults: WebFetchResult[],
+  dateStr: string,
+  lang: Lang = "zh",
+): string {
+  // -- Trending section -------------------------------------------------------
+  const trendingList =
+    trendingData.trendingFetchSuccess && trendingData.trendingRepos.length > 0
+      ? trendingData.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.description ? ` — ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(GitHub Trending list unavailable today)"
+        : "（今日 GitHub Trending 榜单未能获取）";
+
+  const searchList =
+    trendingData.searchRepos.length > 0
+      ? trendingData.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? ` — ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No topic search results)"
+        : "（无主题搜索结果）";
+
+  // -- HN section -------------------------------------------------------------
+  const hnList =
+    hnData.fetchSuccess && hnData.stories.length > 0
+      ? hnData.stories
+          .map((s, i) =>
+            lang === "en"
+              ? `${i + 1}. **${s.title}** — Score: ${s.points} | Comments: ${s.comments}\n   ${s.url}`
+              : `${i + 1}. **${s.title}** — 分数: ${s.points} | 评论: ${s.comments}\n   ${s.url}`,
+          )
+          .join("\n\n")
+      : lang === "en"
+        ? "(Hacker News data unavailable today)"
+        : "（今日 HN 数据未能获取）";
+
+  // -- Web section ------------------------------------------------------------
+  const webList =
+    webResults.length > 0 && webResults.some((r) => r.newItems.length > 0)
+      ? webResults
+          .filter((r) => r.newItems.length > 0)
+          .map(
+            (r) =>
+              `### ${r.siteName} (${r.newItems.length} ${lang === "en" ? "new articles" : "篇新内容"})\n` +
+              r.newItems
+                .map((item) => `- [${item.title || item.url}](${item.url}) [${item.category}]`)
+                .join("\n"),
+          )
+          .join("\n\n")
+      : lang === "en"
+        ? "(No new official content today)"
+        : "（今日无新增官方内容）";
+
+  if (lang === "en") {
+    return `You are an expert AI ecosystem analyst. Your task is to synthesize signals from THREE parallel data sources collected on ${dateStr} into a single "wide view" panoramic report. Look for convergence patterns — topics, projects, or themes that appear across multiple sources simultaneously.
+
+---
+
+## SOURCE 1 — GitHub Trending (${trendingData.trendingRepos.length} trending repos)
+
+${trendingList}
+
+### AI Topic Search (${trendingData.searchRepos.length} repos)
+
+${searchList}
+
+---
+
+## SOURCE 2 — Hacker News AI Stories (${hnData.stories.length} stories, sorted by score)
+
+${hnList}
+
+---
+
+## SOURCE 3 — Official AI Content (Anthropic + OpenAI new articles)
+
+${webList}
+
+---
+
+Generate an **AI Ecosystem Panorama** report in English with these sections:
+
+### 1. Wide View Summary (3-5 sentences)
+What is the single biggest signal when you look at all three sources together today? What story do GitHub developers, HN community, and official announcements collectively tell?
+
+### 2. Cross-Source Convergence Signals
+List topics/projects/themes that appear in **2 or more** of the three sources. For each convergence signal:
+- What it is (with links)
+- Which sources it appeared in (GitHub Trending / HN / Official)
+- Why this multi-source presence is significant
+
+### 3. Source-Specific Exclusive Signals
+Brief highlights of important signals found in **only one** source (things the other sources missed):
+- **Only on GitHub Trending**: ...
+- **Only on Hacker News**: ...
+- **Only in Official Content**: ...
+
+### 4. All Signals Wide-View Grid
+A consolidated table of all notable signals today — the full panorama:
+
+| Signal | Stars/Score | Source(s) | Category | Why It Matters |
+|--------|-------------|-----------|----------|----------------|
+(list all notable projects and stories)
+
+### 5. Ecosystem Narrative (200-300 words)
+What overarching story does today's complete signal set tell about the direction of the AI open-source ecosystem? What should developers and researchers pay attention to this week?
+
+Style: English, analytical and synthesizing. Include all GitHub links and HN discussion links.
+`;
+  }
+
+  return `你是 AI 生态领域的资深分析师。你的任务是将 ${dateStr} 从三个并行数据源采集到的信号汇聚成一份"全景日报"，重点寻找跨源收敛模式——同一话题、项目或主题在多个来源中同时出现的信号。
+
+---
+
+## 信号源 1 — GitHub Trending（${trendingData.trendingRepos.length} 个趋势仓库）
+
+${trendingList}
+
+### AI 主题搜索（${trendingData.searchRepos.length} 个仓库）
+
+${searchList}
+
+---
+
+## 信号源 2 — Hacker News AI 热帖（${hnData.stories.length} 条，按分数降序）
+
+${hnList}
+
+---
+
+## 信号源 3 — 官方 AI 内容（Anthropic + OpenAI 今日新增）
+
+${webList}
+
+---
+
+请生成一份《AI 生态全景日报》，包含以下部分：
+
+### 1. 全景速览（3~5 句话）
+同时看三个数据源，今日最大的信号是什么？GitHub 开发者、HN 社区、官方公告，共同讲述了怎样一个故事？
+
+### 2. 跨源收敛信号
+列出同时出现在 **2 个或以上** 来源中的话题/项目/主题。每条收敛信号包含：
+- 是什么（附链接）
+- 出现在哪些来源（GitHub Trending / HN / 官方内容）
+- 多源印证为何值得重点关注
+
+### 3. 单源独有信号
+各来源中只出现在一处的重要信号简要摘录：
+- **仅见于 GitHub Trending**：...
+- **仅见于 Hacker News**：...
+- **仅见于官方内容**：...
+
+### 4. 今日全量信号一览表
+汇总今日所有值得关注的信号——完整全景视图：
+
+| 信号 | Stars/分数 | 来源 | 分类 | 一句话说明 |
+|------|-----------|------|------|-----------|
+（列出所有值得关注的项目和话题）
+
+### 5. 生态叙事（200~300 字）
+今日完整信号集讲述了什么关于 AI 开源生态走向的整体故事？开发者和研究者本周应该重点关注什么？
+
+语言要求：中文，分析深入，善于综合。附所有 GitHub 链接和 HN 讨论链接。
+`;
+}
+
 export function buildHnPrompt(data: HnData, dateStr: string, lang: Lang = "zh"): string {
   const storiesText = data.stories
     .map((s, i) =>

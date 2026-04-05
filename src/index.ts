@@ -30,7 +30,7 @@ import {
 import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
 import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport, saveSynthesisReport } from "./report-savers.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -341,6 +341,26 @@ async function main(): Promise<void> {
     ),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("zh"), "zh"),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
+    saveSynthesisReport(
+      trendingData,
+      hnData,
+      webResults,
+      utcStr,
+      dateStr,
+      digestRepo,
+      autoGenFooter("zh"),
+      "zh",
+    ),
+    saveSynthesisReport(
+      trendingData,
+      hnData,
+      webResults,
+      utcStr,
+      dateStr,
+      digestRepo,
+      autoGenFooter("en"),
+      "en",
+    ),
   ]);
 
   // 5. Generate highlights for Telegram notification
@@ -355,6 +375,7 @@ async function main(): Promise<void> {
     ["ai-trending", "ai-trending.md", "ai-trending-en.md"],
     ["ai-web", "ai-web.md", "ai-web-en.md"],
     ["ai-hn", "ai-hn.md", "ai-hn-en.md"],
+    ["ai-synthesis", "ai-synthesis.md", "ai-synthesis-en.md"],
   ] as const) {
     const zh = readReport(zhFile);
     const en = readReport(enFile);
