@@ -30,7 +30,7 @@ import {
 import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
 import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport, saveLandscapeReport } from "./report-savers.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -343,11 +343,52 @@ async function main(): Promise<void> {
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
   ]);
 
-  // 5. Generate highlights for Telegram notification
+  // 4b. Save landscape (wide-view) reports — reads from already-generated content
   const readReport = (name: string): string | undefined => {
     const p = path.join("digests", dateStr, name);
     return fs.existsSync(p) ? fs.readFileSync(p, "utf-8") : undefined;
   };
+
+  await Promise.all([
+    saveLandscapeReport(
+      {
+        trendingContent: (() => {
+          const f = readReport("ai-trending.md");
+          if (!f) console.warn("  [landscape/zh] ai-trending.md not found, falling back to in-memory summary");
+          return f ?? zhSummaries.trendingSummary;
+        })(),
+        cliContent: cliContent.zh,
+        agentsContent: openclawContent.zh,
+        hnContent: readReport("ai-hn.md"),
+        webContent: readReport("ai-web.md"),
+      },
+      utcStr,
+      dateStr,
+      digestRepo,
+      autoGenFooter("zh"),
+      "zh",
+    ),
+    saveLandscapeReport(
+      {
+        trendingContent: (() => {
+          const f = readReport("ai-trending-en.md");
+          if (!f) console.warn("  [landscape/en] ai-trending-en.md not found, falling back to in-memory summary");
+          return f ?? enSummaries.trendingSummary;
+        })(),
+        cliContent: cliContent.en,
+        agentsContent: openclawContent.en,
+        hnContent: readReport("ai-hn-en.md"),
+        webContent: readReport("ai-web-en.md"),
+      },
+      utcStr,
+      dateStr,
+      digestRepo,
+      autoGenFooter("en"),
+      "en",
+    ),
+  ]);
+
+  // 5. Generate highlights for Telegram notification
 
   const zhReports: Record<string, string> = { "ai-cli": cliContent.zh, "ai-agents": openclawContent.zh };
   const enReports: Record<string, string> = { "ai-cli": cliContent.en, "ai-agents": openclawContent.en };
@@ -355,6 +396,7 @@ async function main(): Promise<void> {
     ["ai-trending", "ai-trending.md", "ai-trending-en.md"],
     ["ai-web", "ai-web.md", "ai-web-en.md"],
     ["ai-hn", "ai-hn.md", "ai-hn-en.md"],
+    ["ai-landscape", "ai-landscape.md", "ai-landscape-en.md"],
   ] as const) {
     const zh = readReport(zhFile);
     const en = readReport(enFile);

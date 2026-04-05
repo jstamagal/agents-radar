@@ -9,6 +9,162 @@ import type { WebFetchResult } from "./web.ts";
 import type { TrendingData } from "./trending.ts";
 import type { HnData } from "./hn.ts";
 import type { Lang } from "./i18n.ts";
+
+// ---------------------------------------------------------------------------
+// Landscape prompt (wide-view ecosystem synthesis)
+// ---------------------------------------------------------------------------
+
+export interface LandscapeInput {
+  trendingContent: string;
+  cliContent: string;
+  agentsContent: string;
+  hnContent?: string;
+  webContent?: string;
+}
+
+/** Max characters taken from each source report to keep prompt manageable. */
+const LANDSCAPE_SOURCE_LIMIT = 3000;
+
+function truncateWithMarker(text: string, limit: number): string {
+  return text.length <= limit ? text : text.slice(0, limit) + "\n…(truncated)";
+}
+
+export function buildLandscapePrompt(input: LandscapeInput, dateStr: string, lang: Lang = "zh"): string {
+  const trending = truncateWithMarker(input.trendingContent, LANDSCAPE_SOURCE_LIMIT);
+  const cli = truncateWithMarker(input.cliContent, LANDSCAPE_SOURCE_LIMIT);
+  const agents = truncateWithMarker(input.agentsContent, LANDSCAPE_SOURCE_LIMIT);
+  const hn = input.hnContent ? truncateWithMarker(input.hnContent, 2000) : null;
+  const web = input.webContent ? truncateWithMarker(input.webContent, 2000) : null;
+
+  if (lang === "en") {
+    const optionalSections = [
+      hn ? `## HN Community Digest\n${hn}` : null,
+      web ? `## Official AI Updates (Anthropic / OpenAI)\n${web}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n\n---\n\n");
+
+    return `You are a senior AI ecosystem analyst. Your task is to synthesize today's AI open-source landscape from multiple intelligence sources into a single comprehensive "Wide View" report for ${dateStr}.
+
+You have access to the following source reports generated today:
+
+---
+
+## GitHub AI Trending Report
+${trending}
+
+---
+
+## AI CLI Tools Community Digest
+${cli}
+
+---
+
+## AI Agents Ecosystem Digest
+${agents}
+
+${optionalSections ? `---\n\n${optionalSections}\n\n---` : "---"}
+
+Generate a comprehensive **AI Open Source Ecosystem Landscape** report in English with the following structure:
+
+### 1. Executive Summary (Wide View)
+3–5 sentences capturing the single most important macro-signal visible when all sources are viewed together. What story do ALL the data sources tell in unison?
+
+### 2. Full Ecosystem Signal Map
+Present ALL notable signals from ALL sources organized into a unified map. Group by ecosystem layer:
+
+- **🔧 Infrastructure Layer** — sandboxes, runtimes, dev tools, CLI engines, compute
+- **🤖 Agent & Orchestration Layer** — agent frameworks, multi-agent systems, planning/memory, workflows
+- **🔍 Knowledge & Retrieval Layer** — RAG, vector stores, memory systems, knowledge graphs
+- **🧠 Model & Training Layer** — base models, fine-tuning, evaluation, inference optimization
+- **📦 Application Layer** — end-user apps, vertical solutions, plugins, integrations
+- **🏢 Industry & Community Layer** — funding news, official announcements, HN hot topics, community debates
+
+For each signal, include:
+  - Project/topic name with link (if available)
+  - Source(s) it appeared in (Trending / CLI Digest / Agents Digest / HN / Official)
+  - One sentence on why it matters
+
+### 3. Cross-Source Convergence Signals
+Identify 3–6 signals that appear in **more than one** source report today. These are the strongest signals — the ecosystem is voting with multiple feet. Explain WHY convergence is significant for each.
+
+### 4. Divergence & Gaps
+What are the top 2–3 tensions or gaps visible when comparing sources? (e.g., HN is excited about X but the OSS activity shows the opposite, or a major trending repo is absent from official channels)
+
+### 5. Ecosystem Momentum Score (qualitative)
+Briefly rate momentum in each layer (🔥 High / 🟡 Medium / ❄️ Low) based on today's evidence. One sentence rationale per layer.
+
+### 6. Forward Signals — Watch List
+3–5 projects or themes to watch in the next 7 days based on today's cross-source patterns.
+
+Style: English, analytical, concise. Preserve all original links. This is a synthesis — do not repeat full content from source reports, only extract the key signals.
+`;
+  }
+
+  const optionalSectionsZh = [
+    hn ? `## Hacker News AI 社区动态\n${hn}` : null,
+    web ? `## AI 官方内容更新（Anthropic / OpenAI）\n${web}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n\n---\n\n");
+
+  return `你是资深 AI 生态分析师。你的任务是将今日（${dateStr}）来自多个情报源的 AI 开源动态综合为一份《AI 开源生态全景报告》，让读者一眼看清整个生态的全貌。
+
+以下是今日已生成的各源报告内容：
+
+---
+
+## GitHub AI 开源趋势日报
+${trending}
+
+---
+
+## AI CLI 工具社区动态日报
+${cli}
+
+---
+
+## AI Agents 生态日报
+${agents}
+
+${optionalSectionsZh ? `---\n\n${optionalSectionsZh}\n\n---` : "---"}
+
+请生成一份结构清晰的《AI 开源生态全景报告》，包含以下章节：
+
+### 1. 全景速览
+3~5 句话，提炼出当所有数据源放在一起看时，最重要的宏观信号是什么？各源共同讲述了一个怎样的故事？
+
+### 2. 生态信号全图
+将所有源中出现的重要信号统一映射到生态分层视图中。按以下层次组织：
+
+- **🔧 基础设施层** — 沙箱/运行时、开发工具、CLI 引擎、算力
+- **🤖 智能体与编排层** — 智能体框架、多智能体系统、规划/记忆、工作流
+- **🔍 知识与检索层** — RAG、向量库、记忆系统、知识图谱
+- **🧠 模型与训练层** — 基础模型、微调、评测、推理优化
+- **📦 应用层** — 终端用户应用、垂直解决方案、插件与集成
+- **🏢 产业与社区层** — 融资动态、官方公告、HN 热议、社区争论
+
+每条信号请包含：
+  - 项目/话题名称及链接（如有）
+  - 出现于哪个源（趋势 / CLI 日报 / Agents 日报 / HN / 官方）
+  - 一句话说明其重要性
+
+### 3. 跨源共振信号
+找出今日在**多个数据源中同时出现**的 3~6 个信号。这些是最强信号——生态在多个维度上同步投票。逐一解释共振的意义。
+
+### 4. 分歧与盲区
+对比各源后，发现 2~3 个最显著的张力或盲区（例如：HN 热议 X 但 OSS 活动反映相反，或某个重要趋势仓库未出现在官方渠道）
+
+### 5. 生态动能评估（定性）
+为每一层简短评估今日动能（🔥 高 / 🟡 中 / ❄️ 低），附一句理由。
+
+### 6. 前瞻信号 — 关注清单
+基于今日跨源信号，列出未来 7 天内值得重点关注的 3~5 个项目或主题。
+
+语言要求：中文，分析性语言，简洁专业。保留所有原文链接。这是综合提炼，不要原文复述各源报告，只提取关键信号。
+`;
+}
+
 export function buildTrendingPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
   const trendingSection =
     data.trendingFetchSuccess && data.trendingRepos.length > 0
