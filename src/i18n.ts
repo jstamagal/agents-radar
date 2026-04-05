@@ -75,6 +75,16 @@ export const HN_REPORT = {
     lang === "en" ? `📰 Hacker News AI Digest ${dateStr}` : `📰 Hacker News AI 社区动态日报 ${dateStr}`,
 } as const;
 
+export const SIGNALS_REPORT = {
+  title: t("AI 每日信号全景", "AI Daily Signals Panorama"),
+  sources: t(
+    "数据来源: GitHub Trending + HN + Anthropic & OpenAI 官网 + CLI 工具跟踪",
+    "Sources: GitHub Trending + HN + Anthropic & OpenAI Updates + CLI Tools",
+  ),
+  issueTitle: (dateStr: string, lang: Lang) =>
+    lang === "en" ? `🔭 AI Daily Signals Panorama ${dateStr}` : `🔭 AI 每日信号全景 ${dateStr}`,
+} as const;
+
 export const WEEKLY_REPORT = {
   title: t("AI 工具生态周报", "AI Tools Ecosystem Weekly Report"),
   coverage: t("覆盖日期", "Coverage"),
@@ -92,6 +102,7 @@ export const ISSUE_LABELS = {
   web: t("web", "web-en"),
   trending: t("trending", "trending-en"),
   hn: t("hn", "hn-en"),
+  signals: t("signals", "signals-en"),
 } as const;
 
 export const CLI_ISSUE_TITLE = (dateStr: string, lang: Lang) =>
@@ -127,6 +138,8 @@ export const REPORT_LABELS: Record<string, string> = {
   "ai-trending-en": "AI Open Source Trends",
   "ai-hn": "Hacker News AI 社区动态日报",
   "ai-hn-en": "Hacker News AI Community Digest",
+  "ai-signals": "AI 每日信号全景",
+  "ai-signals-en": "AI Daily Signals Panorama",
   "ai-weekly": "AI 工具生态周报",
   "ai-weekly-en": "AI Tools Weekly Digest",
   "ai-monthly": "AI 工具生态月报",
@@ -139,6 +152,7 @@ export const NOTIFY_LABELS: Record<string, Record<Lang, string>> = {
   "ai-web": t("官网动态", "Official Updates"),
   "ai-trending": t("GitHub 趋势", "GitHub Trends"),
   "ai-hn": t("HN 社区动态", "HN Community"),
+  "ai-signals": t("每日信号全景", "Daily Signals Panorama"),
   "ai-weekly": t("AI 工具生态周报", "AI Tools Weekly"),
   "ai-monthly": t("AI 工具生态月报", "AI Tools Monthly"),
 };

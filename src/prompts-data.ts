@@ -509,3 +509,104 @@ ${storiesText}
 语言要求：中文，简洁专业，保留所有原文链接。
 `;
 }
+
+// ---------------------------------------------------------------------------
+// Signals Panorama prompt — cross-source "wide view" synthesis from all
+// daily reports, giving users a single consolidated view of all AI signals.
+// ---------------------------------------------------------------------------
+
+/**
+ * Build a prompt that synthesises all daily report content into a single
+ * "wide view" panorama — the AI Daily Signals report.
+ *
+ * @param reportContents  Map of report-id → full report markdown (same shape
+ *                        as the object built for highlights in index.ts).
+ * @param dateStr         Date string, e.g. "2026-03-19".
+ * @param lang            Output language.
+ */
+export function buildSignalsPrompt(
+  reportContents: Record<string, string>,
+  dateStr: string,
+  lang: Lang = "zh",
+): string {
+  // Truncate each source to keep the prompt within context limits.
+  // 3000 chars per source ≈ ~750 tokens each; with up to 5 sources that stays
+  // well below a 16 k-token input budget while still capturing most of each
+  // report's key content.  Mirrors the 2000-char limit in buildHighlightsPrompt.
+  const MAX_CHARS_PER_SOURCE = 3000;
+  const sections = Object.entries(reportContents)
+    .map(([id, content]) => {
+      const truncated = content.length > MAX_CHARS_PER_SOURCE;
+      const body = content.slice(0, MAX_CHARS_PER_SOURCE);
+      return `## [${id}]\n\n${body}${truncated ? "\n\n*[content truncated for brevity]*" : ""}`;
+    })
+    .join("\n\n---\n\n");
+
+  const sourceCount = Object.keys(reportContents).length;
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem analyst. The following are all ${dateStr} daily intelligence reports from ${sourceCount} sources: GitHub Trending, Hacker News, official AI company updates (Anthropic / OpenAI), AI CLI tools tracking, and AI agent ecosystem tracking. Your task is to synthesise these into a single "wide view" panorama that lets a reader see ALL signals at once.
+
+${sections}
+
+---
+
+Generate a comprehensive **AI Daily Signals Panorama** report in English. Cover every meaningful signal across all sources — do not omit any source. Structure:
+
+### 1. The Big Picture (3-5 sentences)
+What is the single most important narrative thread connecting today's signals across all sources? Identify the dominant theme(s).
+
+### 2. All Signals at a Glance
+A scannable table or structured list showing **every distinct signal** from today across all sources. For each signal include:
+- Signal name / project (with link if available)
+- Source (Trending / HN / Official / CLI / Agents)
+- Category (Infrastructure / Agents / Models / Applications / Community / Policy)
+- One-line significance
+
+Aim to surface all notable signals — the goal is the "wide view."
+
+### 3. Cross-Source Patterns
+3-5 bullet points identifying patterns, contradictions, or reinforcing signals that only become visible when viewing all sources together. Examples: "The same theme appeared in Trending AND HN AND official docs — high conviction signal."
+
+### 4. Top 5 Actionable Signals for Developers
+Rank the 5 most actionable signals for a developer/technical decision-maker, with brief rationale.
+
+### 5. Signals to Watch Tomorrow
+2-3 emerging threads that did not dominate today but show early momentum across multiple sources.
+
+Style: English, professional, data-driven. Every project mention must include a link where one is available.
+`;
+  }
+
+  return `你是一位资深 AI 生态分析师。以下是 ${dateStr} 来自 ${sourceCount} 个数据源的全部每日情报报告：GitHub Trending、Hacker News、AI 官方网站动态（Anthropic / OpenAI）、AI CLI 工具追踪、AI Agent 生态追踪。你的任务是将这些内容合成为一份"全景宽视图"，让读者一眼看到当日所有信号。
+
+${sections}
+
+---
+
+请生成一份完整的《AI 每日信号全景》报告，覆盖所有数据源的每一个有意义的信号，不得遗漏任何来源。报告结构如下：
+
+### 1. 今日全局叙事（3~5 句话）
+连接今日所有数据源信号的最重要叙事主线是什么？点明主导主题。
+
+### 2. 信号全景速览
+一张可快速扫描的表格或结构化列表，展示今日所有数据源的**每一个独立信号**。每条信号包含：
+- 信号名称 / 项目名（如有链接请附上）
+- 来源（Trending / HN / 官网 / CLI / Agents）
+- 类别（基础设施 / 智能体 / 模型 / 应用 / 社区 / 政策）
+- 一句话说明其意义
+
+目标是呈现"宽视图"——尽量展示所有值得关注的信号。
+
+### 3. 跨源规律洞察
+3~5 条 bullet，识别只有在同时查看所有数据源时才能发现的规律、矛盾或相互印证的信号。例如："同一主题同时出现在 Trending、HN 和官方文档中——高置信度信号。"
+
+### 4. 开发者最值得关注的 5 个信号
+对开发者 / 技术决策者而言，今日最值得行动的 5 个信号，附简短理由，按优先级排列。
+
+### 5. 明日待观察信号
+2~3 条今日未占主导但已在多个数据源中显示早期动能的新兴线索。
+
+语言要求：中文，专业、数据驱动。每个项目提及均须附链接（如有）。
+`;
+}
