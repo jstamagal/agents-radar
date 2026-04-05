@@ -9,6 +9,121 @@ import type { WebFetchResult } from "./web.ts";
 import type { TrendingData } from "./trending.ts";
 import type { HnData } from "./hn.ts";
 import type { Lang } from "./i18n.ts";
+
+export function buildLandscapePrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingSection =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchSection =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  if (lang === "en") {
+    return `You are a technical analyst mapping the AI open-source ecosystem. The following is ${dateStr} GitHub trending and topic-search data. Your task is to produce a "wide view" landscape that presents ALL AI-relevant signals together in one consolidated matrix — not separated by category, but viewed as a single panoramic ecosystem snapshot.
+
+## Data Sources
+- **Trending List** (github.com/trending, today's stars most reliable): Real-time hot list with today's new stars
+- **Topic Search** (GitHub Search API, topic tags): AI-related projects active in last 7 days
+
+---
+
+## GitHub Today's Trending (${data.trendingRepos.length} repositories)
+${trendingSection}
+
+---
+
+## AI Topic Search Results (${data.searchRepos.length} repositories, deduplicated)
+${searchSection}
+
+---
+
+Generate a structured **AI Open Source Landscape Report** in English. This is the "wide view" — present ALL signals together across categories so the reader can see the entire ecosystem at a glance.
+
+**Step 1 (Filter)**: Select all AI/ML-relevant projects from both data sources. Remove clearly non-AI repos.
+
+**Step 2 (Output Report)** with these sections:
+
+1. **Full Signal Matrix** — A single consolidated Markdown table listing every AI project found today with these columns:
+   | Project | Category | Total ⭐ | Today ⭐ | Language | Key Signal (one phrase) |
+   Sort by "Today ⭐" descending (use "—" if no today's star data). Use these category shorthands: Infra / Agents / Apps / LLMs / RAG.
+
+2. **Momentum Leaders** — Top 5 projects by today's new stars (growth velocity), one sentence each on why they are surging.
+
+3. **Cross-Category Themes** — 3-5 major themes visible when you view all signals together (not just within a single category). Focus on patterns that only become apparent when looking at the full landscape, e.g., convergence between categories, shared dependencies, or ecosystem gaps.
+
+4. **Ecosystem Map Narrative** — 150-200 words: If you had to describe the entire AI open-source landscape today as a single coherent picture, what would you say? What is the ecosystem building towards? What is missing?
+
+5. **Signals to Watch** — 3 specific projects or trends that are under-discussed but could be significant in 30 days, with brief reasoning.
+
+Style: English, concise and precise. Every project in the matrix must include a GitHub link.
+`;
+  }
+
+  return `你是一位绘制 AI 开源生态全景图的技术分析师。以下是 ${dateStr} 的 GitHub 热门仓库与主题搜索数据。你的任务是生成一份"大视野"全景报告，将所有 AI 相关信号汇聚在一张表格中，而不是按类别分开，让读者一眼看清整个生态的全貌。
+
+## 数据说明
+- **Trending 榜单**（github.com/trending，今日 stars 数最可信）：今日实时热榜，含今日新增 stars
+- **主题搜索**（GitHub Search API，topic 标签）：7天内活跃的 AI 相关项目，按主题分类
+
+---
+
+## GitHub 今日 Trending 榜单（共 ${data.trendingRepos.length} 个仓库）
+${trendingSection}
+
+---
+
+## AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库，已去重）
+${searchSection}
+
+---
+
+请生成一份结构清晰的《AI 开源生态全景报告》。这是"大视野"全景视角 —— 将所有信号汇聚在一起，让读者一张图看清整个生态系统。
+
+**第一步（过滤）**：从两份数据中筛选出与 AI/ML 明确相关的项目，排除非 AI 仓库。
+
+**第二步（输出报告）**，包含以下部分：
+
+1. **信号全景矩阵** — 一张汇聚所有 AI 项目的 Markdown 表格，列定义如下：
+   | 项目 | 分类 | 总 ⭐ | 今日 ⭐ | 语言 | 核心信号（一句话） |
+   按"今日 ⭐"降序排列（无今日数据时填"—"）。分类简写：基础设施 / 智能体 / 应用 / 大模型 / RAG。
+
+2. **增长势能领跑者** — 今日新增 stars 最高的前 5 个项目，每项一句话说明飙升原因。
+
+3. **跨类别主题发现** — 3~5 个从全局视角才能发现的主题趋势（而非单个类别内的观察）。重点关注跨类别的汇聚、共同依赖、或生态空白。
+
+4. **生态全景叙述** — 150~200 字：如果用一段话描述今日 AI 开源全景，你会怎么说？整个生态在走向何方？缺失什么？
+
+5. **值得持续观察的信号** — 3 个目前关注度不高但 30 天内可能有重要进展的项目或趋势，附简短理由。
+
+语言要求：中文，精准简洁，矩阵中每个项目必须附 GitHub 链接。
+`;
+}
 export function buildTrendingPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
   const trendingSection =
     data.trendingFetchSuccess && data.trendingRepos.length > 0

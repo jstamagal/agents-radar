@@ -3,9 +3,9 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
-import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, LANDSCAPE_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildLandscapePrompt } from "./prompts-data.ts";
+import { callLlm, saveFile, LLM_TOKENS_WEB, LLM_TOKENS_TRENDING } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
 import type { HnData } from "./hn.ts";
@@ -155,5 +155,46 @@ export async function saveHnReport(
     }
   } catch (err) {
     console.error(`  [hn/${lang}] Report generation failed: ${err}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Landscape report
+// ---------------------------------------------------------------------------
+
+export async function saveLandscapeReport(
+  trendingData: TrendingData,
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+  if (!hasData) {
+    console.log(`  [landscape/${lang}] No data available, skipping report.`);
+    return;
+  }
+
+  console.log(`  [landscape/${lang}] Calling LLM for landscape report...`);
+  try {
+    const landscapeSummary = await callLlm(buildLandscapePrompt(trendingData, dateStr, lang), LLM_TOKENS_TRENDING);
+    const fileName = lang === "en" ? "ai-landscape-en.md" : "ai-landscape.md";
+    const header =
+      `# ${LANDSCAPE_REPORT.title[lang]} ${dateStr}\n\n` +
+      `> ${LANDSCAPE_REPORT.sources[lang]} | ${lang === "en" ? "Generated" : "生成时间"}: ${utcStr} UTC\n\n---\n\n`;
+
+    const landscapeContent = header + landscapeSummary + footer;
+
+    console.log(`  Saved ${saveFile(landscapeContent, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const landscapeTitle = LANDSCAPE_REPORT.issueTitle(dateStr, lang);
+      const landscapeLabel = ISSUE_LABELS.landscape[lang];
+      const landscapeUrl = await createGitHubIssue(landscapeTitle, landscapeContent, landscapeLabel);
+      console.log(`  Created landscape issue (${lang}): ${landscapeUrl}`);
+    }
+  } catch (err) {
+    console.error(`  [landscape/${lang}] Report generation failed: ${err}`);
   }
 }
