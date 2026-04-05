@@ -142,6 +142,137 @@ ${searchSection}
 `;
 }
 
+export function buildEcosystemPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingSection =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchSection =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  const totalSignals = data.trendingRepos.length + data.searchRepos.length;
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem analyst. The following is the complete set of ${totalSignals} AI open-source signals captured on ${dateStr} — every trending repository and every topic-search result. Your goal is to produce a **wide-view Ecosystem Map** that shows the entire landscape at once, revealing patterns that are invisible when looking at individual categories in isolation.
+
+## Complete Signal Set
+
+### GitHub Today's Trending (${data.trendingRepos.length} repositories)
+${trendingSection}
+
+---
+
+### AI Topic Search Results (${data.searchRepos.length} repositories, deduplicated)
+${searchSection}
+
+---
+
+Generate a structured **AI Open Source Ecosystem Map** report in English with the following sections:
+
+### 1. Ecosystem Pulse (3-5 sentences)
+A panoramic summary of what these signals collectively reveal about the state of the AI open-source ecosystem today. What is the overarching story?
+
+### 2. Signal Heatmap by Technology Layer
+Map ALL signals onto a technology stack. For each layer, list every relevant signal with its star count and a single-line description. Layers:
+
+| Layer | Description |
+|-------|-------------|
+| 🏗️ Foundation | Model weights, training frameworks, inference engines |
+| 🔧 Tooling & SDKs | Dev tools, CLIs, orchestration primitives |
+| 🤖 Agent Layer | Agent frameworks, multi-agent systems, autonomous workflows |
+| 📡 Data & RAG | Vector stores, retrieval systems, knowledge bases |
+| 📦 Vertical Apps | Domain-specific applications (finance, video, coding, etc.) |
+| 🔒 Safety & Ops | Security, observability, deployment, monitoring |
+
+### 3. Cross-Signal Convergences
+Identify 3-5 **convergence zones** — places where multiple independent signals point to the same emerging trend or unmet need. Name each convergence, list the signals contributing to it, and explain what it reveals.
+
+### 4. Velocity & Momentum
+Rank the top 5 fastest-moving areas by community momentum (today's star velocity, fork rate, recency of contributions). For each, cite the specific signals driving it and project the likely near-term development.
+
+### 5. Ecosystem Gaps & Opportunities
+Based on what is trending and what is conspicuously absent, identify 3-5 **whitespace opportunities** — problems the community is circling but no clear winner has emerged for yet.
+
+### 6. Key Player Mapping
+Identify the top organizations/individuals appearing across multiple signals and characterize their strategic position in the ecosystem today.
+
+Style: English, analytical, every signal must include its GitHub link. Aim for breadth and synthesis over depth on any single project.
+`;
+  }
+
+  return `你是一位资深 AI 生态分析师。以下是 ${dateStr} 采集到的全量 ${totalSignals} 条 AI 开源信号——所有 Trending 仓库与 Topic 搜索结果。你的目标是生成一份**全景生态地图（Ecosystem Map）**，将所有信号汇聚到同一视图中，揭示单独看各分类时难以察觉的整体规律。
+
+## 完整信号集
+
+### GitHub 今日 Trending（共 ${data.trendingRepos.length} 个仓库）
+${trendingSection}
+
+---
+
+### AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库，已去重）
+${searchSection}
+
+---
+
+请生成一份《AI 开源生态全景地图》报告，包含以下模块：
+
+### 1. 生态脉搏（3~5 句话）
+对今日所有信号的全景总结：这些信号合在一起，揭示了 AI 开源生态当前的什么核心故事？
+
+### 2. 按技术层级的信号热力图
+将**所有**信号映射到以下技术栈层级。每个层级列出相关信号、star 数和一句话描述：
+
+| 层级 | 说明 |
+|------|------|
+| 🏗️ 基础层 | 模型权重、训练框架、推理引擎 |
+| 🔧 工具与 SDK | 开发工具、CLI、编排原语 |
+| 🤖 智能体层 | Agent 框架、多智能体系统、自主工作流 |
+| 📡 数据与 RAG | 向量库、检索系统、知识库 |
+| 📦 垂直应用 | 特定领域应用（金融、视频、编程等） |
+| 🔒 安全与运维 | 安全扫描、可观测性、部署、监控 |
+
+### 3. 跨信号汇聚区
+识别 3~5 个**汇聚区**——多条独立信号同时指向同一新兴趋势或未满足需求的区域。命名每个汇聚区，列出参与其中的信号，并说明它揭示了什么。
+
+### 4. 速度与势能
+按社区动能（今日 star 速度、fork 率、贡献新鲜度）排出前 5 个最快增长领域，引用具体信号并预测近期演化方向。
+
+### 5. 生态空白与机会点
+根据当前热点和明显缺位，识别 3~5 个**机会空白**——社区已在围绕、但尚未出现明确胜者的问题域。
+
+### 6. 关键玩家图谱
+识别在多条信号中同时出现的顶级组织/个人，描述其在今日生态中的战略位置。
+
+语言要求：中文，分析性写作，每个信号必须附 GitHub 链接。追求广度与综合视角，而非对单一项目的深度介绍。
+`;
+}
+
 export function buildWebReportPrompt(results: WebFetchResult[], dateStr: string, lang: Lang = "zh"): string {
   const isAnyFirstRun = results.some((r) => r.isFirstRun);
 

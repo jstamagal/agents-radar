@@ -3,8 +3,8 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ECOSYSTEM_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildEcosystemPrompt } from "./prompts-data.ts";
 import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
@@ -112,8 +112,46 @@ export async function saveTrendingReport(
 }
 
 // ---------------------------------------------------------------------------
-// Hacker News report
+// Ecosystem report
 // ---------------------------------------------------------------------------
+
+export async function saveEcosystemReport(
+  trendingData: TrendingData,
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+  if (!hasData) {
+    console.log(`  [ecosystem/${lang}] No trending data available, skipping report.`);
+    return;
+  }
+
+  console.log(`  [ecosystem/${lang}] Calling LLM for ecosystem map report...`);
+  try {
+    const ecosystemSummary = await callLlm(buildEcosystemPrompt(trendingData, dateStr, lang), LLM_TOKENS_WEB);
+    const fileName = lang === "en" ? "ai-ecosystem-en.md" : "ai-ecosystem.md";
+    const header =
+      `# ${ECOSYSTEM_REPORT.title[lang]} ${dateStr}\n\n` +
+      `> ${ECOSYSTEM_REPORT.sources[lang]} | ${lang === "en" ? "Generated" : "生成时间"}: ${utcStr} UTC\n\n` +
+      `---\n\n`;
+
+    const ecosystemContent = header + ecosystemSummary + footer;
+
+    console.log(`  Saved ${saveFile(ecosystemContent, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const ecosystemTitle = ECOSYSTEM_REPORT.issueTitle(dateStr, lang);
+      const ecosystemLabel = ISSUE_LABELS.ecosystem[lang];
+      const ecosystemUrl = await createGitHubIssue(ecosystemTitle, ecosystemContent, ecosystemLabel);
+      console.log(`  Created ecosystem issue (${lang}): ${ecosystemUrl}`);
+    }
+  } catch (err) {
+    console.error(`  [ecosystem/${lang}] Report generation failed: ${err}`);
+  }
+}
 
 export async function saveHnReport(
   hnData: HnData,
