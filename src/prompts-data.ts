@@ -426,6 +426,139 @@ ${sections}
 - 要具体：包含项目名、版本号、star 数等关键信息`;
 }
 
+export function buildSignalsPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingSection =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchSection =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem analyst. The following is ${dateStr} GitHub AI-related trending and topic-search data. Your task is to produce a comprehensive **wide-view signals map** — not a daily snapshot, but a panoramic synthesis that shows how all these signals fit together as an ecosystem picture.
+
+## Data Sources
+- **Trending List** (github.com/trending): Real-time hot list with today's new stars
+- **Topic Search** (GitHub Search API, 7-day window): AI-related projects grouped by topic
+
+---
+
+## GitHub Today's Trending (${data.trendingRepos.length} repositories)
+${trendingSection}
+
+---
+
+## AI Topic Search Results (${data.searchRepos.length} repositories, deduplicated)
+${searchSection}
+
+---
+
+Generate a structured **AI Ecosystem Signals: Wide View** report in English. This report should read like an ecosystem map — showing not just what is trending, but *why it matters together*.
+
+**Step 1 (Collect Signals)**: From the above data, extract all clearly AI-related projects and treat each as a "signal." Ignore non-AI general tools.
+
+**Step 2 (Group by Theme)**: Organise signals into thematic clusters that reveal ecosystem-level patterns. Suggested clusters (adapt as the data warrants):
+- 🏗️ **Foundation Layer** — inference engines, runtimes, SDKs, CLI tooling
+- 🤖 **Agentic Systems** — multi-agent frameworks, orchestration, computer-use, automation
+- 🧠 **Model & Training** — new weights, fine-tuning, evaluation, distillation
+- 🔍 **Memory & Knowledge** — RAG, vector stores, long-term agent memory
+- 🌐 **Application Frontier** — vertical end-user products, creative tools, domain agents
+- 🔒 **Safety & Security** — alignment, red-teaming, secure sandboxes, responsible-AI tooling
+
+**Step 3 (Output the Wide-View Report)** with these sections:
+
+1. **Panoramic Summary** — 4-6 sentences: what is the single overarching narrative that connects all these signals? Describe the ecosystem moment.
+
+2. **Signal Clusters** — For each theme cluster present in the data, list its signals with:
+   - Project name (with link), stars/momentum data
+   - One sentence: what it is and its role in the cluster
+   - A brief "cluster insight" paragraph (3-5 sentences) explaining what this cluster collectively tells us about where the ecosystem is heading
+
+3. **Cross-Signal Patterns** — 3-5 named patterns that emerge only when you look across clusters simultaneously, e.g. "The Agentic Stack is Vertically Integrating," "Security Tooling Lags Agent Capability by 12 Months," etc. Each pattern: name + 2-3 sentence explanation + which signals evidence it.
+
+4. **Ecosystem Forces** — A 200-300 word synthesis of the underlying forces (technical, social, competitive) driving this moment in the AI open-source ecosystem.
+
+5. **Signals Worth Watching** — 5-7 specific projects or directions that are early-stage signals of the *next* wave, with brief reasoning for each.
+
+Style: English, analytical and strategic, written for senior engineers, investors, and AI product leaders. Every project must include its GitHub link.
+`;
+  }
+
+  return `你是一位资深 AI 生态分析师。以下是 ${dateStr} GitHub AI 相关的 Trending 和主题搜索数据。你的任务是制作一份**全景信号地图**——不是每日快照，而是将所有信号作为一个生态系统全貌来综合呈现。
+
+## 数据说明
+- **Trending 榜单**（github.com/trending）：今日实时热榜，含今日新增 stars
+- **主题搜索**（GitHub Search API，7 天窗口）：AI 相关项目，按主题分类
+
+---
+
+## GitHub 今日 Trending 榜单（共 ${data.trendingRepos.length} 个仓库）
+${trendingSection}
+
+---
+
+## AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库，已去重）
+${searchSection}
+
+---
+
+请生成一份结构完整的《AI 生态信号全景图》报告。本报告应像一张生态地图——不仅呈现什么在热门，更要揭示**这些信号放在一起意味着什么**。
+
+**第一步（收集信号）**：从以上数据中提取所有与 AI 明确相关的项目，将每个项目视为一个"信号"。忽略非 AI 通用工具。
+
+**第二步（按主题聚类）**：将信号组织为揭示生态层面规律的主题簇。建议的簇（可根据数据调整）：
+- 🏗️ **基础设施层** — 推理引擎、运行时、SDK、CLI 工具
+- 🤖 **智能体系统** — 多智能体框架、编排、计算机使用、自动化
+- 🧠 **模型与训练** — 新权重、微调、评估、蒸馏
+- 🔍 **记忆与知识** — RAG、向量存储、智能体长期记忆
+- 🌐 **应用前沿** — 垂直用户产品、创意工具、领域智能体
+- 🔒 **安全与治理** — 对齐、红队测试、安全沙盒、负责任 AI 工具
+
+**第三步（输出全景报告）**，包含以下部分：
+
+1. **全景摘要** — 4~6 句话：连接所有信号的主叙事是什么？描述当前的生态时刻。
+
+2. **信号聚类** — 对数据中出现的每个主题簇，列出其信号，每项包含：
+   - 项目名（含链接）、stars/热度数据
+   - 一句话：这个项目是什么，在本簇中扮演什么角色
+   - 一段"簇洞察"（3~5 句话），说明这组信号共同揭示了生态的哪个走向
+
+3. **跨簇规律** — 3~5 个只有同时审视多个簇时才能发现的命名规律，例如"智能体栈正在垂直整合"、"安全工具滞后智能体能力约 12 个月"等。每条规律：名称 + 2~3 句解释 + 哪些信号提供佐证。
+
+4. **生态驱动力** — 200~300 字综合分析，阐述推动当前 AI 开源生态时刻的深层力量（技术、社会、竞争）。
+
+5. **值得关注的新兴信号** — 5~7 个处于早期阶段、预示**下一波浪潮**的具体项目或方向，每项附简短理由。
+
+语言要求：中文，分析性和战略性，面向高级工程师、投资者和 AI 产品负责人。每个项目必须附 GitHub 链接。
+`;
+}
+
 export function buildHnPrompt(data: HnData, dateStr: string, lang: Lang = "zh"): string {
   const storiesText = data.stories
     .map((s, i) =>
