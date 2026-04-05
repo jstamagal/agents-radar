@@ -528,7 +528,7 @@ ${storiesText}
 // Wide-view signals report
 // ---------------------------------------------------------------------------
 
-/** Truncate a string to at most maxLen characters with a notice. */
+/** Truncate a string to at most `maxLen` characters, appending a notice if cut. */
 function truncate(s: string, maxLen: number): string {
   if (s.length <= maxLen) return s;
   return s.slice(0, maxLen) + "\n…(truncated)";

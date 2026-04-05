@@ -343,7 +343,7 @@ async function main(): Promise<void> {
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
   ]);
 
-  // Wide-view signals report: synthesises all per-source summaries (zh + en)
+  // 5. Wide-view signals report: synthesises all per-source summaries (zh + en)
   const readReport = (name: string): string | undefined => {
     const p = path.join("digests", dateStr, name);
     return fs.existsSync(p) ? fs.readFileSync(p, "utf-8") : undefined;
@@ -367,7 +367,7 @@ async function main(): Promise<void> {
     );
   }
 
-  // 5. Generate highlights for Telegram notification
+  // 6. Generate highlights for Telegram notification
   const zhReports: Record<string, string> = { "ai-cli": cliContent.zh, "ai-agents": openclawContent.zh };
   const enReports: Record<string, string> = { "ai-cli": cliContent.en, "ai-agents": openclawContent.en };
   for (const [id, zhFile, enFile] of [
@@ -408,7 +408,7 @@ async function main(): Promise<void> {
   const highlightsPath = saveFile(JSON.stringify(highlights, null, 2), dateStr, "highlights.json");
   console.log(`  Saved ${highlightsPath}`);
 
-  // 6. Create GitHub issues for CLI + OpenClaw (zh + en)
+  // 7. Create GitHub issues for CLI + OpenClaw (zh + en)
   if (digestRepo) {
     for (const lang of ["zh", "en"] as const) {
       const cliUrl = await createGitHubIssue(
