@@ -178,7 +178,10 @@ export async function saveSignalsReport(
 
   console.log(`  [signals/${lang}] Calling LLM for signals landscape report...`);
   try {
-    const signalsSummary = await callLlm(buildSignalsPrompt(trendingData, dateStr, lang), LLM_TOKENS_TRENDING);
+    const signalsSummary = await callLlm(
+      buildSignalsPrompt(trendingData, dateStr, lang),
+      LLM_TOKENS_TRENDING,
+    );
     const fileName = lang === "en" ? "ai-signals-en.md" : "ai-signals.md";
     const header =
       `# ${SIGNALS_REPORT.title[lang]} ${dateStr}\n\n` +

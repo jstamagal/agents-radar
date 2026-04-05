@@ -1,5 +1,5 @@
 /**
- * LLM prompt builders for data-source reports (trending, web, HN)
+ * LLM prompt builders for data-source reports (trending, signals, web, HN)
  * and rollup reports (weekly, monthly).
  *
  * Separated from prompts.ts to keep each module focused.

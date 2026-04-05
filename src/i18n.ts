@@ -88,10 +88,7 @@ export const MONTHLY_REPORT = {
 
 export const SIGNALS_REPORT = {
   title: t("AI 信号全景图", "AI Signals Landscape"),
-  sources: t(
-    "数据来源: GitHub Trending + GitHub Search API",
-    "Sources: GitHub Trending + GitHub Search API",
-  ),
+  sources: t("数据来源: GitHub Trending + GitHub Search API", "Sources: GitHub Trending + GitHub Search API"),
   issueTitle: (dateStr: string, lang: Lang) =>
     lang === "en" ? `🔭 AI Signals Landscape ${dateStr}` : `🔭 AI 信号全景图 ${dateStr}`,
 } as const;
