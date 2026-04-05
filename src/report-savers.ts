@@ -5,7 +5,7 @@
 
 import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, PANORAMA_REPORT, ISSUE_LABELS } from "./i18n.ts";
 import { buildWebReportPrompt, buildHnPrompt, buildPanoramaPrompt } from "./prompts-data.ts";
-import { callLlm, saveFile, LLM_TOKENS_WEB, LLM_TOKENS_TRENDING } from "./report.ts";
+import { callLlm, saveFile, LLM_TOKENS_WEB, LLM_TOKENS_PANORAMA } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
 import type { HnData } from "./hn.ts";
@@ -180,7 +180,7 @@ export async function savePanoramaReport(
   try {
     const panoramaSummary = await callLlm(
       buildPanoramaPrompt(reportContents, dateStr, lang),
-      LLM_TOKENS_TRENDING,
+      LLM_TOKENS_PANORAMA,
     );
     const fileName = lang === "en" ? "ai-panorama-en.md" : "ai-panorama.md";
     const header =

@@ -515,18 +515,21 @@ ${storiesText}
 // cross-cutting "wide view" analysis.
 // ---------------------------------------------------------------------------
 
+// Maximum characters taken from each report to keep the combined prompt within
+// a manageable context window while still providing enough signal per source.
+const PANORAMA_EXCERPT_CHARS = 3000;
+
 export function buildPanoramaPrompt(
   reportContents: Record<string, string>,
   dateStr: string,
   lang: Lang = "zh",
 ): string {
-  const EXCERPT_CHARS = 3000;
   const reportIdOrder = ["ai-cli", "ai-agents", "ai-trending", "ai-hn", "ai-web"];
 
   const sections = reportIdOrder
     .filter((id) => reportContents[id])
     .map((id) => {
-      const content = reportContents[id]!.slice(0, EXCERPT_CHARS);
+      const content = reportContents[id]!.slice(0, PANORAMA_EXCERPT_CHARS);
       return `## [${id}]\n\n${content}`;
     })
     .join("\n\n---\n\n");
