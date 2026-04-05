@@ -30,7 +30,7 @@ import {
 import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
 import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport, saveSignalsReport } from "./report-savers.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -343,18 +343,38 @@ async function main(): Promise<void> {
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
   ]);
 
-  // 5. Generate highlights for Telegram notification
+  // Wide-view signals report: synthesises all per-source summaries (zh + en)
   const readReport = (name: string): string | undefined => {
     const p = path.join("digests", dateStr, name);
     return fs.existsSync(p) ? fs.readFileSync(p, "utf-8") : undefined;
   };
 
+  for (const lang of ["zh", "en"] as const) {
+    const s = summariesByLang[lang];
+    await saveSignalsReport(
+      {
+        trending: s.trendingSummary,
+        hn: readReport(lang === "en" ? "ai-hn-en.md" : "ai-hn.md"),
+        web: readReport(lang === "en" ? "ai-web-en.md" : "ai-web.md"),
+        cliComparison: comparisonByLang[lang],
+        agentsComparison: peersComparisonByLang[lang],
+      },
+      utcStr,
+      dateStr,
+      digestRepo,
+      autoGenFooter(lang),
+      lang,
+    );
+  }
+
+  // 5. Generate highlights for Telegram notification
   const zhReports: Record<string, string> = { "ai-cli": cliContent.zh, "ai-agents": openclawContent.zh };
   const enReports: Record<string, string> = { "ai-cli": cliContent.en, "ai-agents": openclawContent.en };
   for (const [id, zhFile, enFile] of [
     ["ai-trending", "ai-trending.md", "ai-trending-en.md"],
     ["ai-web", "ai-web.md", "ai-web-en.md"],
     ["ai-hn", "ai-hn.md", "ai-hn-en.md"],
+    ["ai-signals", "ai-signals.md", "ai-signals-en.md"],
   ] as const) {
     const zh = readReport(zhFile);
     const en = readReport(enFile);

@@ -9,6 +9,20 @@ import type { WebFetchResult } from "./web.ts";
 import type { TrendingData } from "./trending.ts";
 import type { HnData } from "./hn.ts";
 import type { Lang } from "./i18n.ts";
+
+/** Input sources for the wide-view signals report. All fields are optional. */
+export interface SignalSources {
+  /** LLM-generated trending report summary */
+  trending?: string;
+  /** Saved HN report content */
+  hn?: string;
+  /** Saved web/official content report */
+  web?: string;
+  /** LLM-generated cross-CLI-tool comparison */
+  cliComparison?: string;
+  /** LLM-generated cross-agent-ecosystem comparison */
+  agentsComparison?: string;
+}
 export function buildTrendingPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
   const trendingSection =
     data.trendingFetchSuccess && data.trendingRepos.length > 0
@@ -507,5 +521,175 @@ ${storiesText}
 4. **值得深读** — 列出 2~3 条今日最值得开发者/研究者深入阅读的内容，简述理由
 
 语言要求：中文，简洁专业，保留所有原文链接。
+`;
+}
+
+// ---------------------------------------------------------------------------
+// Wide-view signals report
+// ---------------------------------------------------------------------------
+
+/** Truncate a string to at most maxLen characters with a notice. */
+function truncate(s: string, maxLen: number): string {
+  if (s.length <= maxLen) return s;
+  return s.slice(0, maxLen) + "\n…(truncated)";
+}
+
+/**
+ * Build a prompt for the AI Ecosystem Wide-View Signal Report.
+ * Synthesises all available per-source summaries into one consolidated view.
+ */
+export function buildSignalsPrompt(sources: SignalSources, dateStr: string, lang: Lang = "zh"): string {
+  const SECTION_MAX = 2500;
+
+  const trendingBlock = sources.trending
+    ? truncate(sources.trending, SECTION_MAX)
+    : lang === "en"
+      ? "(Trending data not available)"
+      : "（趋势数据不可用）";
+
+  const hnBlock = sources.hn
+    ? truncate(sources.hn, SECTION_MAX)
+    : lang === "en"
+      ? "(HN data not available)"
+      : "（HN 数据不可用）";
+
+  const webBlock = sources.web
+    ? truncate(sources.web, SECTION_MAX)
+    : lang === "en"
+      ? "(Official content data not available)"
+      : "（官方内容数据不可用）";
+
+  const cliBlock = sources.cliComparison
+    ? truncate(sources.cliComparison, SECTION_MAX)
+    : lang === "en"
+      ? "(CLI comparison not available)"
+      : "（CLI 工具对比数据不可用）";
+
+  const agentsBlock = sources.agentsComparison
+    ? truncate(sources.agentsComparison, SECTION_MAX)
+    : lang === "en"
+      ? "(Agents comparison not available)"
+      : "（Agent 生态对比数据不可用）";
+
+  if (lang === "en") {
+    return `You are a technology strategist synthesizing signals from across the AI open-source ecosystem on ${dateStr}. Multiple data sources have been compiled below. Your task is to create a comprehensive "Wide-View Signal Report" that consolidates all signals into a single coherent narrative.
+
+## Source 1: GitHub AI Trending & Search Signals
+${trendingBlock}
+
+---
+
+## Source 2: Hacker News Community Signals
+${hnBlock}
+
+---
+
+## Source 3: Official AI Announcements (Anthropic + OpenAI)
+${webBlock}
+
+---
+
+## Source 4: AI CLI Tools Cross-Comparison
+${cliBlock}
+
+---
+
+## Source 5: AI Agents Ecosystem Cross-Comparison
+${agentsBlock}
+
+---
+
+Generate a structured **AI Ecosystem Wide-View Signal Report** in English with the following sections:
+
+### 1. Executive Signal Summary
+3-5 sentences: What is the single coherent story all these sources tell together today?
+
+### 2. Signal Matrix
+Organise ALL notable projects and signals across every source by theme. For each entry include: name (with link where available), originating source, and one sentence on why it matters today.
+
+Themes:
+- 🔧 Infrastructure & Tooling
+- 🤖 Agents & Automation
+- 📦 Applications & Vertical Tools
+- 🧠 Models & Training
+- 🔍 Data, RAG & Memory
+- 💬 Community & Discourse (HN discussions / community sentiment)
+- 📣 Official Signals (Anthropic / OpenAI announcements)
+
+### 3. Cross-Source Convergence
+Which themes or projects appear in **multiple** data sources today? These cross-source confirmations are the strongest signals. List each convergence point with the sources that confirm it.
+
+### 4. Today's Velocity Leaders
+The 3-5 fastest-moving projects or signals by community engagement (stars gained, discussion volume, or official endorsement).
+
+### 5. Emerging vs. Established
+- **New signals** appearing for the first time today
+- **Established trends** gaining renewed momentum
+
+### 6. Developer Watch List
+Top 5-7 specific repos, tools, or topics developers should follow over the next week, each with a brief strategic rationale.
+
+Style: Strategic and concise. Include all available GitHub links. Think like a VC analyst surveying the full AI landscape from a single vantage point.
+`;
+  }
+
+  return `你是一位 AI 开源生态的技术战略分析师，正在对 ${dateStr} 的多维数据进行综合研判。以下来自五个不同数据源的摘要已汇总如下，请据此生成一份"全景信号报告"，将所有信号整合为一个连贯的叙述。
+
+## 信号源 1：GitHub AI Trending 及搜索信号
+${trendingBlock}
+
+---
+
+## 信号源 2：Hacker News 社区信号
+${hnBlock}
+
+---
+
+## 信号源 3：官方 AI 动态（Anthropic + OpenAI）
+${webBlock}
+
+---
+
+## 信号源 4：AI CLI 工具横向对比
+${cliBlock}
+
+---
+
+## 信号源 5：AI Agent 生态横向对比
+${agentsBlock}
+
+---
+
+请生成一份结构化的 **AI 生态全景信号报告**，包含以下章节：
+
+### 1. 执行摘要
+3~5 句话：今日所有信号源共同呈现的核心叙事是什么？
+
+### 2. 信号矩阵
+将所有信号源中值得关注的项目和信号按主题分类汇总。每条包含：名称（附链接）、来源信号源、一句话说明今日为何值得关注。
+
+主题分类：
+- 🔧 基础设施与工具
+- 🤖 智能体与自动化
+- 📦 AI 应用与垂直工具
+- 🧠 大模型与训练
+- 🔍 数据、RAG 与记忆
+- 💬 社区与讨论（HN 讨论 / 社区情绪）
+- 📣 官方信号（Anthropic / OpenAI 动态）
+
+### 3. 跨源共振点
+哪些主题或项目在**多个**数据源中同时出现？这些跨源确认是最强的信号。请列出每个共振点及对应的信号源。
+
+### 4. 今日速度领跑者
+3~5 个以社区参与度（今日新增 stars、讨论量或官方背书）最快上升的项目或信号。
+
+### 5. 新兴 vs. 成熟
+- **新兴信号**：今日首次出现的趋势
+- **成熟趋势**：正在获得新动力的既有方向
+
+### 6. 开发者关注清单
+未来一周开发者值得跟进的 5~7 个具体项目、工具或话题，每条附简短的战略理由。
+
+语言要求：中文，简洁专业，保留所有原文链接。像一位从全局视角俯瞰 AI 生态的分析师那样写作。
 `;
 }

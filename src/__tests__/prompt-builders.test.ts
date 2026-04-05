@@ -12,6 +12,8 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHnPrompt,
+  buildSignalsPrompt,
+  type SignalSources,
 } from "../prompts-data.ts";
 import type { RepoConfig, GitHubItem, GitHubRelease } from "../github.ts";
 import type { RepoDigest } from "../prompts.ts";
@@ -353,5 +355,61 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildSignalsPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildSignalsPrompt", () => {
+  const fullSources: SignalSources = {
+    trending: "Trending summary content",
+    hn: "HN summary content",
+    web: "Web summary content",
+    cliComparison: "CLI comparison content",
+    agentsComparison: "Agents comparison content",
+  };
+
+  it("generates English prompt with all sources", () => {
+    const result = buildSignalsPrompt(fullSources, "2026-03-14", "en");
+    expect(result).toContain("Wide-View Signal Report");
+    expect(result).toContain("Trending summary content");
+    expect(result).toContain("HN summary content");
+    expect(result).toContain("Web summary content");
+    expect(result).toContain("CLI comparison content");
+    expect(result).toContain("Agents comparison content");
+    expect(result).toContain("Signal Matrix");
+    expect(result).toContain("Cross-Source Convergence");
+    expect(result).toContain("Developer Watch List");
+  });
+
+  it("generates Chinese prompt with all sources", () => {
+    const result = buildSignalsPrompt(fullSources, "2026-03-14", "zh");
+    expect(result).toContain("全景信号报告");
+    expect(result).toContain("Trending summary content");
+    expect(result).toContain("信号矩阵");
+    expect(result).toContain("跨源共振点");
+    expect(result).toContain("开发者关注清单");
+  });
+
+  it("shows not-available placeholders when sources are missing", () => {
+    const emptySources: SignalSources = {};
+    const enResult = buildSignalsPrompt(emptySources, "2026-03-14", "en");
+    expect(enResult).toContain("not available");
+    const zhResult = buildSignalsPrompt(emptySources, "2026-03-14", "zh");
+    expect(zhResult).toContain("不可用");
+  });
+
+  it("includes date in prompt", () => {
+    const result = buildSignalsPrompt(fullSources, "2026-03-14", "en");
+    expect(result).toContain("2026-03-14");
+  });
+
+  it("truncates very long source content", () => {
+    const longContent = "x".repeat(5000);
+    const sources: SignalSources = { trending: longContent };
+    const result = buildSignalsPrompt(sources, "2026-03-14", "en");
+    expect(result).toContain("(truncated)");
   });
 });
