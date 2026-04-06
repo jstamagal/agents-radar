@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 陷信任危机，频发计费异常与数据丢失",
+      "OpenAI Codex 稳定性崩坏，架构重构致资源占用飙升",
+      "Qwen Code 凭高频修复体验，社区热度反超大厂竞品",
+      "跨平台兼容性成行业痛点，Windows 支持普遍堪忧",
+      "Charm Crush 专注打磨细节，Agent 工具链体验升级",
+      "OpenCode 功能膨胀，引入 Agent Teams 致内存压力剧增"
+    ],
+    "ai-agents": [
+      "OpenClaw 单日处理 500 个 PR，引入 AWS Bedrock 记忆增强",
+      "国际化 Web UI 上线，一次更新覆盖中英日法等 12 种语言",
+      "Lobster 引擎内联集成，深度重构底层 Runtime 架构",
+      "新版本 2026.4.x 遭遇滑铁卢，模型注册与会话管理现回归 Bug",
+      "Gateway WebSocket 修复，解决重启挂起难题",
+      "插件更新流统一，打通 npm 与 Marketplace 的逻辑孤岛"
+    ],
+    "ai-trending": [
+      "Rust 写的 Agent 框架 goose 涨称霸，日增 882 星",
+      "MLX-VLM 解锁 Mac 本地多模态，无需云 GPU 即可微调",
+      "Google 官方展示边缘 AI，全场景覆盖安卓到 IoT",
+      "开源版 Claude Code 教学，learn-claude-code 收获 48k 星",
+      "AI 专用文件检索工具 fff.nvim 挑战传统性能瓶颈",
+      "MariaDB 向 AI-Ready 进化，AI 彻底重构数据底座"
+    ],
+    "ai-hn": [
+      "LM Studio 无头 CLI 支持本地运行 Gemma 4，零依赖受热捧",
+      "OpenAI 调整 Codx 计费模式，按 Token 计费引发透明度争议",
+      "仅用 200 美元打造 TPU 版 Claude Code，JAX 优化降本惊人",
+      "OpenAI 遭地缘政治威胁，海外数据中心面临生存挑战",
+      "Cabinet 结合知识库与大模型，探索 PKM 新形态",
+      "Onepilot 允许 iPhone 远程部署 Agent，开启移动办公新图景"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code: Critical regression on Rate Limits",
+      "OpenAI Codex: Severe kernel panics on macOS/Win",
+      "Ecosystem focus shifts to operational reliability",
+      "New industry trend: Architectural introspection features",
+      "Community plagued by CPU/Memory leaks",
+      "Project movement: Multi-agent orchestration"
+    ],
+    "ai-agents": [
+      "OpenClaw: Hyperactive 500 issues/PRs in 24h",
+      "Preparing for major release v2026.4.x",
+      "Reports of severe volatility in model routing",
+      "Critical bugs in Telegram, WhatsApp channels",
+      "Refactoring streamlines plugin install logic",
+      "Spike in technical debt from rapid iteration"
+    ],
+    "ai-trending": [
+      "block/goose: Rust-based agent surges +882 stars",
+      "Google-ai-edge releases LiteRT-LM for edge AI",
+      "Trend shifts to AI-native infra and autonomy",
+      "Goose offers agentic workflows in Rust",
+      "MLX-VLM bridges model inference and execution",
+      "Unified execution environments trending today"
+    ],
+    "ai-hn": [
+      "OpenAI Codex pricing sparks intense economics debate",
+      "Running Gemma 4 locally drives community excitement",
+      "Claude Code workflows dominate Show HN projects",
+      "Tensions rise over threats to Stargate datacenter",
+      "Nanocode: High-performance agent on TPUs",
+      "Skepticism over musician's AI copyright claims"
+    ]
+  }
+}
