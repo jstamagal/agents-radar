@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 工程体验断崖下跌，计费与回退引发信任危机",
+      "OpenAI Codex 内存泄漏频发，10+ 重构试图解决高 Token 消耗",
+      "MCP 协议成事实标准，OpenCode 等工具深度集成新生态",
+      "Gemini CLI 权限识别混乱，架构重构致配置复杂度攀升",
+      "Qwen Code 多 Agent 并发交互 Bug 频出，构建今日失败",
+      "GitHub Copilot 进入维护期，融合多模型提供第二意见"
+    ],
+    "ai-agents": [
+      "OpenClaw 发力吉瓦级基建，年化营收突破 300 亿美元",
+      "OpenClaw v2026.4.5 发布：移除旧配置项，统一管理标准",
+      "分布式协作成重点，沙箱 Agent 间通信协议修复完成",
+      "原生 Plugin SDK 引入，OpenClaw 深度集成 MCP 生态",
+      "回归问题与 Windows 兼容性成今日痛点，社区热度极高",
+      "视频生成能力推进，OpenClaw 生态扩展多模态边界"
+    ],
+    "ai-trending": [
+      "Google 端侧 AI 爆火，gallery 单日涨星超 1100",
+      "LiteRT-LM 推理框架发布，手机运行大模型门槛降低",
+      "白盒渗透测试代理 Shannon 走红，AI 安全成硬核新热点",
+      "NousResearch Hermes 单日涨星 1574，主打 Agent 长期记忆",
+      "Ollama 持续支持最新模型，依然是本地推理首选网关",
+      "零服务器代码图谱 GitNexus 受关注，聚焦数据主权"
+    ],
+    "ai-web": [
+      "Anthropic 锁定数吉瓦 TPU，与 Google/Broadcom 达成史诗级合作",
+      "Anthropic 年化营收超 300 亿美元，大客户数量两月翻倍",
+      "基建竞赛升级：算力重心从“显卡数量”转向“电力规划”",
+      "OpenAI 推出安全奖学金，低调布局学术护城河",
+      "70% 新算力落地美国，地缘政治承诺扩张至 500 亿美元",
+      "企业级 AI 进入普及期，年消费百万客户突破 1000 家"
+    ],
+    "ai-hn": [
+      "Claude Code 2 月更新“史诗级削弱”，工程能力引众怒",
+      "模仿海马体记忆，Hippo 项目为 Agent 引入持久化能力",
+      "Bernie Sanders 发出警告：AI 或带来大规模社会失业",
+      "移除 MagicDocs 功能，Anthropic 透支开发者信誉遭清算",
+      "Meta-agent 惊艳亮相：利用实时追踪数据进行自我进化",
+      "Hippo Memory 挑战上下文极限，AI 代理开始拥有“回忆”"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Ecosystem pivots from growth to UX stability",
+      "Claude Code faces 437+ comments on regression",
+      "OpenAI Codex Alpha v0.119.0 targets token waste",
+      "Cost and token efficiency re-emerge as critical",
+      "Industry races toward Model Context Protocol maturity",
+      "Community focus shifts to terminal responsiveness"
+    ],
+    "ai-agents": [
+      "OpenClaw sees massive burst: 500 new issues/PRs",
+      "v2026.4.5 removes legacy config alias support",
+      "Breaking changes impact Windows and plugins",
+      "83 issues closed, 417 remain active",
+      "New release enforces canonical config paths",
+      "Project state fragile post-release update"
+    ],
+    "ai-trending": [
+      "NousResearch hermes-agent gains 1,574 stars",
+      "Surge in autonomous and agent-based tools",
+      "Browser-native and local-first AI gaining traction",
+      "Google on-device AI demo goes viral (+1,107 stars)",
+      "Shift towards always-on personalized AI agents",
+      "Growing demand for privacy-preserving workflows"
+    ],
+    "ai-web": [
+      "Anthropic revenue triples to surpass $30B",
+      "Secures multi-gigawatt compute for 2027",
+      "Partners with Google and Broadcom on TPUs",
+      "OpenAI posts new Safety Fellowship content",
+      "Anthropic prioritizes physical supply chain",
+      "Over 1,000 customers spending >$1M annually"
+    ],
+    "ai-hn": [
+      "Claude Code called unusable after updates",
+      "Anthropic accused of burning dev goodwill",
+      "Reports of Claude Code down and features gone",
+      "Term 'OpenClaw' allegedly blacklisted",
+      "Community debates Industrial Policy for AI",
+      "Hippo memory proposes biologically inspired AI"
+    ]
+  }
+}
