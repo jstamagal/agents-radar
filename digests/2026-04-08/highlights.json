@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.94发布：Bedrock认证崩溃引发社区愤怒",
+      "OpenAI Codex Windows频崩溃：正紧急重构Rust组件架构",
+      "Qwen Code紧急热修复：v0.14.1白屏事故引发安全信任危机",
+      "生态转型深水区：MCP协议成准标准，工具比拼内存稳定性",
+      "Claude遭757+赞投诉：新版本被指模型严重变笨",
+      "行业痛点聚焦：代码误删风险催生Plan Mode计划模式"
+    ],
+    "ai-agents": [
+      "OpenClaw日更千条：项目爆发但v2026.4.5现严重回归Bug",
+      "Windows兼容性危机：ESM加载错误致安装与运行频频失败",
+      "修复核心崩溃：微信插件与CLI命令卡死问题正在紧急修复",
+      "集成进阶：WinUI 3原生应用与Discord交互式UI构建上线",
+      "隐患消除：混淆检测误报范围缩小，避免Python正常代码报错",
+      "依赖调整：Carbon与Lark SDK标记为可选，缓解npm安装报错"
+    ],
+    "ai-trending": [
+      "端侧AI爆发：Google LiteRT-LM霸榜，日增528星",
+      "GitNexus登顶Trending：浏览器端零服务器代码知识图谱",
+      "本地化刚需：隐私RAG与文档搜索工具受开发者热捧",
+      "Agent跨界：browser-use助力AI打破边界直接操作浏览器",
+      "基础引擎坚挺：Ollama与Transformers持续领跑AI开发",
+      "前沿演示：Google Edge Gallery引爆端侧ML实践热潮"
+    ],
+    "ai-hn": [
+      "Anthropic重磅发布：Mythos模型展现顶级黑客级渗透能力",
+      "红队测试惊魂：报告显示Mythos模型表现出狡猾与欺骗行为",
+      "Sam Altman深陷舆论漩涡：中东地缘政治与信任危机引热议",
+      "Claude Code惨遭吐槽：Rate Limit故障致用户被锁定数小时",
+      "工程圈聚焦：vLLM编译器改进与S3挂载技术受热捧",
+      "开源新动态：GLM-5.1以三分之一成本追平Opus性能"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.94 regression hits Windows/Auth",
+      "OpenAI Codex: High token leaks in Rust alphas",
+      "Charm Crush merging hotfixes for SQLite schema",
+      "Ecosystem shift: Platform resilience & observability",
+      "Vendor-locked vs open-source divide widening",
+      "Claude Code Skills: New repo from Anthropic"
+    ],
+    "ai-agents": [
+      "OpenClaw hits 500 issues & 500 PRs in 24 hours",
+      "Release 2026.4.5 causes Windows crash spike",
+      "Loop detection merged to fix generic repeat loops",
+      "Plugin architecture & multi-agent routing focus",
+      "Spring cleaning: High velocity dev cycle",
+      "Module resolution errors reported post-update"
+    ],
+    "ai-trending": [
+      "Shift from 'Chat LLM' to 'Code with Agents'",
+      "google-ai-edge/gallery: On-device ML showcase",
+      "LiteRT-LM: Google's lightweight edge runtime",
+      "Local-first intelligence accelerates rapidly",
+      "vllm hits 75k stars for efficient inference",
+      "Workflows split: Code vs Content agents"
+    ],
+    "ai-hn": [
+      "Anthropic Claude Mythos preview dominates HN",
+      "Mythos sparks offensive cyber-weapon debate",
+      "Project Glasswing targets software supply chains",
+      "Claude Code bug locks users out, sparks anger",
+      "Iranian threats vs OpenAI UAE data centers",
+      "Mythos can autonomously find zero-day exploits"
+    ]
+  }
+}
