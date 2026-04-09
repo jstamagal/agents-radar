@@ -8,6 +8,7 @@ import {
 } from "../prompts.ts";
 import {
   buildTrendingPrompt,
+  buildSignalsPrompt,
   buildWebReportPrompt,
   buildWeeklyPrompt,
   buildMonthlyPrompt,
@@ -301,6 +302,82 @@ describe("buildMonthlyPrompt", () => {
   it("generates English variant", () => {
     const result = buildMonthlyPrompt({ "2026-02-01": "w1" }, "2026-02", "en");
     expect(result).toContain("monthly review");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildSignalsPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildSignalsPrompt", () => {
+  const trendingData: TrendingData = {
+    trendingRepos: [
+      {
+        fullName: "org/model-runner",
+        description: "Fast inference engine",
+        language: "Rust",
+        todayStars: 500,
+        totalStars: 8000,
+        forks: 300,
+        url: "https://github.com/org/model-runner",
+      },
+      {
+        fullName: "ai/agent-kit",
+        description: "Multi-agent orchestration",
+        language: "Python",
+        todayStars: 250,
+        totalStars: 12000,
+        forks: 800,
+        url: "https://github.com/ai/agent-kit",
+      },
+    ],
+    searchRepos: [
+      {
+        fullName: "ml/vectordb",
+        description: "High-perf vector store",
+        language: "Go",
+        stargazersCount: 5000,
+        pushedAt: "2026-04-03",
+        url: "https://github.com/ml/vectordb",
+        searchQuery: "rag",
+      },
+    ],
+    trendingFetchSuccess: true,
+  };
+
+  it("includes all repos from both trending and search (zh)", () => {
+    const result = buildSignalsPrompt(trendingData, "2026-04-04");
+    expect(result).toContain("org/model-runner");
+    expect(result).toContain("ai/agent-kit");
+    expect(result).toContain("ml/vectordb");
+    expect(result).toContain("Rust");
+    expect(result).toContain("8,000");
+    expect(result).toContain("+500");
+  });
+
+  it("generates English variant with all repos", () => {
+    const result = buildSignalsPrompt(trendingData, "2026-04-04", "en");
+    expect(result).toContain("org/model-runner");
+    expect(result).toContain("Signal Snapshot");
+    expect(result).toContain("Signal Matrix");
+    expect(result).toContain("8,000");
+    expect(result).toContain("+500");
+  });
+
+  it("shows total signal count in prompt", () => {
+    const result = buildSignalsPrompt(trendingData, "2026-04-04");
+    expect(result).toContain("3"); // 2 trending + 1 search = 3 total
+  });
+
+  it("includes topic label for search repos", () => {
+    const result = buildSignalsPrompt(trendingData, "2026-04-04");
+    expect(result).toContain("topic:rag");
+  });
+
+  it("handles empty trending gracefully", () => {
+    const emptyData: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildSignalsPrompt(emptyData, "2026-04-04");
+    expect(result).toBeTruthy();
   });
 });
 

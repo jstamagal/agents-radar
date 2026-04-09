@@ -27,10 +27,10 @@ import {
   buildPeersComparisonPrompt,
   buildSkillsPrompt,
 } from "./prompts.ts";
-import { buildTrendingPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
+import { buildTrendingPrompt, buildSignalsPrompt, buildHighlightsPrompt, type ReportHighlights } from "./prompts-data.ts";
 import { callLlm, saveFile, autoGenFooter, LLM_TOKENS_TRENDING } from "./report.ts";
 import { buildCliReportContent, buildOpenclawReportContent } from "./report-builders.ts";
-import { saveWebReport, saveTrendingReport, saveHnReport } from "./report-savers.ts";
+import { saveWebReport, saveTrendingReport, saveHnReport, saveSignalsReport } from "./report-savers.ts";
 import { loadWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -168,61 +168,75 @@ async function generateSummaries(
   skillsSummary: string;
   peerDigests: RepoDigest[];
   trendingSummary: string;
+  signalsSummary: string;
 }> {
   const noActivity = MSG.noActivity[lang];
   const fail = MSG.summaryFailed[lang];
 
-  const [cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary] = await Promise.all([
-    Promise.all(
-      fetchedCli.map((f) =>
-        summarizeRepo(f, buildCliPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, lang), noActivity, fail),
-      ),
-    ),
-    summarizeRepo(
-      fetchedOpenclaw,
-      buildPeerPrompt(
-        fetchedOpenclaw.cfg,
-        fetchedOpenclaw.issues,
-        fetchedOpenclaw.prs,
-        fetchedOpenclaw.releases,
-        dateStr,
-        50,
-        30,
-        lang,
-      ),
-      noActivity,
-      fail,
-    ).then((d) => d.summary),
-    summarize(
-      "claude-code-skills",
-      buildSkillsPrompt(skillsData.prs, skillsData.issues, dateStr, lang),
-      MSG.skillsFailed[lang],
-    ),
-    Promise.all(
-      fetchedPeers.map((f) =>
-        summarizeRepo(
-          f,
-          buildPeerPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, undefined, undefined, lang),
-          noActivity,
-          fail,
+  const [cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary, signalsSummary] =
+    await Promise.all([
+      Promise.all(
+        fetchedCli.map((f) =>
+          summarizeRepo(f, buildCliPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, lang), noActivity, fail),
         ),
       ),
-    ),
-    (async () => {
-      const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
-      if (!hasData) {
-        return MSG.trendingNoData[lang];
-      }
-      return summarize(
-        "trending",
-        buildTrendingPrompt(trendingData, dateStr, lang),
-        MSG.trendingFailed[lang],
-        LLM_TOKENS_TRENDING,
-      );
-    })(),
-  ]);
+      summarizeRepo(
+        fetchedOpenclaw,
+        buildPeerPrompt(
+          fetchedOpenclaw.cfg,
+          fetchedOpenclaw.issues,
+          fetchedOpenclaw.prs,
+          fetchedOpenclaw.releases,
+          dateStr,
+          50,
+          30,
+          lang,
+        ),
+        noActivity,
+        fail,
+      ).then((d) => d.summary),
+      summarize(
+        "claude-code-skills",
+        buildSkillsPrompt(skillsData.prs, skillsData.issues, dateStr, lang),
+        MSG.skillsFailed[lang],
+      ),
+      Promise.all(
+        fetchedPeers.map((f) =>
+          summarizeRepo(
+            f,
+            buildPeerPrompt(f.cfg, f.issues, f.prs, f.releases, dateStr, undefined, undefined, lang),
+            noActivity,
+            fail,
+          ),
+        ),
+      ),
+      (async () => {
+        const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+        if (!hasData) {
+          return MSG.trendingNoData[lang];
+        }
+        return summarize(
+          "trending",
+          buildTrendingPrompt(trendingData, dateStr, lang),
+          MSG.trendingFailed[lang],
+          LLM_TOKENS_TRENDING,
+        );
+      })(),
+      (async () => {
+        const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+        if (!hasData) {
+          return MSG.trendingNoData[lang];
+        }
+        return summarize(
+          "signals",
+          buildSignalsPrompt(trendingData, dateStr, lang),
+          MSG.trendingFailed[lang],
+          LLM_TOKENS_TRENDING,
+        );
+      })(),
+    ]);
 
-  return { cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary };
+  return { cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary, signalsSummary };
 }
 
 // ---------------------------------------------------------------------------
@@ -339,6 +353,24 @@ async function main(): Promise<void> {
       autoGenFooter("en"),
       "en",
     ),
+    saveSignalsReport(
+      trendingData,
+      zhSummaries.signalsSummary,
+      utcStr,
+      dateStr,
+      digestRepo,
+      autoGenFooter("zh"),
+      "zh",
+    ),
+    saveSignalsReport(
+      trendingData,
+      enSummaries.signalsSummary,
+      utcStr,
+      dateStr,
+      digestRepo,
+      autoGenFooter("en"),
+      "en",
+    ),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("zh"), "zh"),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, autoGenFooter("en"), "en"),
   ]);
@@ -353,6 +385,7 @@ async function main(): Promise<void> {
   const enReports: Record<string, string> = { "ai-cli": cliContent.en, "ai-agents": openclawContent.en };
   for (const [id, zhFile, enFile] of [
     ["ai-trending", "ai-trending.md", "ai-trending-en.md"],
+    ["ai-signals", "ai-signals.md", "ai-signals-en.md"],
     ["ai-web", "ai-web.md", "ai-web-en.md"],
     ["ai-hn", "ai-hn.md", "ai-hn-en.md"],
   ] as const) {
