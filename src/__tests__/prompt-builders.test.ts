@@ -12,6 +12,7 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHnPrompt,
+  buildSignalsPrompt,
 } from "../prompts-data.ts";
 import type { RepoConfig, GitHubItem, GitHubRelease } from "../github.ts";
 import type { RepoDigest } from "../prompts.ts";
@@ -353,5 +354,117 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildSignalsPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildSignalsPrompt", () => {
+  const trendingData: TrendingData = {
+    trendingRepos: [
+      {
+        fullName: "owner/ai-tool",
+        description: "A great AI tool",
+        language: "Python",
+        todayStars: 500,
+        totalStars: 12000,
+        forks: 800,
+        url: "https://github.com/owner/ai-tool",
+      },
+    ],
+    searchRepos: [
+      {
+        fullName: "org/llm-agent",
+        description: "An LLM agent framework",
+        language: "TypeScript",
+        stargazersCount: 3000,
+        pushedAt: "2026-03-22",
+        url: "https://github.com/org/llm-agent",
+        searchQuery: "ai-agent",
+      },
+    ],
+    trendingFetchSuccess: true,
+  };
+
+  const hnData: HnData = {
+    stories: [
+      {
+        id: "42",
+        title: "Local AI is the future",
+        url: "https://example.com/local-ai",
+        hnUrl: "https://news.ycombinator.com/item?id=42",
+        points: 350,
+        comments: 120,
+        author: "tester",
+        createdAt: "2026-03-22T10:00:00Z",
+      },
+    ],
+    fetchSuccess: true,
+  };
+
+  const webResults: WebFetchResult[] = [
+    {
+      site: "anthropic",
+      siteName: "Anthropic",
+      isFirstRun: false,
+      newItems: [
+        {
+          url: "https://anthropic.com/news/release",
+          title: "Claude 4 released",
+          lastmod: "2026-03-22",
+          content: "Content",
+          site: "anthropic",
+          category: "news",
+        },
+      ],
+      totalDiscovered: 100,
+    },
+  ];
+
+  it("generates Chinese panorama prompt with all three sources", () => {
+    const result = buildSignalsPrompt(trendingData, hnData, webResults, "2026-03-22");
+    expect(result).toContain("owner/ai-tool");
+    expect(result).toContain("12,000");
+    expect(result).toContain("+500 today");
+    expect(result).toContain("org/llm-agent");
+    expect(result).toContain("[ai-agent]");
+    expect(result).toContain("Local AI is the future");
+    expect(result).toContain("350 pts");
+    expect(result).toContain("Anthropic");
+    expect(result).toContain("Claude 4 released");
+    expect(result).toContain("信号");
+    expect(result).toContain("2026-03-22");
+  });
+
+  it("generates English panorama prompt", () => {
+    const result = buildSignalsPrompt(trendingData, hnData, webResults, "2026-03-22", "en");
+    expect(result).toContain("owner/ai-tool");
+    expect(result).toContain("Signal");
+    expect(result).toContain("SOURCE 1");
+    expect(result).toContain("SOURCE 2");
+    expect(result).toContain("SOURCE 3");
+    expect(result).toContain("2026-03-22");
+  });
+
+  it("shows unavailable message when trending fails", () => {
+    const noTrending: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildSignalsPrompt(noTrending, hnData, webResults, "2026-03-22");
+    expect(result).toContain("不可用");
+  });
+
+  it("shows unavailable message when HN fails", () => {
+    const noHn: HnData = { stories: [], fetchSuccess: false };
+    const result = buildSignalsPrompt(trendingData, noHn, webResults, "2026-03-22");
+    expect(result).toContain("不可用");
+  });
+
+  it("shows no official content message when web is empty", () => {
+    const noWeb: WebFetchResult[] = [
+      { site: "anthropic", siteName: "Anthropic", isFirstRun: false, newItems: [], totalDiscovered: 50 },
+    ];
+    const result = buildSignalsPrompt(trendingData, hnData, noWeb, "2026-03-22");
+    expect(result).toContain("无新增");
   });
 });
