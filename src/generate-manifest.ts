@@ -1,11 +1,11 @@
 import fs from "fs";
 import path from "path";
 import { REPORT_LABELS } from "./i18n.ts";
+import { loadConfig } from "./config.ts";
 
 const DIGESTS_DIR = "digests";
 const MANIFEST_PATH = "manifest.json";
 const FEED_PATH = "feed.xml";
-const SITE_URL = "https://duanyytop.github.io/agents-radar";
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const REPORT_FILES = [
   "ai-cli",
@@ -51,6 +51,8 @@ export function escapeXml(s: string): string {
 }
 
 function main(): void {
+  const { rss } = loadConfig();
+  const siteUrl = rss.siteUrl.replace(/\/+$/, "");
   const entries = fs
     .readdirSync(DIGESTS_DIR)
     .filter((name) => DATE_RE.test(name) && fs.statSync(path.join(DIGESTS_DIR, name)).isDirectory())
@@ -86,7 +88,7 @@ function main(): void {
     .map(({ date, report }) => {
       const label = REPORT_LABELS[report] ?? report;
       const title = `${label} ${date}`;
-      const link = `${SITE_URL}/#${date}/${report}`;
+      const link = `${siteUrl}/#${date}/${report}`;
       const parts = date.split("-").map(Number);
       const pubDate = toRfc822(new Date(Date.UTC(parts[0]!, parts[1]! - 1, parts[2]!)));
       return [
@@ -105,11 +107,11 @@ function main(): void {
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n` +
     `  <channel>\n` +
-    `    <title>agents-radar</title>\n` +
-    `    <link>${SITE_URL}</link>\n` +
-    `    <description>AI 开源生态每日简报 · Daily AI ecosystem digest</description>\n` +
-    `    <language>zh-CN</language>\n` +
-    `    <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>\n` +
+    `    <title>${escapeXml(rss.title)}</title>\n` +
+    `    <link>${escapeXml(siteUrl)}</link>\n` +
+    `    <description>${escapeXml(rss.description)}</description>\n` +
+    `    <language>${escapeXml(rss.language)}</language>\n` +
+    `    <atom:link href="${escapeXml(siteUrl)}/feed.xml" rel="self" type="application/rss+xml"/>\n` +
     `    <lastBuildDate>${buildDate}</lastBuildDate>\n` +
     itemsXml +
     `\n  </channel>\n` +

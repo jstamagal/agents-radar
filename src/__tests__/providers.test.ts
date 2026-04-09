@@ -302,6 +302,23 @@ describe("OpenRouterProvider", () => {
     }),
   );
 
+  it("uses anthropic/claude-sonnet-4.6 when no env or constructor model given", async () => {
+    delete process.env["OPENROUTER_MODEL"];
+    const mockCreate = await getOpenAIMockCreate();
+    mockCreate.mockResolvedValueOnce({
+      choices: [{ message: { content: "Hello from OpenRouter" } }],
+    });
+
+    const p = new OpenRouterProvider({ apiKey: "k" });
+    await p.call("prompt", 100);
+
+    expect(mockCreate).toHaveBeenCalledWith({
+      model: "anthropic/claude-sonnet-4.6",
+      max_completion_tokens: 100,
+      messages: [{ role: "user", content: "prompt" }],
+    });
+  });
+
   it("throws on empty response", async () => {
     const mockCreate = await getOpenAIMockCreate();
     mockCreate.mockResolvedValueOnce({

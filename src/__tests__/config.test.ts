@@ -39,6 +39,8 @@ describe("loadConfig", () => {
     expect(config.skillsRepo).toBe("anthropics/skills");
     expect(config.openclaw.id).toBe("openclaw");
     expect(config.openclawPeers.length).toBeGreaterThan(0);
+    expect(config.rss.language).toBe("en");
+    expect(config.trendshift.enabled).toBe(true);
   });
 
   it("loads cli_repos from valid YAML", () => {
@@ -54,6 +56,55 @@ skills_repo: custom/skills
     expect(config.cliRepos).toHaveLength(1);
     expect(config.cliRepos[0]!.id).toBe("custom");
     expect(config.skillsRepo).toBe("custom/skills");
+  });
+
+  it("loads rss and trendshift settings from YAML", () => {
+    vi.spyOn(fs, "existsSync").mockReturnValue(true);
+    vi.spyOn(fs, "readFileSync").mockReturnValue(`
+rss:
+  site_url: https://example.com
+  title: Example Feed
+  description: Example description
+  language: en-US
+trendshift:
+  enabled: false
+  url: https://trendshift.io/custom
+  max_repos: 12
+`);
+    const config = loadConfig("test.yml");
+    expect(config.rss).toEqual({
+      siteUrl: "https://example.com",
+      title: "Example Feed",
+      description: "Example description",
+      language: "en-US",
+    });
+    expect(config.trendshift).toEqual({
+      enabled: false,
+      url: "https://trendshift.io/custom",
+      maxRepos: 12,
+    });
+  });
+
+  it("falls back to rss/trendshift defaults when values are empty", () => {
+    vi.spyOn(fs, "existsSync").mockReturnValue(true);
+    vi.spyOn(fs, "readFileSync").mockReturnValue(`
+rss:
+  site_url: ""
+  title: ""
+  description: ""
+  language: ""
+trendshift:
+  enabled: true
+  url: ""
+  max_repos: 0
+`);
+    const config = loadConfig("test.yml");
+    expect(config.rss.siteUrl).toBe("https://duanyytop.github.io/agents-radar");
+    expect(config.rss.title).toBe("agents-radar");
+    expect(config.rss.description).toBe("AI open source ecosystem daily digest");
+    expect(config.rss.language).toBe("en");
+    expect(config.trendshift.url).toBe("https://trendshift.io/repositories");
+    expect(config.trendshift.maxRepos).toBe(30);
   });
 
   it("falls back to defaults for empty cli_repos", () => {
