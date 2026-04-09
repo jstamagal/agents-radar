@@ -142,6 +142,187 @@ ${searchSection}
 `;
 }
 
+// ---------------------------------------------------------------------------
+// Signals radar prompt — wide-view consolidated table of all trending signals
+// ---------------------------------------------------------------------------
+
+export function buildSignalsPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingSection =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchSection =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  if (lang === "en") {
+    return `You are a technical analyst for the AI open-source ecosystem. The following is ${dateStr} GitHub AI-related trending data. Your task is to produce a **Signals Radar** — a single wide-view table that shows every AI signal at a glance.
+
+## Data Sources
+- **Trending List** (github.com/trending): Real-time hot list with today's new stars
+- **Topic Search** (GitHub Search API, topic tags): AI-related projects active in last 7 days
+
+---
+
+## GitHub Today's Trending (${data.trendingRepos.length} repositories)
+${trendingSection}
+
+---
+
+## AI Topic Search Results (${data.searchRepos.length} repositories, deduplicated)
+${searchSection}
+
+---
+
+**Instructions:**
+
+**Step 1 (Filter):** Select only projects clearly related to AI/ML. Skip unrelated tools, frontend frameworks, and games.
+
+**Step 2 (Deduplicate):** If a project appears in both sources, include it once using the trending data (today's stars most reliable).
+
+**Step 3 (Output):** Generate the Signals Radar report in this exact structure:
+
+### 📡 AI Signals Radar — ${dateStr}
+
+**Summary line:** One sentence capturing today's dominant theme (e.g., "Today's signals show a surge in agentic frameworks and on-device inference tooling").
+
+---
+
+#### Signal Matrix
+
+Produce a Markdown table with ALL identified AI signals (aim for completeness — include every relevant project). Columns:
+
+| # | Project | Category | ⭐ Stars | 📈 Today | Signal Strength | Why It Matters |
+|---|---------|----------|---------|---------|----------------|----------------|
+
+- **#**: Sequential number
+- **Project**: \`[name](url)\` — linked project name
+- **Category**: one of 🔧 Infra · 🤖 Agents · 📦 Apps · 🧠 LLMs · 🔍 RAG
+- **⭐ Stars**: total star count (e.g., 164K or 0 if unknown)
+- **📈 Today**: today's new stars (e.g., +2,149) or — if unavailable
+- **Signal Strength**: 🔥🔥🔥 (explosive >1000 today), 🔥🔥 (strong 100-999), 🔥 (notable <100 or search-only), ⭐ (established project, high total stars)
+- **Why It Matters**: one tight sentence (≤12 words)
+
+---
+
+#### 🏆 Top 5 Signals Today
+Numbered list of the 5 strongest signals with a 2-sentence explanation each (what it is + why it is surging today).
+
+---
+
+#### 📊 Category Breakdown
+A compact summary showing signal counts and dominant theme per category:
+- 🔧 Infra: N signals — [one-line theme]
+- 🤖 Agents: N signals — [one-line theme]
+- 📦 Apps: N signals — [one-line theme]
+- 🧠 LLMs: N signals — [one-line theme]
+- 🔍 RAG: N signals — [one-line theme]
+
+---
+
+#### 🔮 Meta Signal
+2-3 sentences: What does the full set of today's signals reveal about where the AI ecosystem is heading? What is the single biggest structural shift visible across ALL signals combined?
+
+Style: English, data-dense, scannable. The signal matrix must include ALL identified AI projects — the goal is a complete wide-view snapshot, not a curated shortlist.
+`;
+  }
+
+  return `你是一位专注于 AI 开源生态的技术分析师。以下是 ${dateStr} 的 GitHub AI 相关热门数据。你的任务是生成一份**信号雷达**——一张能让人一眼总览所有 AI 信号的宽视图表格。
+
+## 数据说明
+- **Trending 榜单**（github.com/trending）：今日实时热榜，含今日新增 stars
+- **主题搜索**（GitHub Search API，topic 标签）：7天内活跃的 AI 相关项目
+
+---
+
+## GitHub 今日 Trending 榜单（共 ${data.trendingRepos.length} 个仓库）
+${trendingSection}
+
+---
+
+## AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库，已去重）
+${searchSection}
+
+---
+
+**操作说明：**
+
+**第一步（过滤）：** 只选取与 AI/ML 明确相关的项目，排除无关工具、前端框架、游戏等。
+
+**第二步（去重）：** 如果某个项目在两个数据源中都出现，只保留一次，优先使用 Trending 数据（今日 stars 最可信）。
+
+**第三步（输出）：** 按以下结构生成信号雷达报告：
+
+### 📡 AI 开源信号雷达 — ${dateStr}
+
+**概括句：** 一句话总结今日主题（例如："今日信号显示 Agent 框架和端侧推理工具持续爆发"）。
+
+---
+
+#### 信号矩阵
+
+生成一张包含**所有**已识别 AI 信号的 Markdown 表格（追求完整性——尽可能列出每个相关项目）。列定义如下：
+
+| # | 项目 | 分类 | ⭐ Stars | 📈 今日 | 信号强度 | 核心价值 |
+|---|------|------|---------|--------|---------|---------|
+
+- **#**：序号
+- **项目**：\`[名称](链接)\`——附 GitHub 链接
+- **分类**：🔧 基础工具 · 🤖 智能体 · 📦 应用 · 🧠 大模型 · 🔍 RAG
+- **⭐ Stars**：总 star 数（如 164K，未知则填 0）
+- **📈 今日**：今日新增 stars（如 +2,149），无数据则填 —
+- **信号强度**：🔥🔥🔥（爆发 >1000 今日新增）、🔥🔥（强 100-999）、🔥（值得关注 <100 或仅搜索）、⭐（知名项目，总 stars 高）
+- **核心价值**：一句不超过 15 字的说明
+
+---
+
+#### 🏆 今日 Top 5 信号
+编号列出强度最高的 5 个信号，每个附 2 句说明（是什么 + 为何今日爆发）。
+
+---
+
+#### 📊 分类概览
+每个分类的信号数量及主题一句话总结：
+- 🔧 基础工具：N 个信号 — [一句话主题]
+- 🤖 智能体：N 个信号 — [一句话主题]
+- 📦 应用：N 个信号 — [一句话主题]
+- 🧠 大模型：N 个信号 — [一句话主题]
+- 🔍 RAG：N 个信号 — [一句话主题]
+
+---
+
+#### 🔮 元信号解读
+2~3 句话：今日**所有信号**的整体组合揭示了 AI 生态正在往哪个方向演进？跨所有信号观察，最显著的结构性变化是什么？
+
+语言要求：中文，数据密集，易于扫读。信号矩阵必须包含**所有**已识别的 AI 项目——目标是完整的宽视图快照，而非精选短名单。
+`;
+}
+
 export function buildWebReportPrompt(results: WebFetchResult[], dateStr: string, lang: Lang = "zh"): string {
   const isAnyFirstRun = results.some((r) => r.isFirstRun);
 

@@ -6,6 +6,7 @@ import {
   WEB_REPORT,
   TRENDING_REPORT,
   HN_REPORT,
+  SIGNALS_REPORT,
   WEEKLY_REPORT,
   MONTHLY_REPORT,
   ISSUE_LABELS,
@@ -36,6 +37,8 @@ describe("bilingual string maps", () => {
     { name: "WEB_REPORT.firstCrawl", obj: WEB_REPORT.firstCrawl },
     { name: "TRENDING_REPORT.title", obj: TRENDING_REPORT.title },
     { name: "HN_REPORT.title", obj: HN_REPORT.title },
+    { name: "SIGNALS_REPORT.title", obj: SIGNALS_REPORT.title },
+    { name: "SIGNALS_REPORT.sources", obj: SIGNALS_REPORT.sources },
     { name: "WEEKLY_REPORT.title", obj: WEEKLY_REPORT.title },
     { name: "MONTHLY_REPORT.title", obj: MONTHLY_REPORT.title },
     { name: "FOOTER.autoGen", obj: FOOTER.autoGen },
@@ -84,6 +87,13 @@ describe("issue title functions", () => {
     expect(HN_REPORT.issueTitle("2026-03-12", "en")).toContain("Hacker News");
   });
 
+  it("SIGNALS_REPORT.issueTitle produces zh and en", () => {
+    expect(SIGNALS_REPORT.issueTitle("2026-03-13", "zh")).toContain("信号雷达");
+    expect(SIGNALS_REPORT.issueTitle("2026-03-13", "zh")).toContain("2026-03-13");
+    expect(SIGNALS_REPORT.issueTitle("2026-03-13", "en")).toContain("Signals Radar");
+    expect(SIGNALS_REPORT.issueTitle("2026-03-13", "en")).toContain("2026-03-13");
+  });
+
   it("WEEKLY_REPORT.issueTitle includes week string", () => {
     expect(WEEKLY_REPORT.issueTitle("2026-W11")).toContain("2026-W11");
   });
@@ -130,6 +140,8 @@ describe("ISSUE_LABELS", () => {
     expect(ISSUE_LABELS.openclaw.zh).toBe("openclaw");
     expect(ISSUE_LABELS.trending.en).toBe("trending-en");
     expect(ISSUE_LABELS.hn.en).toBe("hn-en");
+    expect(ISSUE_LABELS.signals.zh).toBe("signals");
+    expect(ISSUE_LABELS.signals.en).toBe("signals-en");
   });
 });
 
@@ -139,7 +151,7 @@ describe("ISSUE_LABELS", () => {
 
 describe("NOTIFY_LABELS", () => {
   it("covers all report types", () => {
-    const expected = ["ai-cli", "ai-agents", "ai-web", "ai-trending", "ai-hn", "ai-weekly", "ai-monthly"];
+    const expected = ["ai-cli", "ai-agents", "ai-web", "ai-trending", "ai-hn", "ai-signals", "ai-weekly", "ai-monthly"];
     for (const key of expected) {
       expect(NOTIFY_LABELS[key]).toBeDefined();
       expect(NOTIFY_LABELS[key]!.zh).toBeTruthy();
