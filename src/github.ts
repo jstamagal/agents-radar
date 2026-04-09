@@ -203,6 +203,8 @@ const LABEL_COLORS: Record<string, string> = {
   "web-en": "6366f1",
   "trending-en": "fbbf24",
   "hn-en": "fb923c",
+  landscape: "0ea5e9",
+  "landscape-en": "38bdf8",
 };
 
 /**

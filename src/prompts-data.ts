@@ -509,3 +509,148 @@ ${storiesText}
 语言要求：中文，简洁专业，保留所有原文链接。
 `;
 }
+
+export function buildLandscapePrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingSection =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchSection =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem analyst. The following is ${dateStr} GitHub AI-related data covering both trending repositories and topic-tagged projects. Your task is to synthesize ALL signals into a single coherent "wide view" of the AI open-source landscape.
+
+## Data Sources
+- **Trending List** (github.com/trending): Today's hottest repositories by new stars
+- **Topic Search** (GitHub Search API): AI-tagged projects active in last 7 days
+
+---
+
+## GitHub Today's Trending (${data.trendingRepos.length} repositories)
+${trendingSection}
+
+---
+
+## AI Topic Search Results (${data.searchRepos.length} repositories)
+${searchSection}
+
+---
+
+Generate a comprehensive **AI Ecosystem Landscape Report** in English with the following sections:
+
+### 1. The Wide View — One-Paragraph Executive Summary
+Write a single dense paragraph (150-200 words) that captures the full AI open-source ecosystem as of today. What is the overarching narrative? What is the community collectively building toward?
+
+### 2. The Ecosystem Stack
+Show the AI ecosystem as a layered architecture. For each layer, list the top 3-5 representative projects from today's data (with GitHub links and star counts):
+
+| Layer | Purpose | Key Projects |
+|-------|---------|--------------|
+| 🏗️ **Foundation** | Models, training, fine-tuning | ... |
+| ⚙️ **Infrastructure** | Inference, orchestration, data pipelines | ... |
+| 🔌 **Integration** | RAG, vector DBs, knowledge retrieval | ... |
+| 🤖 **Agency** | Agent frameworks, workflow automation | ... |
+| 📦 **Applications** | End-user products, vertical solutions | ... |
+
+### 3. Signal Matrix — All ${data.trendingRepos.length + data.searchRepos.length} Signals at a Glance
+For every AI-relevant project in the dataset, create a compact table:
+
+| Project | Stars | Today | Category | Key Capability |
+|---------|-------|-------|----------|----------------|
+(include all relevant AI projects, one row each)
+
+### 4. Cross-Category Dependencies
+Identify and explain 3-5 meaningful dependency or synergy relationships between projects from different layers. Format as:
+- **[Project A]** enables **[Project B]**: one sentence explaining how
+
+### 5. Momentum Map
+Rank the top 10 projects by today's momentum (new stars + community signal), regardless of category. Include a brief note on what's driving each project's traction today.
+
+### 6. Gaps & Emerging Directions
+Based on what's trending, identify 2-3 capability gaps or emerging directions that the community is beginning to address but no dominant solution has emerged yet.
+
+Style: English, highly structured, must include GitHub links for all projects. Prioritize breadth — this is the "wide view" that shows everything together.
+`;
+  }
+
+  return `你是一位 AI 生态系统高级分析师。以下是 ${dateStr} 的 GitHub AI 相关数据，涵盖热门仓库和主题标签项目。你的任务是将所有信号综合成一份 AI 开源生态的"全景视图"。
+
+## 数据说明
+- **Trending 榜单**（github.com/trending）：今日新增 stars 最多的热门仓库
+- **主题搜索**（GitHub Search API）：7 天内活跃的 AI 标签项目
+
+---
+
+## GitHub 今日 Trending 榜单（共 ${data.trendingRepos.length} 个仓库）
+${trendingSection}
+
+---
+
+## AI 主题搜索结果（共 ${data.searchRepos.length} 个仓库）
+${searchSection}
+
+---
+
+请生成一份完整的《AI 开源生态全景图》，包含以下部分：
+
+### 1. 全景速览 — 一段式执行摘要
+用一段话（150~200 字）描述今日 AI 开源生态的全貌。整体叙事是什么？社区正在共同构建什么？
+
+### 2. 生态技术栈
+将 AI 生态展示为分层架构。对于每一层，从今日数据中列出 3~5 个代表项目（附 GitHub 链接和 star 数）：
+
+| 层次 | 用途 | 代表项目 |
+|------|------|---------|
+| 🏗️ **基础层** | 模型、训练、微调 | ... |
+| ⚙️ **基础设施层** | 推理、编排、数据管道 | ... |
+| 🔌 **集成层** | RAG、向量数据库、知识检索 | ... |
+| 🤖 **智能体层** | Agent 框架、工作流自动化 | ... |
+| 📦 **应用层** | 最终用户产品、垂直解决方案 | ... |
+
+### 3. 信号矩阵 — 所有 ${data.trendingRepos.length + data.searchRepos.length} 个信号一览
+对数据集中每个 AI 相关项目，生成一张精简表格：
+
+| 项目 | Stars | 今日新增 | 分类 | 核心能力 |
+|------|-------|---------|------|---------|
+（包含所有相关 AI 项目，每个一行）
+
+### 4. 跨层依赖关系
+识别并解释不同层次之间 3~5 个有意义的依赖或协同关系。格式：
+- **[项目 A]** 赋能 **[项目 B]**：一句话说明如何关联
+
+### 5. 势能地图
+不论分类，按今日势能（今日新增 stars + 社区信号）对 Top 10 项目排名，并简短说明每个项目今日获得关注的原因。
+
+### 6. 空白与新兴方向
+基于趋势，识别 2~3 个社区开始关注但尚未出现主导解决方案的能力空白或新兴方向。
+
+语言要求：中文，高度结构化，所有项目必须附 GitHub 链接。注重广度——这是展示全貌的"全景视图"。
+`;
+}

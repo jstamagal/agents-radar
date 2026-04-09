@@ -22,6 +22,8 @@ const REPORT_FILES = [
   "ai-weekly-en",
   "ai-monthly",
   "ai-monthly-en",
+  "ai-landscape",
+  "ai-landscape-en",
 ] as const;
 const MAX_FEED_ITEMS = 30;
 
