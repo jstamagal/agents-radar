@@ -12,6 +12,7 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHnPrompt,
+  buildSignalsPrompt,
 } from "../prompts-data.ts";
 import type { RepoConfig, GitHubItem, GitHubRelease } from "../github.ts";
 import type { RepoDigest } from "../prompts.ts";
@@ -353,5 +354,59 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildSignalsPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildSignalsPrompt", () => {
+  const trendingData: TrendingData = {
+    trendingRepos: [
+      {
+        fullName: "org/ai-tool",
+        description: "An AI agent framework",
+        language: "Python",
+        todayStars: 500,
+        totalStars: 12000,
+        forks: 300,
+        url: "https://github.com/org/ai-tool",
+      },
+    ],
+    searchRepos: [
+      {
+        fullName: "org/rag-lib",
+        description: "RAG library",
+        language: "TypeScript",
+        stargazersCount: 5000,
+        pushedAt: "2026-03-09T00:00:00Z",
+        url: "https://github.com/org/rag-lib",
+        searchQuery: "rag",
+      },
+    ],
+    trendingFetchSuccess: true,
+  };
+
+  it("includes trending repos in Chinese prompt", () => {
+    const result = buildSignalsPrompt(trendingData, "2026-03-09");
+    expect(result).toContain("org/ai-tool");
+    expect(result).toContain("全景");
+    expect(result).toContain("2026-03-09");
+    expect(result).toContain("org/rag-lib");
+  });
+
+  it("generates English variant", () => {
+    const result = buildSignalsPrompt(trendingData, "2026-03-09", "en");
+    expect(result).toContain("org/ai-tool");
+    expect(result).toContain("Wide View");
+    expect(result).toContain("2026-03-09");
+    expect(result).toContain("org/rag-lib");
+  });
+
+  it("shows fetch failure message when trending fails", () => {
+    const failData: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildSignalsPrompt(failData, "2026-03-09");
+    expect(result).toContain("未能抓取");
   });
 });
