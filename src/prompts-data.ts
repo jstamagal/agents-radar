@@ -1,5 +1,5 @@
 /**
- * LLM prompt builders for data-source reports (trending, web, HN)
+ * LLM prompt builders for data-source reports (trending, web, HN, signals)
  * and rollup reports (weekly, monthly).
  *
  * Separated from prompts.ts to keep each module focused.
@@ -507,5 +507,177 @@ ${storiesText}
 4. **值得深读** — 列出 2~3 条今日最值得开发者/研究者深入阅读的内容，简述理由
 
 语言要求：中文，简洁专业，保留所有原文链接。
+`;
+}
+
+/**
+ * Build a "wide view" signals prompt that aggregates GitHub Trending, GitHub
+ * Search API, and Hacker News into one unified signals matrix.  The goal is
+ * to show ALL signals together so the reader can see the full landscape at a
+ * glance rather than reading separate category reports.
+ */
+export function buildSignalsPrompt(
+  trendingData: TrendingData,
+  hnData: HnData,
+  dateStr: string,
+  lang: Lang = "zh",
+): string {
+  // ── Trending repos ──────────────────────────────────────────────────────────
+  const trendingSection =
+    trendingData.trendingFetchSuccess && trendingData.trendingRepos.length > 0
+      ? trendingData.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(GitHub Trending unavailable)"
+        : "（未能抓取 GitHub Trending 榜单）";
+
+  // ── Search repos ────────────────────────────────────────────────────────────
+  const searchSection =
+    trendingData.searchRepos.length > 0
+      ? trendingData.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  // ── HN stories ──────────────────────────────────────────────────────────────
+  const hnSection =
+    hnData.fetchSuccess && hnData.stories.length > 0
+      ? hnData.stories
+          .slice(0, 20)
+          .map((s, i) =>
+            lang === "en"
+              ? `${i + 1}. **${s.title}** — ${s.url} | Score: ${s.points} | Comments: ${s.comments}`
+              : `${i + 1}. **${s.title}** — ${s.url} | 分数: ${s.points} | 评论: ${s.comments}`,
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Hacker News data unavailable)"
+        : "（HN 数据不可用）";
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem analyst. Your task is to produce a **wide-view signals report** — a single unified document that surfaces ALL notable AI open-source signals from today's data in one place, so the reader can see the full landscape at a glance.
+
+## Raw Data for ${dateStr}
+
+### GitHub Trending (${trendingData.trendingRepos.length} repos)
+${trendingSection}
+
+### GitHub AI Topic Search (${trendingData.searchRepos.length} repos)
+${searchSection}
+
+### Hacker News Top AI Stories (${hnData.stories.length} stories)
+${hnSection}
+
+---
+
+Generate an **AI Open Source Signals — Wide View** report in English with the following structure:
+
+### 1. Signal Radar Table
+
+Create a Markdown table with **all distinct AI-relevant projects/signals** from the data above.
+Columns:
+| Signal | Category | Type | Momentum | Tags | Source |
+
+- **Signal**: project name with link
+- **Category**: one of Infrastructure / Agents / Applications / RAG-Knowledge / LLMs-Training / Community
+- **Type**: Framework / Tool / Model / Dataset / Discussion / Product
+- **Momentum**: 🔥 Explosive (top trending today) / ⬆️ Rising / ➡️ Steady
+- **Tags**: 2–4 keywords (e.g. claude-native, RAG, fine-tuning, MCP)
+- **Source**: Trending / Search / HN (or combinations)
+
+Include every AI-relevant entry. Non-AI repos may be omitted.
+
+### 2. Signal Cluster Analysis
+
+Group the signals into 3–5 thematic clusters (e.g. "Claude-Native Stack", "RAG Evolution", "Agent Frameworks").
+For each cluster:
+- Cluster name and 1-sentence description
+- List of signals belonging to it
+- Momentum assessment: is this cluster accelerating, stable, or nascent?
+
+### 3. Cross-Source Synthesis
+
+In 150–250 words, compare what GitHub Trending/Search is showing vs. what HN is discussing:
+- Which signals appear in BOTH sources? (strongest conviction signals)
+- What is GitHub excited about that HN hasn't picked up yet?
+- What is HN discussing that isn't on GitHub Trending?
+
+### 4. Top 5 Signals to Watch
+
+A ranked list of the 5 most important signals today, with a 2-3 sentence rationale for each.
+
+Style: English, professional and concise. All project names must include GitHub/HN links.
+`;
+  }
+
+  return `你是一位资深 AI 生态分析师。你的任务是生成一份**全景信号报告**——将今日所有值得关注的 AI 开源信号汇聚到一份文档中，让读者能够一眼看清完整生态格局。
+
+## ${dateStr} 原始数据
+
+### GitHub Trending（共 ${trendingData.trendingRepos.length} 个仓库）
+${trendingSection}
+
+### GitHub AI 主题搜索（共 ${trendingData.searchRepos.length} 个仓库）
+${searchSection}
+
+### Hacker News AI 热门内容（共 ${hnData.stories.length} 条）
+${hnSection}
+
+---
+
+请生成一份《AI 开源信号全景》报告，结构如下：
+
+### 1. 信号雷达矩阵
+
+用 Markdown 表格列出**上方数据中所有与 AI 相关的项目/信号**。
+列定义：
+| 信号 | 类别 | 类型 | 动能 | 标签 | 来源 |
+
+- **信号**：项目名（含链接）
+- **类别**：基础工具 / 智能体 / 应用产品 / RAG知识库 / 大模型训练 / 社区讨论 之一
+- **类型**：框架 / 工具 / 模型 / 数据集 / 讨论 / 产品
+- **动能**：🔥 爆发（今日 Trending 顶部）/ ⬆️ 上升 / ➡️ 平稳
+- **标签**：2~4 个关键词（如 claude-native、RAG、微调、MCP）
+- **来源**：Trending / 搜索 / HN（可组合）
+
+请将所有 AI 相关条目纳入表格，无关 AI 的仓库可略去。
+
+### 2. 信号聚类分析
+
+将信号分成 3~5 个主题群（如"Claude 原生栈"、"RAG 进化"、"Agent 框架"）。
+每个群：
+- 群名称及 1 句描述
+- 所含信号列表
+- 动能评估：加速中、平稳还是萌芽期？
+
+### 3. 跨来源综合解读
+
+用 150~250 字对比 GitHub Trending/搜索 与 HN 讨论的异同：
+- 哪些信号在两个来源**同时出现**？（最强共识信号）
+- GitHub 热但 HN 尚未关注的是什么？
+- HN 在讨论但 GitHub Trending 未上榜的是什么？
+
+### 4. 今日重点关注 Top 5
+
+按重要性排序，列出今日最值得关注的 5 个信号，每条附 2~3 句理由。
+
+语言要求：中文，专业简洁，所有项目名必须附 GitHub/HN 链接。
 `;
 }
