@@ -18,6 +18,8 @@ const REPORT_FILES = [
   "ai-trending-en",
   "ai-hn",
   "ai-hn-en",
+  "ai-wide-view",
+  "ai-wide-view-en",
   "ai-weekly",
   "ai-weekly-en",
   "ai-monthly",
