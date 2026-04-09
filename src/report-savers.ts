@@ -3,9 +3,9 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
-import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, PANORAMA_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildPanoramaPrompt } from "./prompts-data.ts";
+import { callLlm, saveFile, LLM_TOKENS_WEB, LLM_TOKENS_PANORAMA } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
 import type { HnData } from "./hn.ts";
@@ -155,5 +155,49 @@ export async function saveHnReport(
     }
   } catch (err) {
     console.error(`  [hn/${lang}] Report generation failed: ${err}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Panorama report — synthesises ALL daily signals into a single wide view
+// ---------------------------------------------------------------------------
+
+export async function savePanoramaReport(
+  reportContents: Record<string, string>,
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  const hasContent = Object.values(reportContents).some((v) => v.trim().length > 0);
+  if (!hasContent) {
+    console.log(`  [panorama/${lang}] No report content available, skipping.`);
+    return;
+  }
+
+  console.log(`  [panorama/${lang}] Calling LLM for panorama report...`);
+  try {
+    const panoramaSummary = await callLlm(
+      buildPanoramaPrompt(reportContents, dateStr, lang),
+      LLM_TOKENS_PANORAMA,
+    );
+    const fileName = lang === "en" ? "ai-panorama-en.md" : "ai-panorama.md";
+    const header =
+      `# ${PANORAMA_REPORT.title[lang]} ${dateStr}\n\n` +
+      `> ${PANORAMA_REPORT.sources[lang]} | ${lang === "en" ? "Generated" : "生成时间"}: ${utcStr} UTC\n\n---\n\n`;
+
+    const panoramaContent = header + panoramaSummary + footer;
+
+    console.log(`  Saved ${saveFile(panoramaContent, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const panoramaTitle = PANORAMA_REPORT.issueTitle(dateStr, lang);
+      const panoramaLabel = ISSUE_LABELS.panorama[lang];
+      const panoramaUrl = await createGitHubIssue(panoramaTitle, panoramaContent, panoramaLabel);
+      console.log(`  Created panorama issue (${lang}): ${panoramaUrl}`);
+    }
+  } catch (err) {
+    console.error(`  [panorama/${lang}] Report generation failed: ${err}`);
   }
 }

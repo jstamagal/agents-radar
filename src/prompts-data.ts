@@ -509,3 +509,82 @@ ${storiesText}
 语言要求：中文，简洁专业，保留所有原文链接。
 `;
 }
+
+// ---------------------------------------------------------------------------
+// Panorama prompt — synthesises signals from ALL daily reports into a single
+// cross-cutting "wide view" analysis.
+// ---------------------------------------------------------------------------
+
+// Maximum characters taken from each report to keep the combined prompt within
+// a manageable context window while still providing enough signal per source.
+const PANORAMA_EXCERPT_CHARS = 3000;
+
+export function buildPanoramaPrompt(
+  reportContents: Record<string, string>,
+  dateStr: string,
+  lang: Lang = "zh",
+): string {
+  const reportIdOrder = ["ai-cli", "ai-agents", "ai-trending", "ai-hn", "ai-web"];
+
+  const sections = reportIdOrder
+    .filter((id) => reportContents[id])
+    .map((id) => {
+      const content = reportContents[id]!.slice(0, PANORAMA_EXCERPT_CHARS);
+      return `## [${id}]\n\n${content}`;
+    })
+    .join("\n\n---\n\n");
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem analyst with a wide-angle lens. The following are excerpts from today's (${dateStr}) AI ecosystem reports, each from a different data source. Your task is to synthesize ALL signals into a single panoramic view — revealing the themes, connections, and narrative that span across every source.
+
+${sections}
+
+---
+
+Generate an **AI Ecosystem Panorama** report in English with these sections:
+
+1. **Today's One-Sentence Signal** — A single sentence capturing the most important thing happening in AI today, synthesized from ALL sources
+
+2. **Signal Map** — A structured table or bullet list cataloguing every significant signal from every source, organised by theme (not by source). For each signal include: signal name, source(s), brief one-line description
+
+3. **Cross-Source Themes** — 3-5 overarching themes that emerge when you look across ALL sources together. For each theme:
+   - Theme name and one-sentence description
+   - Which signals from which sources support this theme
+   - Why this theme matters right now
+
+4. **Connections & Tensions** — Where do signals from different sources reinforce each other? Where do they contradict or create tension? List 2-4 notable cross-source relationships
+
+5. **Today's Narrative** — 200-300 words: tell the story of what is happening across the AI ecosystem today as a coherent narrative, using the signals as evidence. Connect GitHub trends, developer tools, community discussion, and official announcements into a single arc
+
+6. **Focus List** — Top 3 specific things (projects, events, themes) a developer or investor should act on or monitor closely this week, with a one-sentence rationale for each
+
+Style: English, synthetic and insightful, written for senior technical decision-makers. Always cite which source (report ID) each signal comes from.
+`;
+  }
+
+  return `你是一位拥有广角视野的 AI 生态高级分析师。以下是今日（${dateStr}）来自不同数据源的 AI 生态报告摘要，你的任务是将所有信号整合成一份全景视图——揭示跨越各数据源的主题、关联和叙事。
+
+${sections}
+
+---
+
+请生成一份《AI 生态全景日报》，包含以下部分：
+
+1. **今日一句话信号** — 一句话，综合所有数据源，点出今日 AI 领域最重要的动向
+
+2. **信号地图** — 将各数据源的所有重要信号按主题（而非按来源）归类整理，以结构化列表或表格呈现。每条信号包含：信号名称、来源报告、一行简述
+
+3. **跨源主题** — 当你综合所有数据源时，浮现出 3~5 个宏观主题。每个主题包含：
+   - 主题名称与一句话描述
+   - 哪些数据源的哪些信号支撑了这一主题
+   - 为什么这个主题现在值得关注
+
+4. **关联与张力** — 哪些来自不同数据源的信号相互印证？哪些相互矛盾或产生张力？列出 2~4 组跨源关系
+
+5. **今日叙事** — 200~300 字：以信号为证据，用连贯的叙事方式讲述今日 AI 生态正在发生什么，将 GitHub 趋势、开发者工具、社区讨论和官方公告串联成一条主线
+
+6. **行动清单** — 本周开发者或投资者应重点关注或行动的具体事项（项目、事件、主题）TOP 3，每条附一句理由
+
+语言要求：中文，综合深刻，面向资深技术决策者。每条信号须注明来源报告 ID。
+`;
+}

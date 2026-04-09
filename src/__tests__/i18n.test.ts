@@ -8,6 +8,7 @@ import {
   HN_REPORT,
   WEEKLY_REPORT,
   MONTHLY_REPORT,
+  PANORAMA_REPORT,
   ISSUE_LABELS,
   CLI_ISSUE_TITLE,
   OPENCLAW_ISSUE_TITLE,
@@ -38,6 +39,8 @@ describe("bilingual string maps", () => {
     { name: "HN_REPORT.title", obj: HN_REPORT.title },
     { name: "WEEKLY_REPORT.title", obj: WEEKLY_REPORT.title },
     { name: "MONTHLY_REPORT.title", obj: MONTHLY_REPORT.title },
+    { name: "PANORAMA_REPORT.title", obj: PANORAMA_REPORT.title },
+    { name: "PANORAMA_REPORT.sources", obj: PANORAMA_REPORT.sources },
     { name: "FOOTER.autoGen", obj: FOOTER.autoGen },
   ];
 
@@ -91,6 +94,12 @@ describe("issue title functions", () => {
   it("MONTHLY_REPORT.issueTitle includes month string", () => {
     expect(MONTHLY_REPORT.issueTitle("2026-02")).toContain("2026-02");
   });
+
+  it("PANORAMA_REPORT.issueTitle produces zh and en titles", () => {
+    expect(PANORAMA_REPORT.issueTitle("2026-03-21", "zh")).toContain("全景");
+    expect(PANORAMA_REPORT.issueTitle("2026-03-21", "zh")).toContain("2026-03-21");
+    expect(PANORAMA_REPORT.issueTitle("2026-03-21", "en")).toContain("Panorama");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -130,6 +139,8 @@ describe("ISSUE_LABELS", () => {
     expect(ISSUE_LABELS.openclaw.zh).toBe("openclaw");
     expect(ISSUE_LABELS.trending.en).toBe("trending-en");
     expect(ISSUE_LABELS.hn.en).toBe("hn-en");
+    expect(ISSUE_LABELS.panorama.zh).toBe("panorama");
+    expect(ISSUE_LABELS.panorama.en).toBe("panorama-en");
   });
 });
 
@@ -139,7 +150,16 @@ describe("ISSUE_LABELS", () => {
 
 describe("NOTIFY_LABELS", () => {
   it("covers all report types", () => {
-    const expected = ["ai-cli", "ai-agents", "ai-web", "ai-trending", "ai-hn", "ai-weekly", "ai-monthly"];
+    const expected = [
+      "ai-cli",
+      "ai-agents",
+      "ai-web",
+      "ai-trending",
+      "ai-hn",
+      "ai-weekly",
+      "ai-monthly",
+      "ai-panorama",
+    ];
     for (const key of expected) {
       expect(NOTIFY_LABELS[key]).toBeDefined();
       expect(NOTIFY_LABELS[key]!.zh).toBeTruthy();
