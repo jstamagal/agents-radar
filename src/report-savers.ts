@@ -3,8 +3,8 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, LANDSCAPE_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildLandscapePrompt, type LandscapeInput } from "./prompts-data.ts";
 import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
@@ -155,5 +155,45 @@ export async function saveHnReport(
     }
   } catch (err) {
     console.error(`  [hn/${lang}] Report generation failed: ${err}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Landscape (wide-view ecosystem) report
+// ---------------------------------------------------------------------------
+
+/** Token budget for the landscape report — needs room for all source excerpts. */
+const LLM_TOKENS_LANDSCAPE = 6144;
+
+export async function saveLandscapeReport(
+  input: LandscapeInput,
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  console.log(`  [landscape/${lang}] Calling LLM for ecosystem landscape report...`);
+  try {
+    const summary = await callLlm(buildLandscapePrompt(input, dateStr, lang), LLM_TOKENS_LANDSCAPE);
+    const fileName = lang === "en" ? "ai-landscape-en.md" : "ai-landscape.md";
+    const header =
+      `# ${LANDSCAPE_REPORT.title[lang]} ${dateStr}\n\n` +
+      `> ${LANDSCAPE_REPORT.sources[lang]} | ` +
+      `${lang === "en" ? "Generated" : "生成时间"}: ${utcStr} UTC\n\n` +
+      `---\n\n`;
+
+    const content = header + summary + footer;
+
+    console.log(`  Saved ${saveFile(content, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const issueTitle = LANDSCAPE_REPORT.issueTitle(dateStr, lang);
+      const label = ISSUE_LABELS.landscape[lang];
+      const url = await createGitHubIssue(issueTitle, content, label);
+      console.log(`  Created landscape issue (${lang}): ${url}`);
+    }
+  } catch (err) {
+    console.error(`  [landscape/${lang}] Report generation failed: ${err}`);
   }
 }
