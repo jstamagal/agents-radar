@@ -370,6 +370,143 @@ ${digestEntries}
 }
 
 // ---------------------------------------------------------------------------
+// Signals prompt — wide-angle panoramic view of all AI signals together
+// ---------------------------------------------------------------------------
+
+export function buildSignalsPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const allRepos = [
+    ...(data.trendingFetchSuccess
+      ? data.trendingRepos.map((r) => ({
+          name: r.fullName,
+          url: r.url,
+          description: r.description,
+          language: r.language,
+          stars: r.totalStars,
+          momentum: r.todayStars,
+          forks: r.forks,
+          source: "trending" as const,
+        }))
+      : []),
+    ...data.searchRepos.map((r) => ({
+      name: r.fullName,
+      url: r.url,
+      description: r.description ?? "",
+      language: r.language ?? "",
+      stars: r.stargazersCount,
+      momentum: 0,
+      forks: 0,
+      source: r.searchQuery,
+    })),
+  ];
+
+  const repoList = allRepos
+    .map(
+      (r) =>
+        `- [${r.name}](${r.url})` +
+        (r.language ? ` [${r.language}]` : "") +
+        ` ⭐${r.stars.toLocaleString()}` +
+        (r.momentum > 0 ? ` (+${r.momentum} today)` : "") +
+        ` [${r.source}]` +
+        (r.description ? `\n  ${r.description}` : ""),
+    )
+    .join("\n");
+
+  const total = allRepos.length;
+
+  if (lang === "en") {
+    return `You are a senior AI ecosystem cartographer. The following is the complete set of ${total} AI-related signals collected on ${dateStr} from GitHub Trending and AI topic searches. Your task is to synthesize ALL signals into one comprehensive panoramic "wide view" — a single-page ecosystem map that shows how everything fits together.
+
+## All Signals (${total} total)
+
+${repoList}
+
+---
+
+Generate a comprehensive **AI Signal Map** in English with these sections:
+
+### 1. 🌐 Ecosystem Landscape
+A 150-200 word narrative describing today's full AI open-source landscape as seen through ALL signals together. What is the dominant story? What forces are shaping the space?
+
+### 2. 📡 Signal Matrix
+Create a Markdown table mapping ALL signals across two axes:
+- **Rows**: Layer (Foundation Models / Inference & Runtime / Developer Tooling / Agent Systems / Vertical Applications / Data & Knowledge)
+- **Columns**: Stage (Research / Experimental / Growing / Mature)
+
+For each cell, list the projects that belong there (just names with links). Empty cells are fine.
+
+### 3. 🔥 Momentum Leaders
+A ranked list of the top 10 signals by combined velocity (today's stars + community attention). For each:
+- Project name + link
+- Stars + today's gain
+- One sentence: what makes this signal significant RIGHT NOW
+
+### 4. 🕸️ Cluster Analysis
+Identify 4-6 thematic clusters that emerge from viewing ALL signals together. For each cluster:
+- Cluster name and emoji
+- Member projects (with links)
+- 2-3 sentences on what this cluster represents and why it's cohering now
+- Cross-cluster connections (which other clusters does this one interact with?)
+
+### 5. ⚡ Velocity Vectors
+Which directions are accelerating, plateauing, or emerging? Use the momentum data to identify:
+- **Accelerating** (3-5 signals with explosive growth)
+- **Steady burn** (3-5 established projects maintaining strong interest)
+- **Emerging** (2-4 signals with low current stars but notable characteristics that suggest future growth)
+
+### 6. 🗺️ The Big Picture
+In 100-150 words: if you had to explain today's AI open-source ecosystem to a strategic decision-maker in one paragraph, using ALL ${total} signals as your data, what would you say?
+
+Style: English, analytical and precise. Every project must include its GitHub link. The goal is a single coherent document that replaces having to read ${total} separate reports.
+`;
+  }
+
+  return `你是一位资深 AI 生态制图师。以下是 ${dateStr} 从 GitHub Trending 和 AI 主题搜索中收集到的完整 ${total} 个 AI 相关信号。你的任务是将**所有信号**综合成一张完整的全景「宽视角图」——一份能够展示整个生态格局的单页信号地图。
+
+## 所有信号（共 ${total} 个）
+
+${repoList}
+
+---
+
+请生成一份完整的《AI 开源信号全景图》，包含以下部分：
+
+### 1. 🌐 生态全景叙述
+150~200 字，将今日所有信号作为一个整体来观察，描述当前 AI 开源生态的全貌。主导叙事是什么？哪些力量在塑造这个空间？
+
+### 2. 📡 信号矩阵
+创建一个 Markdown 表格，将**所有信号**映射到两个维度：
+- **行**：层次（基础模型 / 推理与运行时 / 开发者工具 / 智能体系统 / 垂直应用 / 数据与知识）
+- **列**：阶段（研究探索 / 实验早期 / 快速成长 / 成熟稳定）
+
+每个单元格列出属于该位置的项目（仅项目名+链接）。空格子可以留空。
+
+### 3. 🔥 动能领跑者
+按综合速度（今日新增 stars + 社区关注度）排列的 Top 10 信号清单。每条包含：
+- 项目名 + 链接
+- Stars 数量 + 今日涨幅
+- 一句话：这个信号**此刻**为何重要
+
+### 4. 🕸️ 集群分析
+从**所有信号的整体**中识别出 4~6 个主题集群。每个集群包含：
+- 集群名称和 emoji
+- 成员项目（附链接）
+- 2~3 句话说明这个集群代表什么，为何此刻正在聚合
+- 跨集群连接（与哪些其他集群有交互？）
+
+### 5. ⚡ 速度向量
+哪些方向在加速、平稳还是正在涌现？利用动能数据识别：
+- **加速中**（3~5 个爆发性增长的信号）
+- **稳定燃烧**（3~5 个保持强劲关注的成熟项目）
+- **涌现中**（2~4 个当前 stars 不多但特征显著、预示未来成长的信号）
+
+### 6. 🗺️ 全局视角
+100~150 字：如果你需要用一段话向战略决策者解释今日 AI 开源生态，以全部 ${total} 个信号为数据依据，你会怎么说？
+
+语言要求：中文，分析精准，每个项目必须附 GitHub 链接。目标是生成一份连贯的文档，替代阅读 ${total} 份独立报告。
+`;
+}
+
+// ---------------------------------------------------------------------------
 // Highlights prompt — extracts structured highlights from finished reports
 // for use in Telegram notifications.
 // ---------------------------------------------------------------------------
