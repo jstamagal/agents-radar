@@ -6,6 +6,7 @@ import {
   WEB_REPORT,
   TRENDING_REPORT,
   HN_REPORT,
+  SYNTHESIS_REPORT,
   WEEKLY_REPORT,
   MONTHLY_REPORT,
   ISSUE_LABELS,
@@ -36,6 +37,8 @@ describe("bilingual string maps", () => {
     { name: "WEB_REPORT.firstCrawl", obj: WEB_REPORT.firstCrawl },
     { name: "TRENDING_REPORT.title", obj: TRENDING_REPORT.title },
     { name: "HN_REPORT.title", obj: HN_REPORT.title },
+    { name: "SYNTHESIS_REPORT.title", obj: SYNTHESIS_REPORT.title },
+    { name: "SYNTHESIS_REPORT.sources", obj: SYNTHESIS_REPORT.sources },
     { name: "WEEKLY_REPORT.title", obj: WEEKLY_REPORT.title },
     { name: "MONTHLY_REPORT.title", obj: MONTHLY_REPORT.title },
     { name: "FOOTER.autoGen", obj: FOOTER.autoGen },
@@ -84,6 +87,12 @@ describe("issue title functions", () => {
     expect(HN_REPORT.issueTitle("2026-03-12", "en")).toContain("Hacker News");
   });
 
+  it("SYNTHESIS_REPORT.issueTitle produces zh and en", () => {
+    expect(SYNTHESIS_REPORT.issueTitle("2026-03-12", "zh")).toContain("全景");
+    expect(SYNTHESIS_REPORT.issueTitle("2026-03-12", "en")).toContain("Panorama");
+    expect(SYNTHESIS_REPORT.issueTitle("2026-03-12", "zh")).toContain("2026-03-12");
+  });
+
   it("WEEKLY_REPORT.issueTitle includes week string", () => {
     expect(WEEKLY_REPORT.issueTitle("2026-W11")).toContain("2026-W11");
   });
@@ -130,6 +139,8 @@ describe("ISSUE_LABELS", () => {
     expect(ISSUE_LABELS.openclaw.zh).toBe("openclaw");
     expect(ISSUE_LABELS.trending.en).toBe("trending-en");
     expect(ISSUE_LABELS.hn.en).toBe("hn-en");
+    expect(ISSUE_LABELS.synthesis.zh).toBe("synthesis");
+    expect(ISSUE_LABELS.synthesis.en).toBe("synthesis-en");
   });
 });
 
@@ -139,7 +150,16 @@ describe("ISSUE_LABELS", () => {
 
 describe("NOTIFY_LABELS", () => {
   it("covers all report types", () => {
-    const expected = ["ai-cli", "ai-agents", "ai-web", "ai-trending", "ai-hn", "ai-weekly", "ai-monthly"];
+    const expected = [
+      "ai-cli",
+      "ai-agents",
+      "ai-web",
+      "ai-trending",
+      "ai-hn",
+      "ai-synthesis",
+      "ai-weekly",
+      "ai-monthly",
+    ];
     for (const key of expected) {
       expect(NOTIFY_LABELS[key]).toBeDefined();
       expect(NOTIFY_LABELS[key]!.zh).toBeTruthy();

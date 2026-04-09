@@ -12,6 +12,7 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHnPrompt,
+  buildSynthesisPrompt,
 } from "../prompts-data.ts";
 import type { RepoConfig, GitHubItem, GitHubRelease } from "../github.ts";
 import type { RepoDigest } from "../prompts.ts";
@@ -353,5 +354,104 @@ describe("buildHnPrompt", () => {
     expect(result).toContain("Score: 10");
     expect(result).toContain("Comments: 2");
     expect(result).toContain("Hacker News");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildSynthesisPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildSynthesisPrompt", () => {
+  const trendingData: TrendingData = {
+    trendingRepos: [
+      {
+        fullName: "org/cool-agent",
+        description: "An AI agent framework",
+        language: "Python",
+        todayStars: 500,
+        totalStars: 12000,
+        forks: 300,
+        url: "https://github.com/org/cool-agent",
+      },
+    ],
+    searchRepos: [
+      {
+        fullName: "ai/rag-lib",
+        description: "RAG library",
+        language: "TypeScript",
+        stargazersCount: 3000,
+        pushedAt: "2026-04-03",
+        url: "https://github.com/ai/rag-lib",
+        searchQuery: "rag",
+      },
+    ],
+    trendingFetchSuccess: true,
+  };
+
+  const hnData: HnData = {
+    stories: [
+      {
+        id: "42",
+        title: "Launching open-source agent harness",
+        url: "https://example.com/agent",
+        hnUrl: "https://news.ycombinator.com/item?id=42",
+        points: 350,
+        comments: 120,
+        author: "alice",
+        createdAt: "2026-04-03T10:00:00Z",
+      },
+    ],
+    fetchSuccess: true,
+  };
+
+  const webResults: WebFetchResult[] = [
+    {
+      site: "anthropic",
+      siteName: "Anthropic (Claude)",
+      isFirstRun: false,
+      newItems: [
+        {
+          url: "https://anthropic.com/news/claude-agents",
+          title: "Claude agents update",
+          lastmod: "2026-04-03",
+          content: "New agentic capabilities released",
+          site: "anthropic",
+          category: "news",
+        },
+      ],
+      totalDiscovered: 100,
+    },
+  ];
+
+  it("generates Chinese prompt with all three source sections", () => {
+    const result = buildSynthesisPrompt(trendingData, hnData, webResults, "2026-04-03");
+    expect(result).toContain("org/cool-agent");
+    expect(result).toContain("ai/rag-lib");
+    expect(result).toContain("Launching open-source agent harness");
+    expect(result).toContain("Claude agents update");
+    expect(result).toContain("全景");
+    expect(result).toContain("收敛");
+  });
+
+  it("generates English prompt with all three source sections", () => {
+    const result = buildSynthesisPrompt(trendingData, hnData, webResults, "2026-04-03", "en");
+    expect(result).toContain("org/cool-agent");
+    expect(result).toContain("Launching open-source agent harness");
+    expect(result).toContain("Claude agents update");
+    expect(result).toContain("Panorama");
+    expect(result).toContain("Convergence");
+  });
+
+  it("handles unavailable HN data gracefully", () => {
+    const noHn: HnData = { stories: [], fetchSuccess: false };
+    const result = buildSynthesisPrompt(trendingData, noHn, [], "2026-04-03", "en");
+    expect(result).toContain("Hacker News data unavailable");
+    expect(result).toContain("No new official content");
+  });
+
+  it("handles unavailable trending data gracefully", () => {
+    const noTrending: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildSynthesisPrompt(noTrending, hnData, [], "2026-04-03");
+    expect(result).toContain("未能获取");
   });
 });
