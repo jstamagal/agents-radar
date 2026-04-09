@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code计费异常引热议，社区质疑透明度",
+      "Charm Crush v0.56.0发布：重构Agent内核，增强自配置",
+      "OpenCode v1.4.0重构SDK，全力修复内存与权限问题",
+      "OpenAI Codex Alpha激进发版，重点修复Windows兼容",
+      "Qwen Code v0.14.2补丁频发，紧急修复WebView崩溃",
+      "Copilot CLI进入维护模式，主要更新MCP策略"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.4.8紧急发布，救火严重打包崩溃Bug",
+      "CLI推理首秀：v2026.4.7引入openclaw infer跨模型命令",
+      "依赖地狱警告：新版本引发Carbon与Grammy模块丢失",
+      "Windows路径回归未解，ESM协议报错困扰大量用户",
+      "Krea AI集成在即：社区推动多模态能力与内存管理",
+      "24小时千个PR待处理，项目活跃度极高但稳定性堪忧"
+    ],
+    "ai-trending": [
+      "obra/superpowers单日星标2千，定义Agent开发标准范式",
+      "Google Edge双星闪耀：LiteRT-LM与Gallery霸榜端侧AI",
+      "GitNexus走红：本地代码知识库RAG成私有化刚需",
+      "AI量化交易代码库ai-hedge-fund亮相，涉足完整金融流",
+      "工业级影视平台waoowaoo登场，展示Agent视频制作控力",
+      "反直觉趋势：极简Bash教程热度高，回归Agent核心构建"
+    ],
+    "ai-web": [
+      "Anthropic首发托管代理：解耦大脑与双手，解决脆化难题",
+      "深入解读LLM内部机制：Claude情绪概念功能论文出炉",
+      "劳动力市场新报告：Anthropic揭示AI高暴露职业增速放缓",
+      "OpenAI更新蓝图：聚焦企业AI落地与儿童安全合规治理",
+      "上下文焦虑终结：新模型自适应处理长周期任务变迁",
+      "战略分化明显：Claude重科研落地，OpenAI重合规渗透"
+    ],
+    "ai-hn": [
+      "历史回旋镖登顶：OpenAI当年拒发GPT-2如今成笑谈",
+      "Claude Code被指变笨变懒，AMD AI总监公开吐槽更新",
+      "12分钟生成10小时修复：AI代码陷陷阱引发开发者共鸣",
+      "Bonsai 8B惊艳：仅1.15GB的1-bit LLM技术引围观",
+      "恐怖的克制：媒体渲染Anthropic企业级策略引发恐慌",
+      "本地数据湖Show HN：AI数据工程IDE主打隐私优先"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.97 faces billing anomalies",
+      "OpenAI Codex alpha suffers token burn",
+      "Charm Crush v0.56.0 adds Agent Kernel",
+      "GitHub Copilot focuses on UI stability",
+      "Rising security concerns necessitate sandboxing",
+      "Industry races toward MCP standardization"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.4.8 fixes Telegram crash",
+      "Project resolves over 1,000 issues in 24 hours",
+      "New PRs add Krea AI integration",
+      "Team fixes ignored timeout configurations",
+      "Stabilization follows v2026.4.5 regressions",
+      "Critical dependencies updated for stability"
+    ],
+    "ai-trending": [
+      "obra/superpowers gains +2,028 stars today",
+      "Shift toward Agentic Engineering workflows",
+      "LiteRT-LM enables on-device C++ inference",
+      "Newton physics engine merges AI with robotics",
+      "Industry pivots to Rust/C++ infrastructure",
+      "Client-side intelligence runs locally in browser"
+    ],
+    "ai-web": [
+      "Anthropic launches Managed Agents service",
+      "Claude research reveals 'emotion neurons'",
+      "OpenAI announces Child Safety Blueprint",
+      "Anthropic targets 'system 2' capabilities",
+      "OpenAI pivots to enterprise standardization",
+      "Anthropic decouples brains from software hands"
+    ],
+    "ai-hn": [
+      "Hindsight discussion on 2019 GPT-2 refusal",
+      "Anthropic faces billing and support backlash",
+      "Meta debuts new Muse model",
+      "Bonsai 8B offers 1-bit LLM in 1.15GB",
+      "Dev story: AI code took 10 hours to fix",
+      "AMD director claims models are getting 'lazier'"
+    ]
+  }
+}
