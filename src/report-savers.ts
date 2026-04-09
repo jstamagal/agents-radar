@@ -3,9 +3,9 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
-import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, SIGNALS_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildSignalsPrompt } from "./prompts-data.ts";
+import { callLlm, saveFile, LLM_TOKENS_WEB, LLM_TOKENS_SIGNALS } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
 import type { HnData } from "./hn.ts";
@@ -155,5 +155,67 @@ export async function saveHnReport(
     }
   } catch (err) {
     console.error(`  [hn/${lang}] Report generation failed: ${err}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Signals Panorama report — cross-source "wide view" synthesis
+// ---------------------------------------------------------------------------
+
+/**
+ * Generate and save the AI Daily Signals Panorama report.
+ *
+ * @param reportContents  Map of report-id → full report content (same object
+ *                        used for the Telegram highlights step in index.ts).
+ * @param utcStr          UTC timestamp string.
+ * @param dateStr         Date string, e.g. "2026-03-19".
+ * @param digestRepo      "owner/repo" for GitHub issue creation, or "".
+ * @param footer          Auto-generated footer string.
+ * @param lang            Output language.
+ */
+export async function saveSignalsReport(
+  reportContents: Record<string, string>,
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  if (Object.keys(reportContents).length === 0) {
+    console.log(`  [signals/${lang}] No report content available, skipping.`);
+    return;
+  }
+
+  console.log(`  [signals/${lang}] Calling LLM for signals panorama...`);
+  try {
+    const signalsSummary = await callLlm(
+      buildSignalsPrompt(reportContents, dateStr, lang),
+      LLM_TOKENS_SIGNALS,
+    );
+    const fileName = lang === "en" ? "ai-signals-en.md" : "ai-signals.md";
+    const sourceCount = Object.keys(reportContents).length;
+    const header =
+      lang === "en"
+        ? `# ${SIGNALS_REPORT.title[lang]} ${dateStr}\n\n` +
+          `> ${SIGNALS_REPORT.sources[lang]} | ` +
+          `${sourceCount} sources synthesised | Generated: ${utcStr} UTC\n\n` +
+          `---\n\n`
+        : `# ${SIGNALS_REPORT.title[lang]} ${dateStr}\n\n` +
+          `> ${SIGNALS_REPORT.sources[lang]} | ` +
+          `共整合 ${sourceCount} 个数据源 | 生成时间: ${utcStr} UTC\n\n` +
+          `---\n\n`;
+
+    const signalsContent = header + signalsSummary + footer;
+
+    console.log(`  Saved ${saveFile(signalsContent, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const signalsTitle = SIGNALS_REPORT.issueTitle(dateStr, lang);
+      const signalsLabel = ISSUE_LABELS.signals[lang];
+      const signalsUrl = await createGitHubIssue(signalsTitle, signalsContent, signalsLabel);
+      console.log(`  Created signals issue (${lang}): ${signalsUrl}`);
+    }
+  } catch (err) {
+    console.error(`  [signals/${lang}] Report generation failed: ${err}`);
   }
 }

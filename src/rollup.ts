@@ -10,17 +10,24 @@ import {
   buildWeeklyPrompt,
   buildMonthlyPrompt,
   buildHighlightsPrompt,
+  buildRangeSignalsPrompt,
+  type RangeDayDigest,
   type ReportHighlights,
 } from "./prompts-data.ts";
 import { createGitHubIssue } from "./github.ts";
 import { toCstDateStr, toUtcStr } from "./date.ts";
-import { type Lang, WEEKLY_REPORT, MONTHLY_REPORT } from "./i18n.ts";
+import { type Lang, WEEKLY_REPORT, MONTHLY_REPORT, SIGNALS_REPORT, ISSUE_LABELS } from "./i18n.ts";
 
 const DIGESTS_DIR = "digests";
 const MAX_CHARS_PER_REPORT = 2500;
+/** Max chars read per source file for range signals (multiple sources × multiple days). */
+const MAX_CHARS_SIGNALS_SOURCE = 1500;
 
 // Source report types to read for rollups (in priority order)
 const ROLLUP_SOURCES = ["ai-cli", "ai-agents", "ai-trending", "ai-hn", "ai-web"];
+
+/** Signal source report types to include in the range panorama. */
+const SIGNALS_SOURCES = ["ai-trending", "ai-hn", "ai-cli", "ai-agents", "ai-web"];
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -67,7 +74,173 @@ export function toWeekStr(date: Date): string {
 }
 
 // ---------------------------------------------------------------------------
-// Highlights generation for rollup reports
+// Helpers (range signals)
+// ---------------------------------------------------------------------------
+
+/**
+ * Read all available signal sources for a single date from stored digest files.
+ * Returns a map of source-id → truncated content.
+ *
+ * @param date            ISO date string, e.g. "2026-03-19"
+ * @param overrideReports Optional fresh in-memory reports (today's not-yet-saved data).
+ *                        These take precedence over anything on disk.
+ */
+function readDaySignalSources(
+  date: string,
+  overrideReports?: Record<string, string>,
+): Record<string, string> {
+  const sources: Record<string, string> = {};
+  for (const sourceId of SIGNALS_SOURCES) {
+    if (overrideReports?.[sourceId]) {
+      const raw = overrideReports[sourceId]!;
+      const truncated = raw.slice(0, MAX_CHARS_SIGNALS_SOURCE);
+      sources[sourceId] = truncated.length < raw.length ? truncated + "\n*[truncated]*" : truncated;
+      continue;
+    }
+    const p = path.join(DIGESTS_DIR, date, `${sourceId}.md`);
+    if (fs.existsSync(p)) {
+      const raw = fs.readFileSync(p, "utf-8");
+      const truncated = raw.slice(0, MAX_CHARS_SIGNALS_SOURCE);
+      sources[sourceId] = truncated.length < raw.length ? truncated + "\n*[truncated]*" : truncated;
+    }
+  }
+  return sources;
+}
+
+// ---------------------------------------------------------------------------
+// Range Signals Panorama
+// ---------------------------------------------------------------------------
+
+/**
+ * Generate a wide-angle AI Signals Panorama spanning a date range.
+ *
+ * Reads stored digest files for all dates in the range and synthesises them
+ * into a single multi-day panorama report (zh + en saved in parallel).
+ *
+ * @param todayDate       Today's date string, e.g. "2026-04-05" (used as toDate if toDate not set).
+ * @param todayReports    Today's fresh in-memory reports (not yet on disk) keyed by lang.
+ * @param fromDate        Start of range (inclusive). Defaults to 21 days before todayDate.
+ * @param toDate          End of range (inclusive). Defaults to todayDate.
+ */
+export async function runRangeSignals(
+  todayDate: string,
+  todayReports: Record<Lang, Record<string, string>>,
+  fromDate?: string,
+  toDate?: string,
+): Promise<void> {
+  const now = new Date();
+  const utcStr = toUtcStr(now);
+  const digestRepo = process.env["DIGEST_REPO"] ?? "";
+
+  const effectiveToDate = toDate ?? todayDate;
+  const effectiveFromDate =
+    fromDate ??
+    (() => {
+      const d = new Date(effectiveToDate + "T00:00:00Z");
+      d.setUTCDate(d.getUTCDate() - 20); // 21-day window (inclusive of today)
+      return d.toISOString().slice(0, 10);
+    })();
+
+  console.log(`[signals-range] Generating panorama for ${effectiveFromDate} ~ ${effectiveToDate}`);
+
+  // Collect all date directories within the range
+  const allDates = getDateDirs().filter((d) => d >= effectiveFromDate && d <= effectiveToDate);
+
+  if (allDates.length === 0) {
+    console.log("[signals-range] No digest dates found in range, skipping.");
+    return;
+  }
+
+  // Build per-day digests (newest first)
+  const zhDays: RangeDayDigest[] = [];
+  const enDays: RangeDayDigest[] = [];
+  for (const date of allDates) {
+    const isToday = date === todayDate;
+    const zhSources = readDaySignalSources(date, isToday ? todayReports.zh : undefined);
+    const enSources = readDaySignalSources(
+      date,
+      isToday
+        ? // Build en-suffixed sources for today from in-memory en reports
+          Object.fromEntries(Object.entries(todayReports.en).map(([id, v]) => [id, v]))
+        : (() => {
+            // For past dates, prefer -en files; fall back to zh files
+            const s: Record<string, string> = {};
+            for (const sourceId of SIGNALS_SOURCES) {
+              for (const suffix of ["-en", ""]) {
+                const p = path.join(DIGESTS_DIR, date, `${sourceId}${suffix}.md`);
+                if (fs.existsSync(p)) {
+                  const raw = fs.readFileSync(p, "utf-8");
+                  const truncated = raw.slice(0, MAX_CHARS_SIGNALS_SOURCE);
+                  s[sourceId] = truncated.length < raw.length ? truncated + "\n*[truncated]*" : truncated;
+                  break;
+                }
+              }
+            }
+            return s;
+          })(),
+    );
+    if (Object.keys(zhSources).length > 0) zhDays.push({ date, sources: zhSources });
+    if (Object.keys(enSources).length > 0) enDays.push({ date, sources: enSources });
+  }
+
+  if (zhDays.length === 0) {
+    console.log("[signals-range] No source data found in range, skipping.");
+    return;
+  }
+
+  console.log(
+    `[signals-range] Synthesising ${zhDays.length} days of data across ${effectiveFromDate} ~ ${effectiveToDate}`,
+  );
+
+  // Generate zh and en panoramas in parallel
+  const [zhSummary, enSummary] = await Promise.all([
+    callLlm(buildRangeSignalsPrompt(zhDays, effectiveFromDate, effectiveToDate, "zh"), LLM_TOKENS_ROLLUP),
+    callLlm(buildRangeSignalsPrompt(enDays, effectiveFromDate, effectiveToDate, "en"), LLM_TOKENS_ROLLUP),
+  ]);
+
+  const footer = autoGenFooter("zh");
+  const enFooter = autoGenFooter("en");
+
+  const zhContent =
+    `# ${SIGNALS_REPORT.title.zh} ${effectiveFromDate} ~ ${effectiveToDate}\n\n` +
+    `> ${SIGNALS_REPORT.sources.zh} | ` +
+    `覆盖 ${zhDays.length} 天数据 | 生成时间: ${utcStr} UTC\n\n` +
+    `---\n\n` +
+    zhSummary +
+    footer;
+
+  const enContent =
+    `# ${SIGNALS_REPORT.title.en} ${effectiveFromDate} ~ ${effectiveToDate}\n\n` +
+    `> ${SIGNALS_REPORT.sources.en} | ` +
+    `${zhDays.length} days of data | Generated: ${utcStr} UTC\n\n` +
+    `---\n\n` +
+    enSummary +
+    enFooter;
+
+  // Save in today's date folder so it appears in the manifest for today
+  console.log(`  Saved ${saveFile(zhContent, todayDate, "ai-signals.md")}`);
+  console.log(`  Saved ${saveFile(enContent, todayDate, "ai-signals-en.md")}`);
+
+  if (digestRepo) {
+    const zhUrl = await createGitHubIssue(
+      SIGNALS_REPORT.rangeIssueTitle(effectiveFromDate, effectiveToDate, "zh"),
+      zhContent,
+      ISSUE_LABELS.signals.zh,
+    );
+    console.log(`  Created signals range issue (zh): ${zhUrl}`);
+    const enUrl = await createGitHubIssue(
+      SIGNALS_REPORT.rangeIssueTitle(effectiveFromDate, effectiveToDate, "en"),
+      enContent,
+      ISSUE_LABELS.signals.en,
+    );
+    console.log(`  Created signals range issue (en): ${enUrl}`);
+  }
+
+  console.log(`[signals-range] Done!`);
+}
+
+// ---------------------------------------------------------------------------
+// Helpers (rollup)
 // ---------------------------------------------------------------------------
 
 async function generateRollupHighlights(
