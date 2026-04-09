@@ -1,5 +1,5 @@
 /**
- * LLM prompt builders for data-source reports (trending, web, HN)
+ * LLM prompt builders for data-source reports (trending, signals, web, HN)
  * and rollup reports (weekly, monthly).
  *
  * Separated from prompts.ts to keep each module focused.
@@ -9,6 +9,114 @@ import type { WebFetchResult } from "./web.ts";
 import type { TrendingData } from "./trending.ts";
 import type { HnData } from "./hn.ts";
 import type { Lang } from "./i18n.ts";
+
+// ---------------------------------------------------------------------------
+// Signals Landscape prompt
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a prompt that asks the LLM to produce a wide-view "Signals Landscape"
+ * table — one row per AI project, all signals side-by-side for easy comparison.
+ */
+export function buildSignalsPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
+  const trendingRows =
+    data.trendingFetchSuccess && data.trendingRepos.length > 0
+      ? data.trendingRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.totalStars.toLocaleString()}` +
+              (r.todayStars > 0 ? ` (+${r.todayStars} today)` : "") +
+              (r.forks > 0 ? ` 🍴${r.forks.toLocaleString()}` : "") +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(Unable to fetch today's GitHub Trending list)"
+        : "（未能抓取今日 GitHub Trending 榜单）";
+
+  const searchRows =
+    data.searchRepos.length > 0
+      ? data.searchRepos
+          .map(
+            (r) =>
+              `- [${r.fullName}](${r.url})` +
+              (r.language ? ` [${r.language}]` : "") +
+              ` ⭐${r.stargazersCount.toLocaleString()}` +
+              ` [topic:${r.searchQuery}]` +
+              (r.description ? `\n  ${r.description}` : ""),
+          )
+          .join("\n")
+      : lang === "en"
+        ? "(No search results)"
+        : "（无搜索结果）";
+
+  if (lang === "en") {
+    return `You are a technical analyst. The following is ${dateStr} GitHub AI trending and topic-search data.
+Your task is to produce a concise **AI Signals Landscape** — a single wide Markdown table that puts ALL signals side-by-side so readers can see the full picture at a glance.
+
+---
+
+## GitHub Trending (${data.trendingRepos.length} repos)
+${trendingRows}
+
+## AI Topic Search (${data.searchRepos.length} repos, deduplicated)
+${searchRows}
+
+---
+
+**Instructions**
+
+1. Filter: keep only AI/ML-relevant projects (drop unrelated frontend libs, games, etc.).
+2. Deduplicate: if a project appears in both sources, use one row (prefer trending star count if available).
+3. Sort rows by: today's new stars descending, then total stars descending.
+4. Produce a Markdown table with exactly these columns:
+   | Project | Category | ⭐ Stars | 📈 Today | Stack | Signal |
+   - **Project**: markdown link \`[owner/repo](url)\`
+   - **Category**: one of 🤖 Agents, 🔧 Infra, 📦 Apps, 🔍 RAG/Knowledge, 🧠 LLMs/Training
+   - **⭐ Stars**: total star count (comma-separated thousands)
+   - **📈 Today**: today's new stars if available, else "—"
+   - **Stack**: primary language or framework (≤ 3 words)
+   - **Signal**: one tight sentence on why this project matters right now
+5. After the table add a section \`## Signal Synthesis\` with 3-5 sentences identifying the dominant themes, breakout stars, and any new directions visible in the aggregate.
+
+Output only the table and the Signal Synthesis section — no other prose.
+`;
+  }
+
+  return `你是一位 AI 开源生态技术分析师。以下是 ${dateStr} 的 GitHub AI 热门仓库数据（Trending + 主题搜索）。
+你的任务是生成一份《AI 信号全景图》——一张宽幅 Markdown 表格，把所有信号并排呈现，让读者一眼看清全局。
+
+---
+
+## GitHub Trending（${data.trendingRepos.length} 个仓库）
+${trendingRows}
+
+## AI 主题搜索（${data.searchRepos.length} 个仓库，已去重）
+${searchRows}
+
+---
+
+**输出要求**
+
+1. 过滤：只保留与 AI/ML 明确相关的项目（排除无关的前端框架、游戏等）。
+2. 去重：若同一项目出现在两个来源中，合并为一行（优先使用 Trending 的今日 stars）。
+3. 排序：今日新增 stars 从高到低，其次按总 stars 排序。
+4. 输出 Markdown 表格，列定义如下：
+   | 项目 | 分类 | ⭐ Stars | 📈 今日 | 技术栈 | 信号 |
+   - **项目**：Markdown 链接 \`[owner/repo](url)\`
+   - **分类**：🤖 智能体、🔧 基础设施、📦 应用、🔍 RAG/知识、🧠 大模型 之一
+   - **⭐ Stars**：总 star 数（千位逗号分隔）
+   - **📈 今日**：今日新增 stars（无则填 —）
+   - **技术栈**：主要语言或框架（≤3 个词）
+   - **信号**：一句话说明该项目此刻值得关注的原因
+5. 表格之后输出 \`## 信号综合\` 章节，用 3-5 句话总结当日主导主题、爆发性项目和新兴方向。
+
+只输出表格和"信号综合"章节，不要其他内容。
+`;
+}
+
 export function buildTrendingPrompt(data: TrendingData, dateStr: string, lang: Lang = "zh"): string {
   const trendingSection =
     data.trendingFetchSuccess && data.trendingRepos.length > 0
