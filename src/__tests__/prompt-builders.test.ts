@@ -8,6 +8,7 @@ import {
 } from "../prompts.ts";
 import {
   buildTrendingPrompt,
+  buildPanoramaPrompt,
   buildWebReportPrompt,
   buildWeeklyPrompt,
   buildMonthlyPrompt,
@@ -222,6 +223,112 @@ describe("buildTrendingPrompt", () => {
     const result = buildTrendingPrompt(data, "2026-03-09");
     expect(result).toContain("[topic:ai-agent]");
     expect(result).toContain("1,000");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildPanoramaPrompt
+// ---------------------------------------------------------------------------
+
+describe("buildPanoramaPrompt", () => {
+  it("includes all trending repos in signal summary", () => {
+    const data: TrendingData = {
+      trendingRepos: [
+        {
+          fullName: "org/hotrepo",
+          description: "hot today",
+          language: "Rust",
+          todayStars: 500,
+          totalStars: 2000,
+          forks: 100,
+          url: "https://github.com/org/hotrepo",
+        },
+      ],
+      searchRepos: [
+        {
+          fullName: "ai/searcher",
+          description: "AI search tool",
+          language: "Python",
+          stargazersCount: 3000,
+          pushedAt: "2026-03-15",
+          url: "https://github.com/ai/searcher",
+          searchQuery: "llm",
+        },
+      ],
+      trendingFetchSuccess: true,
+    };
+    const result = buildPanoramaPrompt(data, "2026-03-16");
+    expect(result).toContain("org/hotrepo");
+    expect(result).toContain("ai/searcher");
+    expect(result).toContain("2,000");
+    expect(result).toContain("+500 today");
+    expect(result).toContain("[topic:llm]");
+    expect(result).toContain("信号汇总表");
+  });
+
+  it("generates English variant with panorama structure", () => {
+    const data: TrendingData = {
+      trendingRepos: [
+        {
+          fullName: "org/repo",
+          description: "desc",
+          language: "Go",
+          todayStars: 200,
+          totalStars: 1000,
+          forks: 50,
+          url: "https://github.com/org/repo",
+        },
+      ],
+      searchRepos: [],
+      trendingFetchSuccess: true,
+    };
+    const result = buildPanoramaPrompt(data, "2026-03-16", "en");
+    expect(result).toContain("Signal Summary Table");
+    expect(result).toContain("Ecosystem Map by Category");
+    expect(result).toContain("Cross-Cutting Theme Analysis");
+    expect(result).toContain("Ecosystem Health Snapshot");
+    expect(result).toContain("Top 5 Signals to Watch");
+    expect(result).toContain("org/repo");
+  });
+
+  it("shows fetch failure message when trending fails", () => {
+    const data: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildPanoramaPrompt(data, "2026-03-16");
+    expect(result).toContain("未能抓取今日 GitHub Trending");
+  });
+
+  it("shows no-data message in English when fetch fails", () => {
+    const data: TrendingData = { trendingRepos: [], searchRepos: [], trendingFetchSuccess: false };
+    const result = buildPanoramaPrompt(data, "2026-03-16", "en");
+    expect(result).toContain("Unable to fetch today's GitHub Trending list");
+  });
+
+  it("counts total signals correctly", () => {
+    const data: TrendingData = {
+      trendingRepos: Array.from({ length: 13 }, (_, i) => ({
+        fullName: `org/repo${i}`,
+        description: "",
+        language: "Python",
+        todayStars: i * 10,
+        totalStars: i * 100,
+        forks: 0,
+        url: `https://github.com/org/repo${i}`,
+      })),
+      searchRepos: Array.from({ length: 80 }, (_, i) => ({
+        fullName: `search/repo${i}`,
+        description: "",
+        language: null,
+        stargazersCount: i * 50,
+        pushedAt: "2026-03-15",
+        url: `https://github.com/search/repo${i}`,
+        searchQuery: "llm",
+      })),
+      trendingFetchSuccess: true,
+    };
+    const result = buildPanoramaPrompt(data, "2026-03-16", "en");
+    expect(result).toContain("93 GitHub signals");
+    expect(result).toContain("13 repositories from GitHub Trending");
+    expect(result).toContain("80 repositories from AI topic searches");
   });
 });
 

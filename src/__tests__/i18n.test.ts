@@ -6,6 +6,7 @@ import {
   WEB_REPORT,
   TRENDING_REPORT,
   HN_REPORT,
+  PANORAMA_REPORT,
   WEEKLY_REPORT,
   MONTHLY_REPORT,
   ISSUE_LABELS,
@@ -36,6 +37,8 @@ describe("bilingual string maps", () => {
     { name: "WEB_REPORT.firstCrawl", obj: WEB_REPORT.firstCrawl },
     { name: "TRENDING_REPORT.title", obj: TRENDING_REPORT.title },
     { name: "HN_REPORT.title", obj: HN_REPORT.title },
+    { name: "PANORAMA_REPORT.title", obj: PANORAMA_REPORT.title },
+    { name: "PANORAMA_REPORT.sources", obj: PANORAMA_REPORT.sources },
     { name: "WEEKLY_REPORT.title", obj: WEEKLY_REPORT.title },
     { name: "MONTHLY_REPORT.title", obj: MONTHLY_REPORT.title },
     { name: "FOOTER.autoGen", obj: FOOTER.autoGen },
@@ -82,6 +85,12 @@ describe("issue title functions", () => {
   it("HN_REPORT.issueTitle produces zh and en", () => {
     expect(HN_REPORT.issueTitle("2026-03-12", "zh")).toContain("Hacker News");
     expect(HN_REPORT.issueTitle("2026-03-12", "en")).toContain("Hacker News");
+  });
+
+  it("PANORAMA_REPORT.issueTitle produces zh and en", () => {
+    expect(PANORAMA_REPORT.issueTitle("2026-03-12", "zh")).toContain("全景图");
+    expect(PANORAMA_REPORT.issueTitle("2026-03-12", "en")).toContain("Panorama");
+    expect(PANORAMA_REPORT.issueTitle("2026-03-12", "en")).toContain("2026-03-12");
   });
 
   it("WEEKLY_REPORT.issueTitle includes week string", () => {
@@ -139,7 +148,16 @@ describe("ISSUE_LABELS", () => {
 
 describe("NOTIFY_LABELS", () => {
   it("covers all report types", () => {
-    const expected = ["ai-cli", "ai-agents", "ai-web", "ai-trending", "ai-hn", "ai-weekly", "ai-monthly"];
+    const expected = [
+      "ai-cli",
+      "ai-agents",
+      "ai-web",
+      "ai-trending",
+      "ai-hn",
+      "ai-panorama",
+      "ai-weekly",
+      "ai-monthly",
+    ];
     for (const key of expected) {
       expect(NOTIFY_LABELS[key]).toBeDefined();
       expect(NOTIFY_LABELS[key]!.zh).toBeTruthy();
