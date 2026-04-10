@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 移除 /buddy 引发情感热议，多账户痛点浮现",
+      "OpenAI Codex Rust 核心密集迭代，严重计费 Bug 引发恐慌",
+      "Qwen Code Agent 智能化增强，修复 CJK 输入与竞态条件",
+      "Charm Crush 追求极致 Token 优化，新增 22 种主题系统",
+      "OpenCode 修复内存泄漏，Server API 扩展与 Copilot 兼容",
+      "GitHub Copilot CLI 企业策略误报，模型列表同步问题难解"
+    ],
+    "ai-agents": [
+      "OpenClaw 发布 v2026.4.9：内存架构重构，支持旧数据无缝接入",
+      "今日处理 500 Issues/500 PRs：安装崩溃与平台兼容性成痛点",
+      "锁定 axios 版本：引入依赖黑名单机制，严防供应链攻击",
+      "Browser 核心重构：统一 /act 逻辑，消除维护成本与潜在 Bug",
+      "引入 Canonical Live Benchmark：标准化性能基准测试流程",
+      "REM Backfill Lane 上线：旧历史笔记无需第二内存栈即可重放"
+    ],
+    "ai-trending": [
+      "obra/superpowers ⭐ 2299：提出代理技能框架，解决 AI 编程不可控痛点",
+      "Andrej Karpathy 技能库：CLAUDE.md 配置文件，工程化 Prompt 显著提升编码",
+      "affaan-m/everything-claude-code ⭐ 14.8万：AI 编辑器性能优化系统与开发策略集",
+      "NousResearch/hermes-agent ⭐ 6485：强调伴随成长的 Agent 框架",
+      "shareAI/learn-claude-code ⭐ 5万：从零构建的微型代理控制，展示极简思想",
+      "TheCraigHewitt/seomachine：基于 Claude Code 的专业级 SEO 工作流实践"
+    ],
+    "ai-web": [
+      "Anthropic 重磅推出 Claude for Healthcare：符合 HIPAA 标准的垂直解决方案",
+      "Claude Opus 4.5 霸榜 SpatialBench：展示生命科学领域统治力",
+      "发布可信代理实践指南：防御提示注入，确立 Agent 安全新护城河",
+      "OpenAI 官网今日静默：无增量更新，处于战术发布空窗期",
+      "从聊天到行动：Anthropic 强调人在回路是 Agent 安全的核心原则",
+      "医疗成试金石：Anthropic 高调进军医疗，暗示对 Opus 准确性极具信心"
+    ],
+    "ai-hn": [
+      "Vercel 插件读取本地 Prompt 引恐慌：Claude Code 隐私边界引热议",
+      "实战案例：Claude Code 4 小时重构 66 张票架构，零魔法上线生产",
+      "OpenAI 叫停英国 Stargate 项目：能源成本与监管成基建拦路虎",
+      "Show HN：Imbue 端侧小模型过滤 Twitter 垃圾，主打隐私代理",
+      "硬核教程：利用闲置游戏 PC 自建 Gemma 4 本地推理服务器",
+      "社区热议：AI 编程从试用转向工程化，配置文件与工作流成焦点"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.98: GCP Wizard & Security focus",
+      "OpenAI Codex: Realtime V2 & Guardian arch",
+      "Charm Crush: Token reduction & Theming updates",
+      "Gemini CLI v0.37.1: Memory leak fixes filed",
+      "Kimi Code CLI / OpenCode / Qwen Code active",
+      "Industry shift: Agent Orchestration & MCP/ACP"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.4.9: Grounded REM Backfill added",
+      "500 issues/PRs updated in OpenClaw in 24 hours",
+      "Windows npm global installs currently broken",
+      "NanoBot, Zeroclaw, PicoClaw active ecosystem",
+      "Focus: Memory management & dreaming features",
+      "Maintainers issuing rapid-fire patch attempts"
+    ],
+    "ai-trending": [
+      "NousResearch/hermes-agent +6,485 stars today",
+      "obra/superpowers: Agentic skills framework",
+      "coleam00/Archon: Open-source harness builder",
+      "Paradigm shift: Agentic Engineering takes hold",
+      "Surge in vertical AI agents for SEO & finance",
+      "Tokenizer-Free TTS models rise for efficiency"
+    ],
+    "ai-web": [
+      "Anthropic launches HIPAA-ready Healthcare tools",
+      "Opus 4.5 targets medical agentic performance",
+      "Research update: Trustworthy agents & governance",
+      "Focus: Security against prompt injection",
+      "OpenAI silent; Anthropic dominates narrative",
+      "Shift from chat benchmarks to vertical tasks"
+    ],
+    "ai-hn": [
+      "HN investigates Vercel plugin telemetry issues",
+      "OpenAI withdraws from UK Stargate project",
+      "Trend: Open-source alternatives to managed agents",
+      "Use gaming PC as a Google Gemma 4 server",
+      "Opus plans, Sonnet executes: Advisor strategy",
+      "Community demands transparency in AI workflows"
+    ]
+  }
+}
