@@ -3,8 +3,8 @@
  * Extracted from index.ts for separation of concerns.
  */
 
-import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, ISSUE_LABELS } from "./i18n.ts";
-import { buildWebReportPrompt, buildHnPrompt } from "./prompts-data.ts";
+import { type Lang, WEB_REPORT, TRENDING_REPORT, HN_REPORT, RADAR_REPORT, ISSUE_LABELS } from "./i18n.ts";
+import { buildWebReportPrompt, buildHnPrompt, buildRadarPrompt } from "./prompts-data.ts";
 import { callLlm, saveFile, LLM_TOKENS_WEB } from "./report.ts";
 import { createGitHubIssue } from "./github.ts";
 import { saveWebState, type WebFetchResult, type WebState } from "./web.ts";
@@ -155,5 +155,47 @@ export async function saveHnReport(
     }
   } catch (err) {
     console.error(`  [hn/${lang}] Report generation failed: ${err}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Radar report
+// ---------------------------------------------------------------------------
+
+export async function saveRadarReport(
+  reports: Record<string, string>,
+  utcStr: string,
+  dateStr: string,
+  digestRepo: string,
+  footer: string,
+  lang: Lang = "zh",
+): Promise<void> {
+  if (Object.keys(reports).length === 0) {
+    console.log(`  [radar/${lang}] No report content available, skipping.`);
+    return;
+  }
+
+  console.log(`  [radar/${lang}] Calling LLM for wide-view radar report...`);
+  try {
+    const radarSummary = await callLlm(buildRadarPrompt(reports, dateStr, lang), LLM_TOKENS_WEB);
+
+    const fileName = lang === "en" ? "ai-radar-en.md" : "ai-radar.md";
+    const header =
+      `# ${RADAR_REPORT.title[lang]} ${dateStr}\n\n` +
+      `> ${RADAR_REPORT.sources[lang]} | ${lang === "en" ? "Generated" : "生成时间"}: ${utcStr} UTC\n\n` +
+      `---\n\n`;
+
+    const radarContent = header + radarSummary + footer;
+
+    console.log(`  Saved ${saveFile(radarContent, dateStr, fileName)}`);
+
+    if (digestRepo) {
+      const radarTitle = RADAR_REPORT.issueTitle(dateStr, lang);
+      const radarLabel = ISSUE_LABELS.radar[lang];
+      const radarUrl = await createGitHubIssue(radarTitle, radarContent, radarLabel);
+      console.log(`  Created radar issue (${lang}): ${radarUrl}`);
+    }
+  } catch (err) {
+    console.error(`  [radar/${lang}] Report generation failed: ${err}`);
   }
 }
