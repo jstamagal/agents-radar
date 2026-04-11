@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.101 发布，深陷计费争议与移除功能的信任危机",
+      "OpenAI Codex 新增 MCP Apps 与远程开发，生态版图持续扩张",
+      "Charm Crush 架构重构，引入 Hooks 系统重塑 Token 管理逻辑",
+      "Gemini CLI 严重 UI 退步，ContextManager 解耦引发架构阵痛",
+      "Kimi Code v1.31.0 强化 Web UI，全面修复 Windows 兼容性",
+      "OpenCode v1.4.3 大规模迁移至 Effect 架构，强化底层类型安全"
+    ],
+    "ai-agents": [
+      "OpenClaw 每日活跃超千条，修复 GPT-5.4 与 Codex 关键兼容性",
+      "集成 AWS Polly 与 Transcribe，OpenClaw 原生语音能力大幅增强",
+      "UI 渲染标准化，解决聊天气泡中指令泄露与元数据混乱问题",
+      "网关重启上下文丢失修复，Sub-agent 长时运行稳定性提升",
+      "聚焦身份验证与安全性，社区热议 Agent 信任验证 RFC 提案",
+      "Codex 授权与权限真实性修复，确保新版 API 交互准确无误"
+    ],
+    "ai-trending": [
+      "微软 Markitdown 获 2.3k Star，PDF 转 Markdown 成今日最强刚需",
+      "NousResearch Hermes-Agent 暴涨 7.6k Star，主打长期记忆与进化",
+      "Archon 首创开源 Harness 构建器，致力于解决 AI 编程不可控痛点",
+      "Browser-use 突破 87k Star，成为操控浏览器的 Agent 必备数字手",
+      "金融大模型 Kronos 登场，垂直领域 Agent 展现专业级落地潜力",
+      "多模态 Agent 框架 Superpowers 涨幅超 200%，技能框架获热捧"
+    ],
+    "ai-web": [
+      "Anthropic 推出托管服务，解耦模型与工具以解决代码腐化难题",
+      "Claude 4 横扫金融建模世界杯，垂直落地能力超越所有竞品",
+      "Claude for Financial Services 发布，深度集成 Databricks 数据栈",
+      "OpenAI 今日官网静默，无实质性内容更新维持低调状态",
+      "工程化革新：建立长期任务执行标准，降低企业部署门槛",
+      "解决模型周级迭代痛点，Anthropic 进军 AI 操作系统级服务"
+    ],
+    "ai-hn": [
+      "OpenAI 被曝支持豁免法案，试图将模型伤害的法律责任转嫁社会",
+      "Sam Altman 住宅遭燃烧弹袭击，AI 激进反对者引发安全恐慌",
+      "美政府紧急约见银行首脑，研讨 Anthropic 最新模型网络风险",
+      "OpenAI 官方确认引入广告，ChatGPT 用户体验商业化引发众怒",
+      "Claude Code 代码实现遭吐槽，工程化细节成开发者焦点",
+      "AI 风险实体化：从地缘政治黑名单到现实暴力事件的多重反噬"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.101 fixes auth issues",
+      "OpenAI Codex adds realtime voice & MCP apps",
+      "Charm Crush focuses on token efficiency",
+      "GitHub Copilot CLI improves Windows/WSL support",
+      "Kimi Code CLI enhances UI polish",
+      "Shift from experimental toys to enterprise infra"
+    ],
+    "ai-agents": [
+      "OpenClaw: 500 issues & 500 PRs merged today",
+      "Fixed regression dropping WhatsApp media files",
+      "Debating Agent Identity & Trust Verification",
+      "Addressing network connectivity for remote bots",
+      "High-priority bug fixes for 2026.4.x release",
+      "Architectural proposals for real-time voice"
+    ],
+    "ai-trending": [
+      "microsoft/markitdown hits 2,352 stars today",
+      "NousResearch/hermes-agent gains 7,671 stars",
+      "Shift toward Agentic Coding frameworks",
+      "Context engineering replaces prompt engineering",
+      "Focus on data ingestion infrastructure",
+      "Rise of deterministic AI systems"
+    ],
+    "ai-web": [
+      "Anthropic introduces Managed Agents service",
+      "New Claude 4 models target financial services",
+      "Decoupling agent brains from harnesses",
+      "Pre-built MCP connectors for Databricks",
+      "Solving the 'maintainability crisis' in AI",
+      "Anthropic pivots to enterprise verticalization"
+    ],
+    "ai-hn": [
+      "Molotov cocktail attack on Sam Altman's home",
+      "OpenAI backs Illinois AI immunity bill",
+      "Criticism over regulatory capture claims",
+      "Cybersecurity scare: Anthropic's Mythos model",
+      "Debate over AI safety marketing hype",
+      "Treasury reviews Anthropic security risks"
+    ]
+  }
+}
