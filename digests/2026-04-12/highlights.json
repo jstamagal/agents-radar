@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 陷危机：模型质量下滑引发信任大滑坡",
+      "OpenAI Codex v0.120.0 发布：Rust 重构，TUI 体验优化",
+      "Gemini CLI 探索 AST 代码感知，修补跨平台兼容性",
+      "GitHub Copilot CLI 遭遇 Windows 崩溃与计费逻辑泥潭",
+      "行业焦点转向 MCP/ACP 协议，Agent 可控性成博弈核心",
+      "开发者体验（DX）取代模型能力成为新护城河"
+    ],
+    "ai-agents": [
+      "OpenClaw 日更千条：Memory-Wiki 众包与 Codex 架构解耦",
+      "Agent 获记忆宫殿：支持导入 ChatGPT 历史与源页检查",
+      "安全修复：紧急封堵 WhatsApp 自聊漏洞与消息回声死循环",
+      "架构升级：混合模型部署与原生身份验证机制落地",
+      "Chat/飞书通道稳定性增强：修复无限循环与 URI 编码问题",
+      "生态极活跃：v2026.4.11 强化 GPT-5.4 对齐与 UI 交互"
+    ],
+    "ai-trending": [
+      "微软 Markitdown 爆火：日增 3k+ 星，PDF/Office 转 MD",
+      "NousResearch Hermes-Agent 冲顶：6k+ 日星，聚焦进化智能体",
+      "Karpathy 范式引爆：CLAUDE.md 让 AI 编码走向确定性",
+      "Archon 横空出世：首个开源 AI 编码 Harness，直击复现痛点",
+      "阿里 OpenSandbox：为 AI Agent 构筑防暴走安全沙箱",
+      "数据基建井喷：高质量文档解析与垂直落地成核心抓手"
+    ],
+    "ai-hn": [
+      "Anthropic Mythos 震惊全网：大幅降低黑客攻击门槛引恐慌",
+      "伯克利 RDI 揭秘：主流 AI Agent 基准测试易被“刷榜”攻克",
+      "MCP Spine 新工具：通过代理中间件削减 61% Token 成本",
+      "OpenAI 危机公关：收购 Cirrus Labs 回应工具妥协争议",
+      "HN 热议：网络安全攻防天平因 Mythos 彻底倾斜",
+      "开发者自救：涌现多款 Claude/OpenAI 性能优化对抗 Token 通胀"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code stability hits critical levels",
+      "Kimi CLI captures mindshare with new features",
+      "Universal shift to Agentic Control workflows",
+      "Cost control and hygiene are top priorities",
+      "OpenAI Codex v0.120.0 stable released",
+      "Charm Crush focuses on code optimization"
+    ],
+    "ai-agents": [
+      "OpenClaw sees 500 issues and PRs updated",
+      "v2026.4.11-beta.1 adds ChatGPT import",
+      "Codex provider integration now available",
+      "New Memory Palace UI subtabs released",
+      "Regressions affect WhatsApp and iMessage",
+      "Focus on long-term agentic capabilities"
+    ],
+    "ai-trending": [
+      "Microsoft markitdown gains 3k+ stars",
+      "Claude Code ecosystem tools emerge",
+      "OpenBMB VoxCPM2 tokenizer-free TTS",
+      "Kronos model targets market language",
+      "vllm remains standard for LLM inference",
+      "AI-ready PDF parser gains traction"
+    ],
+    "ai-hn": [
+      "Mythos release aids hackers, causes alarm",
+      "Meta AI execs get billion-dollar bonuses",
+      "Berkeley breaks AI agent benchmarks",
+      "Systemic security failure across models",
+      "Wealth distribution in AI era debated",
+      "Demand for trustworthy AI evaluation grows"
+    ]
+  }
+}
