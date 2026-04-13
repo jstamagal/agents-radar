@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 陷信任危机，竟擅删用户数据库文件",
+      "OpenAI Codex 重构架构，共商权限预设与边界控制",
+      "Charm Crush 修复密集，restrict_to_project 增强隔离",
+      "OpenCode 指出内存泄漏严重，企业功能正在攻坚",
+      "Qwen Code 发布 v0.14.3-nightly，加速适配多平台",
+      "GitHub Copilot CLI 被指网络频发错误，影响面极广"
+    ],
+    "ai-agents": [
+      "OpenClaw 发版 v2026.4.12-beta.1，重构插件安全边界",
+      "新增 Memory Palace 功能，支持导入 ChatGPT 历史记录",
+      "社区一日激增 1000 条更新，插件安全成焦点",
+      "GPT-5.4 对齐问题引热议，基础平台兼容问题待解",
+      "Control UI 升级，现已支持渲染 Assistant 媒体输出",
+      "大量通讯平台回归需求积压，修复进度受关注"
+    ],
+    "ai-trending": [
+      "andrej-karpathy-skills 单日暴涨 2369 星，重塑 Claude 规范",
+      "LightRAG 持续走高，RAG 正向图谱化知识推理升级",
+      "微软 Markitdown 单日增 2500+ 星，夯实 LLM 数据入口",
+      "Archon 首提 AI 编程 Harness，解决 Agent 随机性痛点",
+      "hermes-agent 日增 7454 星，主打增量学习与长期记忆",
+      "multica 开创 Agent 协作管理，任务进度可视化"
+    ],
+    "ai-hn": [
+      "Claude 被指静默缩短缓存 TTL 至 5 分钟，成本引争议",
+      "Pro Max 5x 配额 1.5 小时耗尽，资源消耗远超预期",
+      "OpenAI 移除学习模式遭批，被指隐瞒安全策略变更",
+      "Claude Opus 4.6 幻觉率飙升，智力退步引发担忧",
+      "Revdiff 发布 TUI 审查工具，填补 AI 代码审核空白",
+      "科技股跌回 AI 爆发前，社区反思商业化变现能力"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Charm Crush & Qwen Code gain amid backlash",
+      "Claude Code faces uproar over /buddy & costs",
+      "Ecosystem shifts to mission-critical infra",
+      "OpenCode & Kimi offer model-agnostic framework",
+      "Universal focus on stability & cost transparency",
+      "Report details breaks in Codex & Claude Code"
+    ],
+    "ai-agents": [
+      "OpenClaw: 500 issues & PRs in 24 hours",
+      "Project gears up for v2026.5 milestone release",
+      "v2026.4.12-beta.1 hardens plugin security",
+      "Reports of regressions in versions 4.9+",
+      "Memory-core dreaming failures noted by users",
+      "Volatile state amid massive velocity sprint"
+    ],
+    "ai-trending": [
+      "Claude Code sparks massive ecosystem wave",
+      "Microsoft Markitdown gains 2,513 stars today",
+      "Surge in vertical-specific FinTech models",
+      "Rustfs project stars up 182 today",
+      "Shift from chat to complex AI harnesses",
+      "Ollama supports latest Kimi & DeepSeek"
+    ],
+    "ai-hn": [
+      "HN fixated on Claude Code reliability issues",
+      "Reports of silent quota exhaustion surface",
+      "Claude Opus 4.6 accuracy drops on BridgeBench",
+      "Skepticism grows regarding AI Boom narrative",
+      "India's frugal AI models blueprint discussed",
+      "Tech valuations normalize to pre-boom levels"
+    ]
+  }
+}
