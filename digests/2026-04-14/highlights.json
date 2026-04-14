@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 发布 v2.1.105，因严重回归问题建议暂缓升级",
+      "OpenAI Codex 深度重构中，底层 Rust 架构全面打磨",
+      "MCP 成行业标准，所有主流工具今日均有相关增强",
+      "OpenCode 引入 Effect 逻辑重构，架构再次优化",
+      "社区强烈呼吁增加 Token 实时监控与成本控制功能",
+      "GitHub Copilot CLI 停滞，仅更新企业合规策略"
+    ],
+    "ai-agents": [
+      "OpenClaw 单日 500 PR，团队紧急修复 v2026.4.12 回归 Bug",
+      "引入 Bluesky 技能与无 Key 搜索插件，生态持续扩张",
+      "修复安全降级漏洞，确保 full 模式不会被绕过",
+      "新增隐私检查警告，防止多用户环境消息泄露",
+      "插件加载与内存管理质量修复，Dreaming 功能更稳",
+      "macOS CDP 连接失败与模型识别问题正在紧急修复"
+    ],
+    "ai-trending": [
+      "NousResearch/hermes-agent 单日狂揽 11k stars，成长型 Agent 爆发",
+      "claude-mem 涨势凶猛，解决 Claude 记不住上下文痛点",
+      "Archon 首个开源 AI 编程挽具，致力解决代码不确定性",
+      "andrej-karpathy-skills 配置库 Star 飙升，Prompt 工程显威",
+      "AI 量化金融落地， Kronos 等对冲基金成新热点",
+      "AI 从单一聊天向全自动化任务闭环演进趋势确立"
+    ],
+    "ai-web": [
+      "Anthropic 发文纠偏，主张构建 Agent 应回归简单可组合",
+      "明确划分 Workflows 与 Agents 架构分界，定义行业标准",
+      "OpenAI 官网静默，或处于重大模型发布前整备期",
+      "Anthropic 抢占工程化心智，输出白盒构建逻辑",
+      "实战经验否定复杂框架，企业级应用降低门槛",
+      "巨头竞争从模型比分转向开发范式的定义权争夺"
+    ],
+    "ai-hn": [
+      "英政府评估：Claude Mythos 网络攻击能力显著提升引担忧",
+      "Claude Code 被指消耗隐形 Token，计费透明度遭质疑",
+      "针对真实代码库的 N-Day Bench 漏洞挖掘基准测试发布",
+      "Sam Altman 遭遇 Molotov 袭击，嫌疑人持反 AI 文档",
+      "N-Day-Bench 发布，社区热议 LLM 安全审计实战效果",
+      "斯坦福报告引热议，AI 从业者与公众认知严重脱节"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Stability and orchestration phase focus.",
+      "Resource exhaustion challenges identified.",
+      "Codex plagued by CPU regressions.",
+      "OpenClaw v2026.4.12 improves plugins.",
+      "MCP features released in Copilot CLI.",
+      "Community focus shifts to reliability."
+    ],
+    "ai-agents": [
+      "OpenClaw sees 500 issues and 500 PRs.",
+      "OpenClaw v2026.4.12 boosts plugin reliability.",
+      "Surge of regression reports for OpenClaw.",
+      "Vertex authentication issues widely reported.",
+      "Telegram transcription failures confirmed.",
+      "High triage volume signals instability."
+    ],
+    "ai-trending": [
+      "Claude Code surpasses Cursor-like tools.",
+      "Hermes-agent gains 11,000+ stars today.",
+      "Claude-mem solves context window limits.",
+      "Ralph automates PRD to implementation.",
+      "Financial AI vertical emerges rapidly.",
+      "Shift towards autonomous code loops."
+    ],
+    "ai-web": [
+      "Anthropic releases minimalist agent guide.",
+      "Distinction made: Workflows vs Agents.",
+      "Advice: Avoid framework fatigue.",
+      "Prioritize simple, composable patterns.",
+      "Direct code preferred over abstractions.",
+      "OpenAI had no new content today."
+    ],
+    "ai-hn": [
+      "Claude Mythos cyber capabilities evaluated.",
+      "Debate: effective altruism vs open release.",
+      "UK safety institute finds concerning risks.",
+      "Tech jobs bust driven by macro factors.",
+      "Physical threats against OpenAI leadership.",
+      "Stanford report highlights insider divide."
+    ]
+  }
+}
