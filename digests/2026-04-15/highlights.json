@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.108发布，Prompt缓存计费引争议",
+      "Qwen Code砍免费额度，社区政策调整引发动荡",
+      "Copilot CLI遇企业策略阻断，稳定性问题频发",
+      "Charm Crush构建Hooks系统，架构重构爆发期",
+      "OpenAI Codex修复内存泄漏，解决Win兼容性",
+      "Kimi CLI v1.34.0修复崩溃，平衡思考透明度"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.4.14发布，优化GPT-5与底层性能",
+      "新版引回归问题，配置崩溃与兼容性受挑战",
+      "PR引入结构化日志，大幅提升模型可观测性",
+      "新增梦境自我摄取阻断，防止生成内容循环",
+      "隔离Repo Slot工作流，增强子代理并发安全",
+      "集成Typecast TTS，赋予AI情绪预设与音频能力"
+    ],
+    "ai-trending": [
+      "Karpathy技能库爆榜，Claude编码准确度大增",
+      "微软开源Markitdown，构建RAG数据预处理利器",
+      "Hermes Agent狂增8k星，主打持久记忆与进化",
+      "Claude-mem插件走红，解决AI编码上下文遗忘",
+      "Anthropic官方Cookbooks，API最佳实践指南",
+      "Vercel发布AI SDK 5.0，引爆GenUI应用开发"
+    ],
+    "ai-web": [
+      "Anthropic研发自动化研究员，解决强模型监督难题",
+      "引入诺华CEO入董事会，加固治理与医疗合规",
+      "OpenAI封闭可信访问，网络安全防御策略引猜测",
+      "Karpathy抨击AI编程，LLM生成代码被指不可维护",
+      "Claude Code Routines上线，AI自主执行工程流程",
+      "高盛预警Mythos风险，巨头警惕模型失控可能"
+    ],
+    "ai-hn": [
+      "Claude Code Routines引爆HN，自主Agent重塑工程流",
+      "用户降级恢复推理力，质疑模型暗中偷工减料",
+      "Claude 3.7 Sonnet遭吐槽，懒惰与逻辑退步引不满",
+      "Altman备忘录曝光，AGI攻坚与架构调整受关注",
+      "OpenAI收购金融Hiro，大举进军垂直量化交易",
+      "Claude Desktop重设计上线，深耕本地化开发体验"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Ecosystem shifts focus to stability and refinement",
+      "OpenAI Codex faces critical memory leak issues",
+      "GitHub Copilot CLI hit by CPU saturation bugs",
+      "Charm Crush races to implement extensibility standards",
+      "Vendors balance 'thinking' model latency vs. costs",
+      "Claude Code tackles token inflation bugs"
+    ],
+    "ai-agents": [
+      "OpenClaw hits extremely high development velocity",
+      "v2026.4.14 release sparks critical regression reports",
+      "New onboarding wizard triggers user crashes",
+      "GPT-5 family integration improves turn handling",
+      "Memory subsystem updates amidst stability concerns",
+      "Markdown-it replaces marked.js for security"
+    ],
+    "ai-trending": [
+      "Claude Code drives viral autonomous agent focus",
+      "Shift from chatbots to coding agents with memory",
+      "Anthropic cookbooks gains 931 stars today",
+      "Microsoft Markitdown +1675 stars for RAG pipelines",
+      "Rust framework 'rig' gains traction for modularity",
+      "Financial sector sees surge in specialized models"
+    ],
+    "ai-web": [
+      "Anthropic publishes automated alignment research",
+      "Solves 'weak-to-strong' generalization problem",
+      "Novartis CEO joins Anthropic Board of Directors",
+      "Pivot targets healthcare and life sciences sectors",
+      "OpenAI announces cyber-defense metadata initiative",
+      "Governance becomes a competitive moat"
+    ],
+    "ai-hn": [
+      "Debate rages over 'nerfing' of Claude models",
+      "Focus shifts to Claude Code Routines release",
+      "Developers question model consistency and throttling",
+      "Chinese reactions analyzed for Claude Mythos model",
+      "OpenAI expands into cybersecurity and finance",
+      "Tension grows between features and stability"
+    ]
+  }
+}
