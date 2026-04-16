@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 与 OpenAI 竞逐插件市场，Agent 编排成新焦点",
+      "Copilot 严限流、Qwen 取消免费额，商业化策略引信任危机",
+      "Claude Code v2.1.110 与 OpenAI Codex v0.121.0 极高频迭代",
+      "社区强烈呼吁 App 端支持 /compact 命令以控制 Token 浪费",
+      "Kimi 与 Gemini 力推本地模型以降低成本，但稳定性存疑",
+      "生态从代码补全转向全栈代理，多智能体协作受关注"
+    ],
+    "ai-agents": [
+      "OpenClaw v2026.4.15-beta.1 发布，新增强大的模型认证状态卡片",
+      "安装向导崩溃、连接失败，v2026.4.14 引发大规模回归故障",
+      "24 小时内激增 1000 条更新，项目活跃度极高但伴随动荡",
+      "修复 Windows 安装程序与 pnpm.exe 运行器兼容性问题",
+      "核心逻辑修正：修复 Cron 通告误发及 WhatsApp 媒体传输问题",
+      "降低门槛：推进 CLI 核心命令的中文文档翻译"
+    ],
+    "ai-trending": [
+      "Claude Code 生态爆发：Karpathy 背书技巧与外挂内存工具",
+      "GenericAgent 展示自我进化，3.3k 代码实现全系统级控制",
+      "Google Magika 开源：AI 驱动文件检测，精准度大幅提升",
+      "CowAgent 与 Activepieces 受热捧，Agent 从聊天走向实战",
+      "Vercel 发布 open-agents 模板，云端 Agent 部署门槛降低",
+      "社区关注基础设施：OpenCLI 连接 AI 与操作系统工具链"
+    ],
+    "ai-web": [
+      "Anthropic 宣布 Agent Skills 为开放标准，专注跨平台可移植性",
+      "OpenAI 同步更新 Agents SDK 元数据，双方工具链竞争白热化",
+      "Anthropic 试图定义行业规范，技能包成构建专家新范式",
+      "竞争焦点转移：从模型参数规模转向落地执行与编排能力",
+      "文件系统化封装知识，Anthropic 强调工程化降低开发门槛",
+      "OpenAI 路径神秘：仅捕获标题更新，具体功能细节尚不可知"
+    ],
+    "ai-hn": [
+      "Gas Town 被指盗用用户配额训练，AI 基础设施伦理陷危机",
+      "OpenAI 巨额估值遭投资者质疑，资本市场耐心正在消退",
+      "MCP Server 为 Agent 设定预算约束，防止 Token 消费失控",
+      "Tier 工具通过自适应路由，让小模型准确率提升 10 个点",
+      "开发者抗议 Anthropic 移除锁定模型版本功能，稳定性受疑",
+      "社区热议 OpenBindings：统一接口标准解决协议碎片化难题"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.110: Major TUI update released",
+      "Codex v0.121.0 launches new Marketplace",
+      "Copilot CLI & Claude face stability issues",
+      "Shift toward agentic workflows causes friction",
+      "Qwen Code removes generous free tiers",
+      "Stricter rate limits hit ecosystem tools"
+    ],
+    "ai-agents": [
+      "OpenClaw hits 500 issues and 500 PRs today",
+      "New v2026.4.15-beta.1 focuses on visibility",
+      "v2026.4.14 regression causes stability crisis",
+      "New Model Auth Status Card added to UI",
+      "Community debates core Agent Identity",
+      "Onboarding flows broken by recent release"
+    ],
+    "ai-trending": [
+      "andrej-karpathy-skills gains 9,646 stars",
+      "Claude-Code-Game-Studios drives agent trends",
+      "Agents shift to long-term memory systems",
+      "Rise of Computer Use desktop sandboxes",
+      "Learn-claude-code tops nano agent harnesses",
+      "Push toward self-evolving codebases"
+    ],
+    "ai-web": [
+      "Anthropic standardizes open Agent Skills",
+      "OpenAI evolves parallel Agents SDK",
+      "Shift from tuning to composable architectures",
+      "Focus on procedural knowledge capture",
+      "Anthropic targets agent interoperability",
+      "Agentic stack becomes competitive frontier"
+    ],
+    "ai-hn": [
+      "OpenAI's $852B valuation faces scrutiny",
+      "Suspicions over Gas Town data usage rise",
+      "Community debates agent integration costs",
+      "New KillBench reveals model political bias",
+      "Skepticism grows over Claude's performance",
+      "Vendors criticized for removing compatibility"
+    ]
+  }
+}
