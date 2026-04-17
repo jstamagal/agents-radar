@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code v2.1.112 紧急修复 Opus 4.7 适配问题",
+      "GitHub Copilot CLI 连发 3 版，Rate Limit 遭社区差评",
+      "OpenCode v1.4.7 被指内存泄漏，多模型兼容性受考验",
+      "Qwen Code 遭遇 OAuth 风暴，国际化之路遇安全挑战",
+      "AI CLI 竞争进入深水区：Agent 编排成核心战场",
+      "Charm Crush 高频迭代，Shell 极客体验持续优化"
+    ],
+    "ai-agents": [
+      "OpenClaw 发售 v2026.4.15，集成 Claude Opus 4.7 图像理解",
+      "OpenClaw 新增 Google TTS 支持，语音交互能力大增",
+      "Memory v2 架构重构：SQLite 侧车模式奠定记忆基础",
+      "OpenClaw 单日处理 1000+ 更新，社区活跃度极高",
+      "Windows 原生包装器上线，OpenClaw 加速跨平台适配",
+      "全栈 AI 框架竞争白热化，OpenClaw 持续领跑生态"
+    ],
+    "ai-trending": [
+      "Claude 生态霸榜：Karpathy 配置文件单日获 8k Star",
+      "claude-mem 横空出世，根治 AI 编程遗忘症获 6w+ Star",
+      "GenericAgent 展示自我进化，仅需 1/6 Token 控制系统",
+      "OpenAI 官方下场，推出 Python 多智能体工作流框架",
+      "Vercel 发布 Open Agents，云生态赋能 AI 分发",
+      "Magika 助力数据清洗，Google 出品 AI 文件检测神器"
+    ],
+    "ai-web": [
+      "Claude Opus 4.7 正式发布：定位受控的次旗舰模型",
+      "Opus 4.7 引入自我验证机制，向独立工程师角色演进",
+      "首发安全拦截机制，Opus 4.7 充当网络攻防测试床",
+      "OpenAI 推出 GPT Rosalind，疑似发力生物科学计算",
+      "OpenAI 密集更新 Codex，或意图实现全场景自动化",
+      "模型能力分级加剧，Mythos 预览版仍保留最强能力"
+    ],
+    "ai-hn": [
+      "Claude Opus 4.7 霸榜 Hacker News，社区热议推理天花板",
+      "实测 Qwen3.6 本地绘图效果惊艳，开源力量挑战闭源",
+      "OpenAI 宣布 Codex for almost everything 引发替代焦虑",
+      "Claude 模型卡泄露，红队测试与安全细节受极客关注",
+      "MacMind 项目炸场：1989 年古董 Mac 跑神经网络",
+      "算力危机引发深思，社区担忧 AI 资源寡头垄断化"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.112 battles 10 critical issues",
+      "OpenAI Codex refactors infrastructure in Rust",
+      "Charm Crush maintains stability amidst chaos",
+      "Ecosystem faces 'Reasoning Models' architecture debt",
+      "Platformization war drives technical debt",
+      "Authentication instability hits major CLI tools"
+    ],
+    "ai-agents": [
+      "OpenClaw updates flood: 1,000 items in 24 hours",
+      "New versions v2026.4.15 introduce critical regressions",
+      "Anthropic integration defaults to Claude Opus 4.7",
+      "Major 'Memory v2' architectural changes underway",
+      "Windows native support currently in progress",
+      "Onboarding crashes reported in latest releases"
+    ],
+    "ai-trending": [
+      "andrej-karpathy-skills goes viral with 8k+ stars",
+      "OpenAI releases official 'openai-agents-python'",
+      "Google Magika brings AI-powered file ID",
+      "'Agent Ops' movement sweeps GitHub trending",
+      "Focus shifts to autonomous software engineering agents",
+      "Speculative decoding optimizes inference costs"
+    ],
+    "ai-web": [
+      "Anthropic releases Claude Opus 4.7 for engineering",
+      "Opus 4.7 models 'self-verification' safety checks",
+      "OpenAI releases four updates, including Codex",
+      "New 'Cyber Defense' initiative spotted in URLs",
+      "Vision capabilities upgraded to greater resolution",
+      "Safety mechanisms tested for 'Mythos Preview'"
+    ],
+    "ai-hn": [
+      "Claude Opus 4.7 dominates HN with 1,400 upvotes",
+      "New KYC process sparks heated community debate",
+      "Simon Willison: Qwen3.6 beats Opus in image gen",
+      "OpenAI Codex expansion targets 'almost everything'",
+      "Discussion: 'The beginning of scarcity' in compute",
+      "Community debates rise of 'AI slop'"
+    ]
+  }
+}
