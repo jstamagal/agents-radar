@@ -26,10 +26,17 @@ export interface SearchRepo {
   searchQuery: string;
 }
 
+export interface TrendshiftRepo {
+  fullName: string;
+  url: string;
+}
+
 export interface TrendingData {
   trendingRepos: TrendingRepo[];
   searchRepos: SearchRepo[];
+  trendshiftRepos: TrendshiftRepo[];
   trendingFetchSuccess: boolean;
+  trendshiftFetchSuccess: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -44,6 +51,7 @@ const SEARCH_QUERIES = [
   { q: "topic:large-language-model", label: "llm-model" },
   { q: "topic:machine-learning", label: "ml" },
 ];
+const GITHUB_REPO_URL_PATTERN = /https?:\/\/github\.com\/([A-Za-z0-9_.-]+)\/([A-Za-z0-9_.-]+)(?=[/"'?#]|$)/g;
 
 // ---------------------------------------------------------------------------
 // GitHub Trending HTML fetch
@@ -190,16 +198,89 @@ async function searchAiRepos(sevenDaysAgo: string): Promise<SearchRepo[]> {
 }
 
 // ---------------------------------------------------------------------------
+// trendshift.io HTML fetch
+// ---------------------------------------------------------------------------
+
+interface TrendshiftConfig {
+  enabled: boolean;
+  url: string;
+  maxRepos: number;
+}
+
+async function fetchTrendshiftRepos(
+  config: TrendshiftConfig,
+): Promise<{ repos: TrendshiftRepo[]; success: boolean }> {
+  if (!config.enabled) return { repos: [], success: true };
+
+  try {
+    const resp = await fetch(config.url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (compatible; agents-radar/1.0)",
+        Accept: "text/html",
+      },
+    });
+    if (!resp.ok) {
+      console.error(`  [trendshift] HTTP ${resp.status} fetching ${config.url}`);
+      return { repos: [], success: false };
+    }
+
+    const html = await resp.text();
+    const seen = new Set<string>();
+    const repos: TrendshiftRepo[] = [];
+
+    for (const m of html.matchAll(GITHUB_REPO_URL_PATTERN)) {
+      const owner = m[1];
+      const repo = m[2];
+      if (!owner || !repo) continue;
+      const fullName = `${owner}/${repo}`;
+
+      if (seen.has(fullName)) continue;
+      seen.add(fullName);
+      repos.push({ fullName, url: `https://github.com/${fullName}` });
+      if (repos.length >= config.maxRepos) break;
+    }
+
+    if (repos.length === 0) {
+      console.error("  [trendshift] Parsed 0 GitHub repos — HTML structure may have changed");
+      return { repos: [], success: false };
+    }
+
+    console.log(`  [trendshift] Parsed ${repos.length} repos from ${config.url}`);
+    return { repos, success: true };
+  } catch (err) {
+    console.error(`  [trendshift] Fetch failed: ${err}`);
+    return { repos: [], success: false };
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Export
 // ---------------------------------------------------------------------------
 
-export async function fetchTrendingData(): Promise<TrendingData> {
+export async function fetchTrendingData(
+  trendshiftConfig: TrendshiftConfig = {
+    enabled: true,
+    url: "https://trendshift.io/repositories",
+    maxRepos: 30,
+  },
+): Promise<TrendingData> {
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-  const [{ repos: trendingRepos, success }, searchRepos] = await Promise.all([
+  const [
+    { repos: trendingRepos, success },
+    searchRepos,
+    { repos: trendshiftRepos, success: trendshiftSuccess },
+  ] = await Promise.all([
     fetchGitHubTrending(),
     searchAiRepos(sevenDaysAgo),
+    fetchTrendshiftRepos(trendshiftConfig),
   ]);
 
-  return { trendingRepos, searchRepos, trendingFetchSuccess: success };
+  return {
+    trendingRepos,
+    searchRepos,
+    trendshiftRepos,
+    trendingFetchSuccess: success,
+    trendshiftFetchSuccess: trendshiftSuccess,
+  };
 }

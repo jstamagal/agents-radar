@@ -3,7 +3,7 @@
  *
  * Env vars:
  *   OPENROUTER_API_KEY  - API key
- *   OPENROUTER_MODEL    - model name (default: anthropic/claude-sonnet-4)
+ *   OPENROUTER_MODEL    - model name (default: anthropic/claude-sonnet-4.6)
  */
 
 import { OpenAICompatibleProvider } from "./openai-compatible.ts";
@@ -17,7 +17,7 @@ export class OpenRouterProvider extends OpenAICompatibleProvider {
     super({
       apiKey: opts?.apiKey ?? process.env["OPENROUTER_API_KEY"],
       baseURL: OPENROUTER_BASE_URL,
-      model: opts?.model ?? process.env["OPENROUTER_MODEL"] ?? "anthropic/claude-sonnet-4",
+      model: opts?.model ?? process.env["OPENROUTER_MODEL"] ?? "anthropic/claude-sonnet-4.6",
     });
   }
 }

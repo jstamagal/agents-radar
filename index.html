@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -247,11 +247,11 @@
   <div id="body">
     <div id="sidebar">
       <div id="mob-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
-        ☰ &nbsp;选择报告
+        ☰ &nbsp;Select Reports
       </div>
       <div class="side-label">REPORTS</div>
       <div class="search-wrap">
-        <input id="searchInput" type="search" placeholder="搜索全文，如 Claude">
+        <input id="searchInput" type="search" placeholder="Search all reports, e.g. Claude">
         <div id="searchStatus"></div>
       </div>
       <div id="nav"></div>
@@ -259,7 +259,7 @@
 
     <div id="cwrap">
       <div id="content">
-        <div class="msg"><div class="msg-icon">📡</div><div>正在加载…</div></div>
+        <div class="msg"><div class="msg-icon">📡</div><div>Loading…</div></div>
       </div>
     </div>
   </div>
@@ -284,15 +284,15 @@ function renderMarkdown(raw) {
 }
 
 const LABELS = {
-  'ai-cli':          'AI CLI 工具',
+  'ai-cli':          'AI CLI Tools',
   'ai-cli-en':       'AI CLI Tools',
-  'ai-agents':       'AI Agents 生态',
+  'ai-agents':       'AI Agents Ecosystem',
   'ai-agents-en':    'AI Agents Ecosystem',
-  'ai-web':          'OpenAI & Anthropic 官网动态',
+  'ai-web':          'OpenAI & Anthropic Updates',
   'ai-web-en':       'OpenAI & Anthropic Updates',
-  'ai-trending':     'GitHub AI 趋势',
+  'ai-trending':     'GitHub AI Trends',
   'ai-trending-en':  'GitHub AI Trends',
-  'ai-hn':           'HN 社区动态',
+  'ai-hn':           'HN Community Digest',
   'ai-hn-en':        'HN Community Digest',
   'ai-radar':        'AI 生态全景雷达',
   'ai-radar-en':     'AI Ecosystem Radar',
@@ -354,9 +354,9 @@ function applyDateSearch(query) {
   if (!needle) {
     setSearchStatus('');
   } else if (!searchReady) {
-    setSearchStatus('正在建立索引…');
+    setSearchStatus('Building search index…');
   } else {
-    setSearchStatus(`匹配 ${hits} 天`);
+    setSearchStatus(`${hits} matching day(s)`);
   }
 }
 
@@ -383,7 +383,7 @@ async function buildSearchIndex(dates) {
 
 function initSearch(dates) {
   searchReady = false;
-  setSearchStatus('索引准备中…');
+    setSearchStatus('Preparing search index…');
 
   buildSearchIndex(dates).then((index) => {
     searchIndex = index;
@@ -436,7 +436,7 @@ async function loadReport(date, report, push = true) {
     const safe = renderMarkdown(raw);
     setContent(`<div class="md fade">${safe}</div>`);
   } catch (e) {
-    setContent(`<div class="msg"><div class="msg-icon">⚠️</div><div>加载失败：${e.message}</div></div>`);
+    setContent(`<div class="msg"><div class="msg-icon">⚠️</div><div>Failed to load: ${e.message}</div></div>`);
   }
 }
 
@@ -539,7 +539,7 @@ window.addEventListener('popstate', () => {
   } catch (e) {
     document.getElementById('nav').innerHTML =
       '<div class="msg" style="height:80px;font-size:10px">⚠️ ' + e.message + '</div>';
-    setContent('<div class="msg"><div class="msg-icon">📡</div><div>无法加载 manifest.json</div></div>');
+    setContent('<div class="msg"><div class="msg-icon">📡</div><div>Unable to load manifest.json</div></div>');
   }
 })();
 </script>
