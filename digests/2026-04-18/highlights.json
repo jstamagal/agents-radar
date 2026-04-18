@@ -1,0 +1,86 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code架构重构引争议，Issue获赞超840",
+      "OpenAI Codex高频迭代，Token消耗成最大痛点",
+      "OpenCode深陷“修复地狱”，V2架构版本引入严重回退",
+      "Qwen Code认证服务瘫痪，遭遇大规模401故障",
+      "GitHub Copilot被指进入维护模式，用户呼吁Remote支持",
+      "Kimi Code模型思考过载，社区关注成本平衡难题"
+    ],
+    "ai-agents": [
+      "OpenClaw单日更新千条，活跃度极高聚焦安全修复",
+      "MCP协议漏洞修复：OpenClaw合并关键安全补丁",
+      "OpenClaw紧急修复Docker兼容及v2026.4.14版回归问题",
+      "新增Gemini TTS提供商，OpenClaw强化语音合成能力",
+      "RFC提案涌现，OpenClaw加码生态安全防御建设",
+      "Agent配置升级：OpenClaw支持独立TTS/STT设置"
+    ],
+    "ai-trending": [
+      "OpenAI开源Python Agents框架，提供多智能体标准范式",
+      "Chrome DevTools拥抱MCP协议，AI Agent可直接调试浏览器",
+      "GenericAgent爆火：声称6倍更少Token实现全系统控制",
+      "Magika单日涨星近千，谷歌开源AI文件类型检测工具",
+      "Claude变身游戏工厂：49个Agent全自动开发游戏",
+      "AI感知层爆发：Omi与语音合成工具Voicebox受热捧"
+    ],
+    "ai-web": [
+      "Claude Opus 4.7发布：针对长周期编程任务深度优化",
+      "Anthropic推Claude Design：对话式搞定专业原型设计",
+      "Glasswing战略落地：Claude 4.7实验性削弱网络攻击能力",
+      "Opus 4.7视觉能力升级，被赞更有“品味”",
+      "Claude Design自动应用企业设计系统，解决风格割裂痛点",
+      "OpenAI今日无更新，疑似GPT-5发布前蓄力"
+    ],
+    "ai-hn": [
+      "Claude Design引爆HN：讨论热度断层第一，对比Figma",
+      "技术控实测Claude 4.7分词器，成本分析登榜热门",
+      "独立研究复现Mythos发现，HN热议模型真实能力",
+      "OpenAI豪掷200亿采购Cerebras芯片",
+      "Show HN: Egregore实现多人版Claude Code共享记忆",
+      "DOOM游戏运行在ChatGPT与Claude内"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.113 introduces major architectural changes",
+      "Developers report critical regressions in keybindings",
+      "Users express fatigue over rising token costs",
+      "OpenAI Codex struggles with Windows/Mac instability",
+      "Gemini CLI and Qwen adopt local model support",
+      "GitHub Copilot CLI issues highlight ecosystem fragility"
+    ],
+    "ai-agents": [
+      "OpenClaw manages 500 issues and 500 PRs in 24 hours",
+      "RFC #49971 targets agent security protocols",
+      "v2026.4.14 release causes critical Web UI regressions",
+      "Security PR #68292 fixes MCP ownership spoofing",
+      "New OAuth handling failures plague user experience",
+      "Rapid feature additions outpace stability testing"
+    ],
+    "ai-trending": [
+      "obra/superpowers gains 1,713 stars: agentic framework",
+      "OpenAI releases official Python agents framework",
+      "Claude Code-Game-Studios adds 49 agents and 72 skills",
+      "Speculative Decoding technique slashes inference costs",
+      "EvoMap/evolver enables agents to self-evolve",
+      "Trending focus shifts to complex hierarchical workflows"
+    ],
+    "ai-web": [
+      "Anthropic releases Claude Opus 4.7 for engineering",
+      "New Claude Design tool targets visual workflows",
+      "Opus 4.7 prioritizes safety in autonomous tasks",
+      "Claude 4.7 tokenizer efficiency under community scrutiny",
+      "Anthropic explores visual product design automation",
+      "Mythos model safeguards see controlled rollout"
+    ],
+    "ai-hn": [
+      "Claude Design launch sparks frontend engineering debates",
+      "Developers analyze Claude 4.7's new tokenization costs",
+      "OpenAI commits $20B to Cerebras for inference chips",
+      "Public models reproduce Anthropic's Mythos findings",
+      "Community questions if frontier models are distinct",
+      "Discussions highlight agentic workflow future"
+    ]
+  }
+}
