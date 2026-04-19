@@ -1,0 +1,70 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 陷信任危机：模型退化与系统变砖引恐慌",
+      "OpenAI Codex 推出“目标模式”：向高阶 Agent 演进",
+      "Charm Crush 发布夜间版：支持 CamelHumps 极客编辑",
+      "GitHub Copilot CLI 涉嫌 GPT-5.4 限流与隐藏功能",
+      "Gemini CLI 遭遇 OAuth 403 危机，Shell 频繁卡死",
+      "生态阵痛：Electron 迭代导致旧版 macOS/WSL 兼容性灾难"
+    ],
+    "ai-agents": [
+      "OpenClaw 日更 500 条：架构重构，持久化队列落地",
+      "引入 Minions 作业队列：彻底解决 Gateway 崩溃丢失任务痛点",
+      "安全升级：openclaw.json 强制锁定 0o600 权限防泄露",
+      "Prompt Hooks 支持动态裁剪工具，大幅降低 Token 消耗",
+      "v2026.4.x 引入配置管理新 Bug，模型适配问题集中",
+      "Cron 任务默认开启失败警报，防止后台任务静默失败"
+    ],
+    "ai-trending": [
+      "EvoMap/evolver 单日千星：首创“基因组进化协议”引全网狂欢",
+      "DeepSeek 开源 DeepGEMM：极致 FP8 内核，硬核必备",
+      "OpenAI 官方库 openai-agents-python 登场：定义多 Agent 标准",
+      "BasedHardware/omi 热爆：AI 能看屏监听的下一代伴侣",
+      "Android 逆向工程技能集爆火：Claude Code 攻克系统级安全",
+      "Claude Desktop Debian 原生化：社区对本地隐私 AI 需求激增"
+    ],
+    "ai-hn": [
+      "Claude Design 封神：被赞 AI 界的 Braeburn 字体时刻",
+      "OpenAI 陷舆论漩涡：高管离职潮引发管理文化大质疑",
+      "Claude Code 误报恶意软件：安全护栏过严致开发效率崩塌",
+      "Rapid-MLX 登场：Mac 本地 LLM 推理提速 2-3 倍",
+      "AI 写作 Chrome 漏洞：黑客担忧犯罪泛滥与防御枯竭",
+      "Opus 4.7 性能解禁：硬核基准测试数据独家发布"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code v2.1.114 broken on macOS",
+      "OpenAI Codex adds Goal Mode feature",
+      "Ecosystem battles regression & instability",
+      "Rapid iteration breaks core reliability",
+      "User demand shifts to agent orchestration",
+      "Platform-specific bugs plague ecosystem"
+    ],
+    "ai-agents": [
+      "OpenClaw hits 500 issues/PRs in 24 hours",
+      "OpenClaw adds SQLite job queue overhaul",
+      "Release 2026.4.14 introduces regressions",
+      "New job queue prevents gateway data loss",
+      "Core model configuration widely broken",
+      "Session continuity affected by bugs"
+    ],
+    "ai-trending": [
+      "omi: AI wearable for proactive screen aid",
+      "OpenAI releases agents-python framework",
+      "evolver introduces Genome Evolution Protocol",
+      "Focus shifts to ambient computing agents",
+      "DeepGEMM releases high-performance FP8 kernels",
+      "Community pivots to multi-agent systems"
+    ],
+    "ai-hn": [
+      "Claude Opus 4.7 faces nerfing scrutiny",
+      "OpenAI exec exodus sparks PR crisis",
+      "Claude Opus 4.7 benchmarks analyzed today",
+      "Opus 4.7 wrote a Chrome exploit report",
+      "Fake Claude sites caught distributing malware",
+      "Debate: Opus 4.7 cost vs performance value"
+    ]
+  }
+}
