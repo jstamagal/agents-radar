@@ -160,7 +160,7 @@ export async function ensureLabel(name: string, color: string): Promise<void> {
     headers: { ...headers(), "Content-Type": "application/json" },
     body: JSON.stringify({ name, color }),
   });
-  if (!resp.ok && resp.status !== 422) {
+  if (!resp.ok && resp.status !== 422 && resp.status !== 410) {
     throw new Error(`Failed to create label "${name}": ${await resp.text()}`);
   }
 }
@@ -234,7 +234,10 @@ export async function createGitHubIssue(title: string, body: string, label: stri
     headers: { ...headers(), "Content-Type": "application/json" },
     body: JSON.stringify({ title, body, labels: [label] }),
   });
-  if (!resp.ok) throw new Error(`Failed to create issue: ${await resp.text()}`);
+  if (!resp.ok) {
+    if (resp.status === 410) return "";
+    throw new Error(`Failed to create issue: ${await resp.text()}`);
+  }
   const data = (await resp.json()) as { html_url: string };
   return data.html_url;
 }

@@ -47,6 +47,7 @@ const {
   skillsRepo: CLAUDE_SKILLS_REPO,
   openclaw: OPENCLAW,
   openclawPeers: OPENCLAW_PEERS,
+  trendshift: TRENDSHIFT,
 } = loadConfig();
 
 // ---------------------------------------------------------------------------
@@ -111,11 +112,13 @@ async function fetchAllData(
         return { site: "openai", siteName: "OpenAI", isFirstRun: false, newItems: [], totalDiscovered: 0 };
       }),
     ]),
-    fetchTrendingData().catch(
+    fetchTrendingData(TRENDSHIFT).catch(
       (): TrendingData => ({
         trendingRepos: [],
         searchRepos: [],
+        trendshiftRepos: [],
         trendingFetchSuccess: false,
+        trendshiftFetchSuccess: false,
       }),
     ),
     fetchHnData().catch((): HnData => ({ stories: [], fetchSuccess: false })),
@@ -209,7 +212,10 @@ async function generateSummaries(
       ),
     ),
     (async () => {
-      const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
+      const hasData =
+        trendingData.trendingRepos.length > 0 ||
+        trendingData.searchRepos.length > 0 ||
+        trendingData.trendshiftRepos.length > 0;
       if (!hasData) {
         return MSG.trendingNoData[lang];
       }
@@ -413,14 +419,14 @@ async function main(): Promise<void> {
         cliContent[lang],
         ISSUE_LABELS.cli[lang],
       );
-      console.log(`  Created CLI issue (${lang}): ${cliUrl}`);
+      if (cliUrl) console.log(`  Created CLI issue (${lang}): ${cliUrl}`);
 
       const ocUrl = await createGitHubIssue(
         OPENCLAW_ISSUE_TITLE(dateStr, lang),
         openclawContent[lang],
         ISSUE_LABELS.openclaw[lang],
       );
-      console.log(`  Created OpenClaw issue (${lang}): ${ocUrl}`);
+      if (ocUrl) console.log(`  Created OpenClaw issue (${lang}): ${ocUrl}`);
     }
   }
 
