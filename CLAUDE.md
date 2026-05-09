@@ -27,7 +27,7 @@ export LLM_PROVIDER=anthropic   # anthropic | openai | github-copilot | openrout
 
 # Anthropic (default)
 export ANTHROPIC_API_KEY=sk-ant-xxxxx
-export ANTHROPIC_BASE_URL=https://api.kimi.com/coding/  # omit for Anthropic
+export ANTHROPIC_BASE_URL=https://api.xiaomimimo.com/anthropic/v1/messages  # omit for Anthropic
 
 # OpenAI
 # export OPENAI_API_KEY=sk-xxxxx

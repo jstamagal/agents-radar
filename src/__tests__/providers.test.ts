@@ -296,7 +296,7 @@ describe("OpenRouterProvider", () => {
 
   it(
     "uses OPENROUTER_MODEL env",
-    withEnv({ OPENROUTER_MODEL: "meta-llama/llama-3-70b" }, () => {
+    withEnv({ OPENROUTER_: "meta-llama/llama-3-70b" }, () => {
       const p = new OpenRouterProvider({ apiKey: "k" });
       expect(p.name).toBe("openrouter");
     }),
